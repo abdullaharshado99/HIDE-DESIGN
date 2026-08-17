@@ -1,69 +1,68 @@
-import Image from "next/image";
+import Navbar from './components/Navbar'
+import Hero from './components/Hero'
+import TrustStrip from './components/TrustStrip'
+import ProductCarousel from './components/ProductCarousel'
+import About from './components/About'
+import Contact from './components/Contact'
+import Footer from './components/Footer'
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <>
+      <Navbar />
+      <main>
+        <Hero />
+        <TrustStrip />
+        <ProductCarousel gender="men" />
+        <ProductCarousel gender="women" />
+
+        <section className="material-section" id="leather">
+          <div className="container material-grid">
+            <div className="material-copy">
+              <span className="eyebrow">OUR MATERIALS</span>
+              <h2>From fine <em>leather</em><br />to premium wool.</h2>
+              <p>We work with carefully selected hides, wool, tweed and premium blends to create outerwear that feels exceptional and holds its character season after season.</p>
+              <div className="material-list">
+                <div>
+                  <span>01</span>
+                  <b>Leather</b>
+                  <small>Jackets · Coats · Custom Finishes</small>
+                </div>
+                <div>
+                  <span>02</span>
+                  <b>Wool &amp; Tweed</b>
+                  <small>Long Coats · Overcoats · Tailoring</small>
+                </div>
+                <div>
+                  <span>03</span>
+                  <b>Custom Fabrics</b>
+                  <small>Developed To Your Specification</small>
+                </div>
+              </div>
+            </div>
+            <div className="material-panel">
+              <div className="material-panel-inner">
+                <span>H</span>
+                <p>CRAFTED<br />WITH<br />PURPOSE</p>
+                <small>HIDE DESIGN · SINCE 2002</small>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="custom-section" id="custom">
+          <div className="container custom-inner">
+            <span className="eyebrow">PRIVATE LABEL · WHOLESALE · BESPOKE</span>
+            <h2>Your design.<br /><em>Our craftsmanship.</em></h2>
+            <p>Share your sketches, references, fabric requirements or size specifications. Our team can develop custom coats for your collection or private label.</p>
+            <a className="btn btn-gold" href="#contact">Start A Custom Project <span>→</span></a>
+          </div>
+        </section>
+
+        <About />
+        <Contact />
       </main>
-    </div>
-  );
+      <Footer />
+    </>
+  )
 }
