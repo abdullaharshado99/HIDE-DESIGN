@@ -8,6 +8,9 @@ interface Product {
   name: string
   material: string
   image: string
+  description?: string
+  price?: number | null
+  currency?: string
 }
 
 interface ProductCarouselProps {
@@ -89,8 +92,41 @@ export default function ProductCarousel({
 
   const [selectedProduct, setSelectedProduct] =
     useState<Product | null>(null)
+  const [apiProducts, setApiProducts] = useState<Product[] | null>(null)
 
-  const items = products[gender]
+  const items = apiProducts ?? products[gender]
+
+  useEffect(() => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
+
+    fetch(`${apiUrl}/products`)
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then((remoteProducts: Array<{
+        articleNumber: string
+        name: string
+        material: string
+        description: string
+        imageUrl: string
+        price: number | null
+        currency: string
+        audience: string
+      }>) => {
+        const matchingProducts = remoteProducts
+          .filter((product) => product.audience.toLowerCase() === gender)
+          .map((product) => ({
+            id: product.articleNumber,
+            name: product.name,
+            material: product.material,
+            image: product.imageUrl,
+            description: product.description,
+            price: product.price,
+            currency: product.currency,
+          }))
+
+        if (matchingProducts.length > 0) setApiProducts(matchingProducts)
+      })
+      .catch(() => undefined)
+  }, [gender])
 
   const title =
     gender === 'men'
@@ -300,6 +336,10 @@ export default function ProductCarousel({
               <p>
                 {selectedProduct.material}
               </p>
+              {selectedProduct.description && <p>{selectedProduct.description}</p>}
+              {selectedProduct.price != null && (
+                <p>{selectedProduct.currency} {selectedProduct.price}</p>
+              )}
 
             </div>
 

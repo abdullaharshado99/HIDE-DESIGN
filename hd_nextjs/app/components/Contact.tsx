@@ -3,13 +3,27 @@
 import { useState, FormEvent } from 'react'
 
 export default function Contact() {
-  const [submitted, setSubmitted] = useState<boolean>(false)
+  const [status, setStatus] = useState<'idle' | 'submitted' | 'error'>('idle')
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setSubmitted(true)
-    ;(e.target as HTMLFormElement).reset()
-    setTimeout(() => setSubmitted(false), 5000)
+    const form = e.currentTarget
+    const data = Object.fromEntries(new FormData(form).entries())
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
+
+    try {
+      const response = await fetch(`${apiUrl}/quotes`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+      if (!response.ok) throw new Error('Quote submission failed')
+      setStatus('submitted')
+      form.reset()
+      setTimeout(() => setStatus('idle'), 5000)
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
@@ -61,7 +75,8 @@ export default function Contact() {
           <button className="btn btn-gold form-submit" type="submit">
             Send Request <span>→</span>
           </button>
-          {submitted && <p className="form-success">Thank you. Your request has been received.</p>}
+          {status === 'submitted' && <p className="form-success">Thank you. Your request has been received.</p>}
+          {status === 'error' && <p className="form-success">We could not send your request. Please try again.</p>}
         </form>
       </div>
     </section>
