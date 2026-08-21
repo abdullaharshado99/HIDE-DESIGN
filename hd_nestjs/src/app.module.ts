@@ -16,9 +16,9 @@ import { Quote } from './entities/quote.entity';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        type: 'mysql',
+        type: 'postgres',
         host: config.get('DB_HOST', 'localhost'),
-        port: config.get<number>('DB_PORT', 3306),
+        port: config.get<number>('DB_PORT', 5432),
         username: config.get('DB_USER', 'hide_design'),
         password: config.get('DB_PASSWORD', 'hide_design'),
         database: config.get('DB_NAME', 'hide_design'),

@@ -1,18 +1,17 @@
 services:
-  mysql:
-    image: mysql:8.4
+  postgres:
+    image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ${DB_NAME:-hide_design}
-      MYSQL_USER: ${DB_USER:-hide_design}
-      MYSQL_PASSWORD: ${DB_PASSWORD:-change-this-db-password}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-change-this-root-password}
+      POSTGRES_DB: ${DB_NAME:-hide_design}
+      POSTGRES_USER: ${DB_USER:-hide_design}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-change-this-db-password}
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - hide-design-mysql:/var/lib/mysql
+      - hide-design-postgres:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-hide_design} -d ${DB_NAME:-hide_design}"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -22,12 +21,12 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      DB_HOST: mysql
+      DB_HOST: postgres
     ports:
       - "3001:3001"
     depends_on:
-      mysql:
+      postgres:
         condition: service_healthy
 
 volumes:
-  hide-design-mysql:
+  hide-design-postgres:

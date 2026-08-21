@@ -1,17 +1,19 @@
 import 'reflect-metadata';
+import 'dotenv/config';
 import * as bcrypt from 'bcrypt';
 import { DataSource } from 'typeorm';
 import { Product } from './entities/product.entity';
+import { Quote } from './entities/quote.entity';
 import { User } from './entities/user.entity';
 
 const dataSource = new DataSource({
-  type: 'mysql',
+  type: 'postgres',
   host: process.env.DB_HOST ?? 'localhost',
-  port: Number(process.env.DB_PORT ?? 3306),
+  port: Number(process.env.DB_PORT ?? 5432),
   username: process.env.DB_USER ?? 'hide_design',
-  password: process.env.DB_PASSWORD ?? 'hide_design',
+  password: process.env.DB_PASSWORD ?? 'itsabouts',
   database: process.env.DB_NAME ?? 'hide_design',
-  entities: [User, Product],
+  entities: [User, Product, Quote],
   synchronize: true,
 });
 

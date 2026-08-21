@@ -11,7 +11,7 @@ export class Quote {
   @Column({ length: 190 })
   email: string;
 
-  @Column({ length: 40, nullable: true })
+  @Column({ type: 'varchar', length: 40, nullable: true })
   phone: string | null;
 
   @Column({ length: 80 })
