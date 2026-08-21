@@ -1,4 +1,4 @@
-import { Shield, Scissors, Star, Globe } from 'lucide-react'
+import { Shield, Scissors, BadgeCheck, Crown } from 'lucide-react'
 
 interface TrustItem {
   icon: React.ReactNode
@@ -8,25 +8,25 @@ interface TrustItem {
 
 export default function TrustStrip() {
   const items: TrustItem[] = [
-    { 
-      icon: <Shield size={36} strokeWidth={1.5} />, 
-      title: 'Premium Materials', 
-      desc: 'Finest Wool & Leather' 
+    {
+      icon: <Shield size={36} strokeWidth={1.5} />,
+      title: 'Finest Materials',
+      desc: 'Carefully selected leather & fabrics for superior comfort and durability.',
     },
-    { 
-      icon: <Scissors size={36} strokeWidth={1.5} />, 
-      title: 'Custom Design', 
-      desc: 'Built To Your Preference' 
+    {
+      icon: <Scissors size={36} strokeWidth={1.5} />,
+      title: 'Expert Craftsmanship',
+      desc: 'Precision stitching & attention to detail in every piece.',
     },
-    { 
-      icon: <Star size={36} strokeWidth={1.5} />, 
-      title: 'Quality Assured', 
-      desc: 'Crafted To Perfection' 
+    {
+      icon: <BadgeCheck size={36} strokeWidth={1.5} />,
+      title: 'Built To Last',
+      desc: 'Durable, reliable & made to stand the test of time.',
     },
-    { 
-      icon: <Globe size={36} strokeWidth={1.5} />, 
-      title: 'Global Export', 
-      desc: 'Worldwide Shipping' 
+    {
+      icon: <Crown size={36} strokeWidth={1.5} />,
+      title: 'Timeless Design',
+      desc: 'Classic styles that never go out of fashion.',
     },
   ]
 
@@ -34,12 +34,20 @@ export default function TrustStrip() {
     <section className="trust-strip">
       <div className="container trust-grid">
         {items.map((item, index) => (
-          <div key={index}>
-            <span className="icon-wrapper">{item.icon}</span>
-            <span>
-              {item.title}
-              <small>{item.desc}</small>
+          <div className="trust-item" key={index}>
+            <span className="icon-wrapper">
+              {item.icon}
             </span>
+
+            <div className="trust-text">
+              <span className="trust-title">
+                {item.title}
+              </span>
+
+              <small>
+                {item.desc}
+              </small>
+            </div>
           </div>
         ))}
       </div>

@@ -5,57 +5,103 @@ export default function Hero() {
 
       <div className="hero-content">
 
-        <div className="hero-brand">
-          <div className="hero-logo">HD</div>
+        {/* LEFT SIDE */}
+        <div className="hero-main">
 
-          <h2>HIDE DESIGN</h2>
-
-          <span>
-            MANUFACTURER &amp; EXPORTER OF LEATHER
+          <div className="hero-subtitle">
+            MANUFACTURER &amp; EXPORTER OF
             <br />
-            JACKET &amp; LONG COAT.
-          </span>
-        </div>
-
-        <div className="hero-title">
-          <span>PREMIUM QUALITY</span>
-
-          <h1>COATS</h1>
-        </div>
-
-        <div className="hero-description">
-          <div className="hero-features">
-            <span>Timeless Style</span>
-            <b>•</b>
-            <span>Superior Craftsmanship</span>
-            <b>•</b>
-            <span>Custom Made</span>
+            LEATHER JACKET &amp; WOOL LONG COAT.
           </div>
 
-          <p>
-            Established in 2002, we deal in leather jackets
-            and goods. Now offering premium quality wool
-            (tweed) long coat in custom design and
-            alignments.
-          </p>
+          <h1 className="hero-craftsmanship">
+            Premium Craftsmanship.
+          </h1>
+
+          <div className="hero-line"></div>
+
+          <div className="hero-about">
+            <h2>ABOUT US</h2>
+
+            <p>
+              Established in 2002, HIDE DESIGN has built a strong
+              reputation for excellence in the manufacturing of
+              premium leather goods, earning the trust of customers
+              through exceptional craftsmanship, superior materials,
+              and uncompromising quality.
+            </p>
+
+            <p>
+              Today, HIDE DESIGN proudly extends its expertise to the
+              manufacturing of luxury wool long coats, combining
+              traditional tailoring techniques with contemporary
+              designs to create garments that reflect sophistication
+              and comfort.
+            </p>
+          </div>
+
+          <div className="hero-actions">
+            <a className="btn btn-gold" href="#men">
+              EXPLORE COLLECTION <span>→</span>
+            </a>
+
+            <a className="btn btn-outline" href="#contact">
+              CONTACT US
+            </a>
+          </div>
+
         </div>
 
-        <div className="hero-actions">
-          <a className="btn btn-gold" href="#men">
-            Explore Cotes <span>→</span>
-          </a>
 
-          <a className="btn btn-outline" href="#contact">
-            Contact Us
-          </a>
+        {/* RIGHT SIDE BADGES */}
+        <div className="hero-badges">
+
+          <div className="hero-badge">
+            <div className="badge-icon">✦</div>
+
+            <div>
+              <strong>PREMIUM QUALITY</strong>
+              <span>
+                Finest materials &amp; exceptional finish
+              </span>
+            </div>
+          </div>
+
+
+          <div className="hero-badge">
+            <div className="badge-icon">✂</div>
+
+            <div>
+              <strong>EXPERT CRAFTSMANSHIP</strong>
+              <span>
+                Precision stitching &amp; attention to detail
+              </span>
+            </div>
+          </div>
+
+
+          <div className="hero-badge">
+            <div className="badge-icon">✓</div>
+
+            <div>
+              <strong>BUILT TO LAST</strong>
+              <span>
+                Durable, reliable &amp; made to last
+              </span>
+            </div>
+          </div>
+
         </div>
 
       </div>
 
+
+      {/* SCROLL */}
       <div className="hero-scroll">
         SCROLL TO EXPLORE
         <span className="chev"></span>
       </div>
+
     </section>
   )
 }
