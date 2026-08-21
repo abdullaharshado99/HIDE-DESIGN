@@ -1,23 +1,41 @@
+import { Shield, Scissors, Star, Globe } from 'lucide-react'
+
 interface TrustItem {
-  number: string
+  icon: React.ReactNode
   title: string
   desc: string
 }
 
 export default function TrustStrip() {
   const items: TrustItem[] = [
-    { number: '01', title: 'Premium Materials', desc: 'Finest Wool & Leather' },
-    { number: '02', title: 'Custom Design', desc: 'Built To Your Preference' },
-    { number: '03', title: 'Quality Assured', desc: 'Crafted To Perfection' },
-    { number: '04', title: 'Global Export', desc: 'Worldwide Shipping' },
+    { 
+      icon: <Shield size={36} strokeWidth={1.5} />, 
+      title: 'Premium Materials', 
+      desc: 'Finest Wool & Leather' 
+    },
+    { 
+      icon: <Scissors size={36} strokeWidth={1.5} />, 
+      title: 'Custom Design', 
+      desc: 'Built To Your Preference' 
+    },
+    { 
+      icon: <Star size={36} strokeWidth={1.5} />, 
+      title: 'Quality Assured', 
+      desc: 'Crafted To Perfection' 
+    },
+    { 
+      icon: <Globe size={36} strokeWidth={1.5} />, 
+      title: 'Global Export', 
+      desc: 'Worldwide Shipping' 
+    },
   ]
 
   return (
     <section className="trust-strip">
       <div className="container trust-grid">
-        {items.map((item) => (
-          <div key={item.number}>
-            <strong>{item.number}</strong>
+        {items.map((item, index) => (
+          <div key={index}>
+            <span className="icon-wrapper">{item.icon}</span>
             <span>
               {item.title}
               <small>{item.desc}</small>
