@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-hide_design}
+      POSTGRES_USER: ${DB_USER:-hide_design}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-change-this-db-password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - hide-design-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-hide_design} -d ${DB_NAME:-hide_design}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_HOST: postgres
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  hide-design-postgres:
