@@ -3,41 +3,41 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 @Entity('products')
 export class Product {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column({ unique: true, length: 60 })
-  articleNumber: string;
+  articleNumber?: string;
 
   @Column({ length: 160 })
-  name: string;
+  name?: string;
 
   @Column({ length: 30 })
-  category: string;
+  category?: string;
 
   @Column({ length: 30 })
-  audience: string;
+  audience?: string;
 
   @Column({ length: 120 })
-  material: string;
+  material?: string;
 
   @Column({ type: 'text' })
-  description: string;
+  description?: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  price: number | null;
+  price?: number | null;
 
   @Column({ length: 3, default: 'USD' })
-  currency: string;
+  currency?: string;
 
-  @Column({ length: 255 })
-  imageUrl: string;
+  @Column({ length: 1500 })
+  imageUrl?: string;
 
   @Column({ default: true })
-  published: boolean;
+  published?: boolean;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt?: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt?: Date;
 }

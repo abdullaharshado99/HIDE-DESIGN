@@ -36,6 +36,7 @@ export default function Navbar() {
           <a href="#women" onClick={() => setIsOpen(false)}>Women</a>
           <a href="#leather" onClick={() => setIsOpen(false)}>Leather</a>
           <a href="#custom" onClick={() => setIsOpen(false)}>Custom</a>
+          <a href="#account" onClick={() => setIsOpen(false)}>My account</a>
           <a href="#about" onClick={() => setIsOpen(false)}>About</a>
           <a href="#contact" onClick={() => setIsOpen(false)}>Contact Us</a>
         </nav>

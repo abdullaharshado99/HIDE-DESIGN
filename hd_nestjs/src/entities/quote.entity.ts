@@ -3,26 +3,26 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeor
 @Entity('quotes')
 export class Quote {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column({ length: 160 })
-  name: string;
+  name?: string;
 
   @Column({ length: 190 })
-  email: string;
+  email?: string;
 
   @Column({ type: 'varchar', length: 40, nullable: true })
-  phone: string | null;
+  phone?: string | null;
 
   @Column({ length: 80 })
-  category: string;
+  category?: string;
 
   @Column({ type: 'text' })
-  message: string;
+  message?: string;
 
   @Column({ length: 30, default: 'new' })
-  status: string;
+  status?: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt?: Date;
 }

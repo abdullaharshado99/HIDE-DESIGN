@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_DB: ${DB_NAME:-hide_design}
       POSTGRES_USER: ${DB_USER:-hide_design}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-change-this-db-password}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-itsabouts}
     ports:
       - "5432:5432"
     volumes:
@@ -22,6 +22,9 @@ services:
     env_file: .env
     environment:
       DB_HOST: postgres
+      PORT: 3001
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "3001:3001"
     depends_on:
