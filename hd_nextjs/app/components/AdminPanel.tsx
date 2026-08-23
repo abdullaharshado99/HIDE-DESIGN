@@ -21,7 +21,7 @@ const emptyProduct: Omit<Product, 'id'> = {
   material: '', description: '', price: null, currency: 'USD', imageUrl: '', published: true,
 }
 
-const CLOUD_NAME = 'gmqcr7ae'; 
+const CLOUD_NAME = 'gmqcr7ae';
 const UPLOAD_PRESET = 'hide_design_uploads';
 
 export default function AdminPanel() {

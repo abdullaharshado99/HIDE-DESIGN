@@ -7,15 +7,14 @@ import { CreateQuoteDto } from './dto/create-quote.dto';
 
 @Injectable()
 export class QuoteService {
-  constructor(@InjectRepository(Quote) private readonly quotes: Repository<Quote>) {}
+  constructor(@InjectRepository(Quote) private readonly quotes: Repository<Quote>) { }
 
   async create(dto: CreateQuoteDto) {
     try {
-      console.log('Received data:', dto); 
+      console.log('Received data:', dto);
       const quote = await this.quotes.save(this.quotes.create(dto));
       console.log('✅ Quote saved to database:', quote.id);
 
-      // Email bhejein
       try {
         await this.sendEmailNotification(quote);
       } catch (emailError: any) {
@@ -30,10 +29,9 @@ export class QuoteService {
 
       return quote;
     } catch (dbError: any) {
-      // ✅ Is line ne error ko log karna hai
       console.error('❌ Database Error:', dbError.message);
-      console.error(dbError.stack); // Exact error stack print karein
-      throw dbError; // Error frontend ko bhejein
+      console.error(dbError.stack); 
+      throw dbError; 
     }
   }
 

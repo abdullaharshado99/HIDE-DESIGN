@@ -6,14 +6,14 @@ import { QuoteService } from './quote.service';
 
 @Controller('quotes')
 export class QuoteController {
-  constructor(private readonly quotes: QuoteService) {}
+  constructor(private readonly quotes: QuoteService) { }
 
   @Post()
-  create(@Body() dto: CreateQuoteDto) { 
+  create(@Body() dto: CreateQuoteDto) {
     try {
       return this.quotes.create(dto);
     } catch (error) {
-      console.error('Controller Error:', error); 
+      console.error('Controller Error:', error);
       throw error;
     }
   }
