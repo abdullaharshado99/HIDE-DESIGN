@@ -1,9 +1,24 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { useEffect, useState, FormEvent } from 'react'
 
 export default function Contact() {
   const [status, setStatus] = useState<'idle' | 'submitted' | 'error'>('idle')
+  const [whatsappLink, setWhatsappLink] = useState('')
+
+  useEffect(() => {
+    const handleEnquiry = (event: Event) => {
+      const detail = (event as CustomEvent<{ name?: string; company?: string; products?: string[] }>).detail
+      const form = document.querySelector<HTMLFormElement>('.quote-form')
+      if (!form) return
+      const nameInput = form.elements.namedItem('name') as HTMLInputElement | null
+      const messageInput = form.elements.namedItem('message') as HTMLTextAreaElement | null
+      if (nameInput && detail.name) nameInput.value = detail.name
+      if (messageInput && detail.products?.length) messageInput.value = `I would like to discuss: ${detail.products.join(', ')}${detail.company ? `\nCompany: ${detail.company}` : ''}`
+    }
+    window.addEventListener('hide-design-enquiry', handleEnquiry)
+    return () => window.removeEventListener('hide-design-enquiry', handleEnquiry)
+  }, [])
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -18,6 +33,13 @@ export default function Contact() {
         body: JSON.stringify(data),
       })
       if (!response.ok) throw new Error('Quote submission failed')
+
+      const adminPhone = '+923284828987'
+      const messageBody = `New Quote Request\n\nName: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\nCategory: ${data.category}\nMessage: ${data.message}`
+      const encodedMessage = encodeURIComponent(messageBody)
+      const link = `https://wa.me/${adminPhone.replace('+', '')}?text=${encodedMessage}`
+
+      setWhatsappLink(link)
       setStatus('submitted')
       form.reset()
       setTimeout(() => setStatus('idle'), 5000)
@@ -55,7 +77,7 @@ export default function Contact() {
           <div className="form-row">
             <label>
               Phone
-              <input name="phone" placeholder="+92 ..." />
+              <input name="phone" required placeholder="+92 ..." />
             </label>
             <label>
               Interested In
@@ -75,7 +97,17 @@ export default function Contact() {
           <button className="btn btn-gold form-submit" type="submit">
             Send Request <span>→</span>
           </button>
-          {status === 'submitted' && <p className="form-success">Thank you. Your request has been received.</p>}
+
+          {status === 'submitted' && (
+            <div className="form-success">
+              <p>Thank you. Your request has been received.</p>
+              {whatsappLink && (
+                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-gold" style={{ marginTop: '10px' }}>
+                  📲 Send via WhatsApp
+                </a>
+              )}
+            </div>
+          )}
           {status === 'error' && <p className="form-success">We could not send your request. Please try again.</p>}
         </form>
       </div>

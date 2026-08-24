@@ -6,10 +6,17 @@ import { QuoteService } from './quote.service';
 
 @Controller('quotes')
 export class QuoteController {
-  constructor(private readonly quotes: QuoteService) {}
+  constructor(private readonly quotes: QuoteService) { }
 
   @Post()
-  create(@Body() dto: CreateQuoteDto) { return this.quotes.create(dto); }
+  create(@Body() dto: CreateQuoteDto) {
+    try {
+      return this.quotes.create(dto);
+    } catch (error) {
+      console.error('Controller Error:', error);
+      throw error;
+    }
+  }
 
   @Get()
   @UseGuards(JwtAuthGuard, AdminGuard)

@@ -2,6 +2,7 @@ import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import TrustStrip from './components/TrustStrip'
 import ProductCarousel from './components/ProductCarousel'
+import AccountDashboard from './components/AccountDashboard'
 import About from './components/About'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
@@ -15,6 +16,7 @@ export default function Home() {
         <TrustStrip />
         <ProductCarousel gender="men" />
         <ProductCarousel gender="women" />
+        <AccountDashboard />
 
         <section className="material-section" id="leather">
           <div className="container material-grid">
