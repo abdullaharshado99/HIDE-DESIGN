@@ -34,7 +34,7 @@ export default function Contact() {
       })
       if (!response.ok) throw new Error('Quote submission failed')
 
-      const adminPhone = '+923284828987'
+      const adminPhone = '+923044885277'
       const messageBody = `New Quote Request\n\nName: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\nCategory: ${data.category}\nMessage: ${data.message}`
       const encodedMessage = encodeURIComponent(messageBody)
       const link = `https://wa.me/${adminPhone.replace('+', '')}?text=${encodedMessage}`
@@ -56,8 +56,8 @@ export default function Contact() {
           <h2>Request a <em>quote.</em></h2>
           <p>Tell us what you are looking for and our team will get back to you with the next steps.</p>
           <div className="contact-details">
-            <a href="tel:+923137318089">+92 313 7318089</a>
-            <a href="tel:+923434094678">+92 343 4094678</a>
+            <a href="tel:+923044885277">+92 304 488 5277</a>
+            <a href="tel:+923434094678">+92 343 409 4678</a>
             <a href="mailto:info@hidesdesign.com">info@hidesdesign.com</a>
             <span>Pakistan · Worldwide Export</span>
           </div>

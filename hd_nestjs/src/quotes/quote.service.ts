@@ -90,7 +90,7 @@ export class QuoteService {
 
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: 'nidaarshad113@gmail.com',
+      to: 'abdullah.arshad@hidedesign.com',
       subject: `📩 New Quote Request from ${quote.name}`,
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd;">
