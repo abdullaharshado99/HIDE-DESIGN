@@ -9,6 +9,7 @@ import { QuoteModule } from './quotes/quote.module';
 import { User } from './entities/user.entity';
 import { Product } from './entities/product.entity';
 import { Quote } from './entities/quote.entity';
+import { HealthController } from './health.controller';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { Quote } from './entities/quote.entity';
     ProductModule,
     QuoteModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, HealthController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
