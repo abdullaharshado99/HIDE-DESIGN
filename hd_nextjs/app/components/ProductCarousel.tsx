@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 interface Product {
   id: string
@@ -17,72 +18,15 @@ interface ProductCarouselProps {
   gender: 'men' | 'women'
 }
 
-const products: Record<'men' | 'women', Product[]> = {
-  men: [
-    {
-      id: 'HD-M01',
-      name: 'The Regent',
-      material: 'Wool · Tailored Double-Breasted',
-      image: '/images/men/men-01.jpg',
-    },
-    {
-      id: 'HD-M02',
-      name: 'The Heritage',
-      material: 'Tweed · Classic Longline',
-      image: '/images/men/men-02.jpg',
-    },
-    {
-      id: 'HD-M03',
-      name: 'The Executive',
-      material: 'Wool Blend · Modern Fit',
-      image: '/images/men/men-03.jpg',
-    },
-    {
-      id: 'HD-M04',
-      name: 'The Sovereign',
-      material: 'Cashmere Blend · Luxury Finish',
-      image: '/images/men/men-04.jpg',
-    },
-    {
-      id: 'HD-M05',
-      name: 'The Traveller',
-      material: 'Wool · Relaxed Tailoring',
-      image: '/images/men/men-05.jpg',
-    },
-  ],
-
-  women: [
-    {
-      id: 'HD-W01',
-      name: 'The Elena',
-      material: 'Wool · Sculpted Silhouette',
-      image: '/images/women/women-01.jpg',
-    },
-    {
-      id: 'HD-W02',
-      name: 'The Camille',
-      material: 'Tweed · Soft Tailoring',
-      image: '/images/women/women-02.jpg',
-    },
-    {
-      id: 'HD-W03',
-      name: 'The Victoria',
-      material: 'Wool Blend · Refined Fit',
-      image: '/images/women/women-03.jpg',
-    },
-    {
-      id: 'HD-W04',
-      name: 'The Celeste',
-      material: 'Cashmere Blend · Signature Finish',
-      image: '/images/women/women-04.jpg',
-    },
-    {
-      id: 'HD-W05',
-      name: 'The Grace',
-      material: 'Wool · Contemporary Longline',
-      image: '/images/women/women-05.jpg',
-    },
-  ],
+interface ApiProduct {
+  articleNumber: string
+  name: string
+  material: string
+  description: string
+  imageUrl: string
+  price: number | null
+  currency: string
+  audience: string
 }
 
 export default function ProductCarousel({
@@ -90,44 +34,11 @@ export default function ProductCarousel({
 }: ProductCarouselProps) {
   const carouselRef = useRef<HTMLDivElement>(null)
 
+  const [products, setProducts] = useState<Product[]>([])
   const [selectedProduct, setSelectedProduct] =
     useState<Product | null>(null)
-  const [apiProducts, setApiProducts] = useState<Product[] | null>(null)
 
-  const items = apiProducts ?? products[gender]
-
-  useEffect(() => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
-
-    fetch(`${apiUrl}/products`)
-      .then((response) => response.ok ? response.json() : Promise.reject())
-      .then((remoteProducts: Array<{
-        articleNumber: string
-        name: string
-        material: string
-        description: string
-        imageUrl: string
-        price: number | null
-        currency: string
-        audience: string
-      }>) => {
-        const matchingProducts = remoteProducts
-          .filter((product) => product.audience.toLowerCase() === gender)
-          .map((product) => ({
-            id: product.articleNumber,
-            name: product.name,
-            material: product.material,
-            image: product.imageUrl,
-            description: product.description,
-            price: product.price,
-            currency: product.currency,
-          }))
-
-        if (matchingProducts.length > 0) setApiProducts(matchingProducts)
-      })
-      .catch(() => undefined)
-  }, [gender])
-
+  const [loading, setLoading] = useState(true)
   const title =
     gender === 'men'
       ? "Men's Long Coats"
@@ -138,27 +49,84 @@ export default function ProductCarousel({
       ? "THE MEN'S EDIT"
       : "THE WOMEN'S EDIT"
 
-  /* ---------- AUTO SCROLL ---------- */
+  useEffect(() => {
+    const apiUrl =
+      process.env.NEXT_PUBLIC_API_URL ??
+      'http://localhost:3001'
+
+    setLoading(true)
+
+    fetch(`${apiUrl}/products`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch products')
+        }
+
+        return response.json()
+      })
+      .then((remoteProducts: ApiProduct[]) => {
+        const matchingProducts = remoteProducts
+          .filter(
+            (product) =>
+              product.audience?.toLowerCase() === gender
+          )
+          .map((product) => ({
+            id: product.articleNumber,
+            name: product.name,
+            material: product.material,
+            image: product.imageUrl,
+            description: product.description,
+            price: product.price,
+            currency: product.currency,
+          }))
+
+        setProducts(matchingProducts)
+      })
+      .catch((error) => {
+        console.error(
+          'Error loading products:',
+          error
+        )
+
+        setProducts([])
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [gender])
 
   useEffect(() => {
     const carousel = carouselRef.current
 
-    if (!carousel) return
+    if (!carousel || products.length === 0) {
+      return
+    }
 
     const interval = setInterval(() => {
-      const card = carousel.querySelector(
-        '.product-card'
-      ) as HTMLElement | null
+      const card =
+        carousel.querySelector(
+          '.product-card'
+        ) as HTMLElement | null
 
       if (!card) return
 
       const gap = 24
-      const scrollAmount = card.offsetWidth + gap
+
+      const scrollAmount =
+        card.offsetWidth + gap
 
       const maxScroll =
-        carousel.scrollWidth - carousel.clientWidth
+        carousel.scrollWidth -
+        carousel.clientWidth
 
-      if (carousel.scrollLeft >= maxScroll - 5) {
+      if (maxScroll <= 0) {
+        return
+      }
+
+      if (
+        carousel.scrollLeft >=
+        maxScroll - 5
+      ) {
         carousel.scrollTo({
           left: 0,
           behavior: 'smooth',
@@ -171,19 +139,24 @@ export default function ProductCarousel({
       }
     }, 5000)
 
-    return () => clearInterval(interval)
-  }, [])
-
-  /* ---------- CLOSE MODAL WITH ESC ---------- */
+    return () => {
+      clearInterval(interval)
+    }
+  }, [products])
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = (
+      event: KeyboardEvent
+    ) => {
       if (event.key === 'Escape') {
         setSelectedProduct(null)
       }
     }
 
-    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener(
+      'keydown',
+      handleKeyDown
+    )
 
     return () => {
       window.removeEventListener(
@@ -192,8 +165,6 @@ export default function ProductCarousel({
       )
     }
   }, [])
-
-  /* ---------- PREVENT BACKGROUND SCROLL ---------- */
 
   useEffect(() => {
     if (selectedProduct) {
@@ -207,18 +178,26 @@ export default function ProductCarousel({
     }
   }, [selectedProduct])
 
+  const openProductModule = (
+    product: Product
+  ) => {
+    setSelectedProduct(product)
+  }
+  const closeProductModule = () => {
+    setSelectedProduct(null)
+  }
+
   return (
     <>
       <section
         className={`collection-section ${
-          gender === 'men' ? 'section-dark' : ''
+          gender === 'men'
+            ? 'section-dark'
+            : ''
         }`}
         id={gender}
       >
         <div className="container">
-
-          {/* SECTION HEADING */}
-
           <div className="section-heading">
             <div>
               <span className="eyebrow">
@@ -228,61 +207,72 @@ export default function ProductCarousel({
               <h2>{title}</h2>
             </div>
           </div>
-
-          {/* CAROUSEL */}
-
-          <div
-            className="carousel"
-            ref={carouselRef}
-          >
-            {items.map((product) => (
-              <article
-                className="product-card"
-                key={product.id}
-                onClick={() =>
-                  setSelectedProduct(product)
-                }
+          {loading && (
+            <div className="products-loading">
+              Loading products...
+            </div>
+          )}
+          {!loading &&
+            products.length === 0 && (
+              <div className="products-empty">
+                No products available.
+              </div>
+            )}
+          {!loading &&
+            products.length > 0 && (
+              <div
+                className="carousel"
+                ref={carouselRef}
               >
-                <div className="product-image">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    width={280}
-                    height={340}
-                    onError={(e) => {
-                      const target =
-                        e.target as HTMLImageElement
+                {products.map((product) => (
+                  <article
+                    className="product-card"
+                    key={product.id}
+                    onClick={() =>
+                      openProductModule(
+                        product
+                      )
+                    }
+                  >
+                    <div className="product-image">
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        width={280}
+                        height={340}
+                        onError={(event) => {
+                          const target =
+                            event.target as HTMLImageElement
 
-                      target.src =
-                        '/images/placeholder.svg'
-                    }}
-                  />
-                </div>
+                          target.src =
+                            '/images/placeholder.svg'
+                        }}
+                      />
+                    </div>
+                    <div className="product-info">
+                      <span className="product-id">
+                        {product.id}
+                      </span>
 
-                <div className="product-info">
-                  <span className="product-id">
-                    {product.id}
-                  </span>
+                      <h3>
+                        {product.name}
+                      </h3>
 
-                  <h3>{product.name}</h3>
-
-                  <p>{product.material}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-
+                      <p>
+                        {product.material}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
         </div>
       </section>
-
-
-      {/* ---------- PRODUCT MODAL ---------- */}
-
       {selectedProduct && (
         <div
           className="product-modal-overlay"
-          onClick={() =>
-            setSelectedProduct(null)
+          onClick={
+            closeProductModule
           }
         >
           <div
@@ -291,32 +281,27 @@ export default function ProductCarousel({
               event.stopPropagation()
             }
           >
-
-            {/* CLOSE BUTTON */}
-
             <button
               className="product-modal-close"
-              onClick={() =>
-                setSelectedProduct(null)
+              onClick={
+                closeProductModule
               }
-              aria-label="Close product details"
+              aria-label="Close product module"
             >
               ×
             </button>
-
-            {/* IMAGE */}
-
             <div className="product-modal-image">
               <Image
-                src={selectedProduct.image}
-                alt={selectedProduct.name}
+                src={
+                  selectedProduct.image
+                }
+                alt={
+                  selectedProduct.name
+                }
                 width={500}
                 height={600}
               />
             </div>
-
-            {/* DETAILS */}
-
             <div className="product-modal-content">
 
               <span className="product-modal-id">
@@ -333,16 +318,37 @@ export default function ProductCarousel({
                 MATERIAL &amp; DESIGN
               </span>
 
-              <p>
+              <p className="product-modal-material">
                 {selectedProduct.material}
               </p>
-              {selectedProduct.description && <p>{selectedProduct.description}</p>}
-              {selectedProduct.price != null && (
-                <p>{selectedProduct.currency} {selectedProduct.price}</p>
+              {selectedProduct.description && (
+                <p className="product-modal-description">
+                  {
+                    selectedProduct.description
+                  }
+                </p>
               )}
 
-            </div>
+              {selectedProduct.price != null && (
+                <p className="product-modal-price">
+                  {selectedProduct.currency}{' '}
+                  {selectedProduct.price}
+                </p>
+              )}
+              <Link
+                href={`/products/${encodeURIComponent(
+                  selectedProduct.id
+                )}`}
+                className="product-details-btn"
+                onClick={() =>
+                  setSelectedProduct(null)
+                }
+              >
+                View Details
+                <span>→</span>
+              </Link>
 
+            </div>
           </div>
         </div>
       )}
