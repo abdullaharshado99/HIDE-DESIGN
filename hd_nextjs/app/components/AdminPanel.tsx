@@ -25,7 +25,7 @@ const CLOUD_NAME = 'gmqcr7ae';
 const UPLOAD_PRESET = 'hide_design_uploads';
 
 export default function AdminPanel() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
   const [token, setToken] = useState('')
   const [credentials, setCredentials] = useState({ email: '', password: '' })
   const [products, setProducts] = useState<Product[]>([])

@@ -24,6 +24,7 @@ export default function Navbar() {
             alt="Hide Design logo"
             width={38}
             height={38}
+            style={{ width: 'auto' }}
           />
           <span className="brand-text">
             <span className="name">HIDE DESIGN</span>
