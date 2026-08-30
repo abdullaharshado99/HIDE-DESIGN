@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^ss -ltnp 'sport = :3002' \\|\\| true && printf '\\\\nProcesses:\\\\n' && pgrep -af 'nest\\|node\\|tsx\\|ts-node' \\|\\| true$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

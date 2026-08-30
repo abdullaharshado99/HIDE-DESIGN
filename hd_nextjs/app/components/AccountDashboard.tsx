@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { ArrowUpRight, Check, Heart, UserRound } from 'lucide-react'
+import { getApiUrl } from '../api-config'
 
 interface Product { id: string; name: string; detail: string; audience: string; description?: string }
 
@@ -29,9 +30,9 @@ export default function AccountDashboard() {
       if (Array.isArray(shortlist)) setSavedProducts(shortlist)
       if (typeof profile.name === 'string') setName(profile.name)
       if (typeof profile.company === 'string') setCompany(profile.company)
-    } catch { /* Ignore malformed browser data. */ }
+    } catch {  }
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
+    const apiUrl = getApiUrl()
     fetch(`${apiUrl}/products`)
       .then((response) => response.ok ? response.json() : Promise.reject())
       .then((remoteProducts: Array<{ articleNumber: string; name: string; material: string; audience: string; description: string }>) => {
