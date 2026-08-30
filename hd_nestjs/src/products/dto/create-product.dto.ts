@@ -1,4 +1,5 @@
-import { IsBoolean, IsNumber, IsOptional, IsString, MaxLength, Min } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, Min } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateProductDto {
   @IsString() @MaxLength(60) articleNumber?: string;
@@ -7,8 +8,8 @@ export class CreateProductDto {
   @IsString() @MaxLength(30) audience?: string;
   @IsString() @MaxLength(120) material?: string;
   @IsString() description?: string;
-  @IsOptional() @IsNumber() @Min(0) price?: number;
+  @IsOptional() @Type(() => Number) @IsNumber() @Min(0) price?: number;
   @IsOptional() @IsString() @MaxLength(3) currency?: string;
-  @IsString() @MaxLength(1500) imageUrl?: string;
+  @IsString() @IsNotEmpty() @MaxLength(1500) imageUrl?: string;
   @IsOptional() @IsBoolean() published?: boolean;
 }
