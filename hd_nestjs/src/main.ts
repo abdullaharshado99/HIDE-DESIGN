@@ -5,14 +5,16 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const allowedOrigins = (process.env.FRONTEND_URL ?? [
+  const defaultOrigins = [
     'http://localhost:3000',
     'https://hidesdesign.com',
     'https://www.hidesdesign.com',
-  ].join(','))
+  ];
+  const configuredOrigins = (process.env.FRONTEND_URL ?? '')
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean);
+  const allowedOrigins = [...new Set([...defaultOrigins, ...configuredOrigins])];
 
   app.enableCors({
     origin: allowedOrigins,
