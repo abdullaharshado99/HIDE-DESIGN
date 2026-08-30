@@ -22,11 +22,11 @@ services:
     env_file: .env
     environment:
       DB_HOST: postgres
-      PORT: 3001
+      PORT: 4000
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - "3001:3001"
+      - "4000:4000"
     depends_on:
       postgres:
         condition: service_healthy
