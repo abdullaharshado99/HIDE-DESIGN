@@ -86,8 +86,12 @@ export default function AdminPanel() {
 
     const productToSave = {
       ...form,
-      imageUrl: form.imageUrl || '/images/placeholder.svg',
+      price: form.price === null ? null : Number(form.price),
     };
+    if (!productToSave.imageUrl.trim()) {
+      setMessage('Please upload a product image before saving.')
+      return
+    }
     const endpoint = editingId ? `${apiUrl}/products/${editingId}` : `${apiUrl}/products`
     const response = await fetch(endpoint, {
       method: editingId ? 'PATCH' : 'POST',
@@ -178,7 +182,7 @@ export default function AdminPanel() {
 
           <label>
             Upload Image
-            <input type="file" accept="image/*" onChange={uploadImage} />
+            <input type="file" accept="image/*" required={!editingId} onChange={uploadImage} />
             {uploading && <span>Uploading to Cloudinary...</span>}
             {form.imageUrl && (
               <img src={form.imageUrl} alt="Preview" style={{ width: '100px', height: 'auto', marginTop: '10px' }} />
