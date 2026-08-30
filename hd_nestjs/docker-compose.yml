@@ -17,16 +17,17 @@ services:
       retries: 20
 
   api:
+    profiles: ["container-api"]
     build: .
     restart: unless-stopped
     env_file: .env
     environment:
       DB_HOST: postgres
-      PORT: 4000
+      PORT: 3002
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - "4000:4000"
+      - "3002:3002"
     depends_on:
       postgres:
         condition: service_healthy

@@ -1,6 +1,7 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
+import { getApiUrl } from '../api-config'
 
 interface Product {
   id: number
@@ -25,7 +26,7 @@ const CLOUD_NAME = 'gmqcr7ae';
 const UPLOAD_PRESET = 'hide_design_uploads';
 
 export default function AdminPanel() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'
+  const apiUrl = getApiUrl()
   const [token, setToken] = useState('')
   const [credentials, setCredentials] = useState({ email: '', password: '' })
   const [products, setProducts] = useState<Product[]>([])

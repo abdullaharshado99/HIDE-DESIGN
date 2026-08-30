@@ -23,6 +23,30 @@ export class ProductService {
     return product;
   }
 
+  async findByArticleNumber(articleNumber: string) {
+  const product = await this.products.findOne({
+    where: { articleNumber },
+  });
+
+  if (!product) {
+    throw new NotFoundException('Article not found');
+  }
+
+  return product;
+}
+
+  async findOneByArticleNumber(articleNumber: string) {
+  const product = await this.products.findOne({
+    where: { articleNumber },
+  });
+
+  if (!product) {
+    throw new NotFoundException('Article not found');
+  }
+
+  return product;
+}
+
   create(dto: CreateProductDto) {
     return this.products.save(this.products.create(dto));
   }

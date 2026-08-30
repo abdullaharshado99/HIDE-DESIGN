@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, FormEvent } from 'react'
+import { getApiUrl } from '../api-config'
 
 export default function Contact() {
   const [status, setStatus] = useState<'idle' | 'submitted' | 'error'>('idle')
@@ -24,7 +25,7 @@ export default function Contact() {
     e.preventDefault()
     const form = e.currentTarget
     const data = Object.fromEntries(new FormData(form).entries())
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
+    const apiUrl = getApiUrl()
 
     try {
       const response = await fetch(`${apiUrl}/quotes`, {

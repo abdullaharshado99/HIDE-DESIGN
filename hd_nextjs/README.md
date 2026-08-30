@@ -16,6 +16,10 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+The frontend uses `http://localhost:3002` for local API requests and
+`https://hide-design.onrender.com` on the deployed HIDE DESIGN domains. Set
+`NEXT_PUBLIC_API_URL` to override this when using another environment.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

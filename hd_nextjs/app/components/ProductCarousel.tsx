@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { getApiUrl } from '../api-config'
 
 interface Product {
   id: string
@@ -50,9 +51,7 @@ export default function ProductCarousel({
       : "THE WOMEN'S EDIT"
 
   useEffect(() => {
-    const apiUrl =
-      process.env.NEXT_PUBLIC_API_URL ??
-      'http://localhost:4000'
+    const apiUrl = getApiUrl()
 
     setLoading(true)
 
