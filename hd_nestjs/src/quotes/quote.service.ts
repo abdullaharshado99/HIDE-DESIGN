@@ -42,11 +42,14 @@ export class QuoteService {
     const apiKey = process.env.WASPHERE_API_KEY;
     const workspaceId = process.env.WASPHERE_WORKSPACE_ID;
     const sessionId = process.env.WASPHERE_SESSION_ID;
-    const recipient = process.env.ADMIN_WHATSAPP_NUMBER?.replace(/\D/g, '');
+    const recipients = (process.env.QUOTE_WHATSAPP_RECIPIENTS ?? process.env.ADMIN_WHATSAPP_NUMBER ?? '')
+      .split(',')
+      .map((recipient) => recipient.replace(/\D/g, ''))
+      .filter(Boolean);
 
-    if (!apiUrl || !apiKey || !workspaceId || !sessionId || !recipient) {
+    if (!apiUrl || !apiKey || !workspaceId || !sessionId || !recipients.length) {
       throw new Error(
-        'Missing WASPHERE_API_URL, WASPHERE_API_KEY, WASPHERE_WORKSPACE_ID, WASPHERE_SESSION_ID, or ADMIN_WHATSAPP_NUMBER',
+        'Missing WASPHERE_API_URL, WASPHERE_API_KEY, WASPHERE_WORKSPACE_ID, WASPHERE_SESSION_ID, or QUOTE_WHATSAPP_RECIPIENTS',
       );
     }
 
@@ -61,36 +64,59 @@ export class QuoteService {
       `Message: ${quote.message}`,
     ].join('\n');
 
-    console.log(`Sending WhatsApp notification to ${recipient} via ${endpoint}`);
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ to: recipient, text: messageBody }),
-    });
+    await Promise.all(recipients.map(async (recipient) => {
+      console.log(`Sending WhatsApp notification to ${recipient} via ${endpoint}`);
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ to: recipient, text: messageBody }),
+      });
 
-    const responseText = await response.text();
-    if (!response.ok) {
-      throw new Error(`WaSphere returned ${response.status}: ${responseText}`);
-    }
+      const responseText = await response.text();
+      if (!response.ok) {
+        throw new Error(`WaSphere returned ${response.status} for ${recipient}: ${responseText}`);
+      }
 
-    console.log('✅ WhatsApp notification sent:', responseText);
+      console.log(`✅ WhatsApp notification sent to ${recipient}:`, responseText);
+    }));
   }
 
   private async sendEmailNotification(quote: Quote) {
+    const sender = process.env.EMAIL_USER?.trim();
+    const password = process.env.EMAIL_PASS?.replace(/\s/g, '');
+    const recipients = (process.env.QUOTE_EMAIL_RECIPIENTS ?? process.env.EMAIL_USER ?? '')
+      .split(',')
+      .map((email) => email.trim())
+      .filter(Boolean);
+
+    if (!recipients.length) {
+      throw new Error('Missing QUOTE_EMAIL_RECIPIENTS or EMAIL_USER');
+    }
+
+    if (!sender || !password) {
+      throw new Error('Missing EMAIL_USER or EMAIL_PASS');
+    }
+
+    if (password.includes(',') || password.includes('//')) {
+      throw new Error('EMAIL_PASS must contain one App Password for EMAIL_USER, without commas or comments');
+    }
+
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: process.env.EMAIL_SMTP_HOST ?? 'smtp.zoho.com',
+      port: Number(process.env.EMAIL_SMTP_PORT ?? 465),
+      secure: process.env.EMAIL_SMTP_SECURE !== 'false',
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: sender,
+        pass: password,
       },
     });
 
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: 'abdullah.arshad@hidedesign.com',
+      from: sender,
+      to: recipients,
       subject: `📩 New Quote Request from ${quote.name}`,
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd;">

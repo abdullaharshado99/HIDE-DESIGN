@@ -43,7 +43,7 @@ export default function Contact() {
       setWhatsappLink(link)
       setStatus('submitted')
       form.reset()
-      setTimeout(() => setStatus('idle'), 5000)
+      setTimeout(() => setStatus('idle'), 600000)
     } catch {
       setStatus('error')
     }

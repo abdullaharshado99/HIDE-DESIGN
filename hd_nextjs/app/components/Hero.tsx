@@ -52,49 +52,7 @@ export default function Hero() {
 
         </div>
 
-
-        {/* RIGHT SIDE BADGES */}
-        <div className="hero-badges">
-
-          <div className="hero-badge">
-            <div className="badge-icon">✦</div>
-
-            <div>
-              <strong>PREMIUM QUALITY</strong>
-              <span>
-                Finest materials &amp; exceptional finish
-              </span>
-            </div>
-          </div>
-
-
-          <div className="hero-badge">
-            <div className="badge-icon">✂</div>
-
-            <div>
-              <strong>EXPERT CRAFTSMANSHIP</strong>
-              <span>
-                Precision stitching &amp; attention to detail
-              </span>
-            </div>
-          </div>
-
-
-          <div className="hero-badge">
-            <div className="badge-icon">✓</div>
-
-            <div>
-              <strong>BUILT TO LAST</strong>
-              <span>
-                Durable, reliable &amp; made to last
-              </span>
-            </div>
-          </div>
-
-        </div>
-
       </div>
-
 
       {/* SCROLL */}
       <div className="hero-scroll">
