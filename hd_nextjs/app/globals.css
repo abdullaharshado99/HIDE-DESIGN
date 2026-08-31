@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
 :root {
   --ink: #120d0a;
   --espresso: #1c1611;
@@ -11,6 +12,8 @@
   --muted: #a9977d;
   --hair: rgba(201,162,77,0.25);
   --shadow: 0 20px 50px rgba(0,0,0,0.35);
+    --font-cormorant: 'Cormorant Garamond', serif;
+
 }
 
 * {
@@ -133,150 +136,107 @@ button {
   display: inline-block;
 }
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
+/* ---------- NAV ---------- */
 
 .nav {
   position: fixed;
-
   top: 0;
   left: 0;
   right: 0;
-
   z-index: 200;
-
-  padding: 22px 0;
-
-  transition:
-    background 0.4s ease,
-    padding 0.4s ease,
-    box-shadow 0.4s ease;
+  padding: 22px 24px;
+  transition: background .4s ease, padding .4s ease, box-shadow .4s ease;
 }
-
-
-/* FULL WIDTH NAV */
 
 .nav .wrap {
   width: 100%;
   max-width: none;
 
-  padding-left: 28px;
-  padding-right: 28px;
-
-  margin: 0;
-
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
 
-  gap: 40px;
+  gap: 30px;
 }
 
-
-/* ---------- BRAND ---------- */
-
+/* LEFT - HD LOGO */
 .brand {
+  justify-self: start;
+
   display: flex;
-
   align-items: center;
-
   gap: 12px;
 
   text-decoration: none;
-
-  flex-shrink: 0;
 }
 
 .brand img {
   height: 38px;
-
   width: auto;
-
   display: block;
-
-  background: var(--gold-bright);
-
+  background: transparent;
   object-fit: contain;
 }
 
 .brand-text {
   display: flex;
-
   flex-direction: column;
-
   line-height: 1.1;
 }
 
 .brand-text .name {
   font-family: 'Fraunces', serif;
-
   font-size: 19px;
-
   letter-spacing: 0.14em;
-
   color: var(--cream);
 }
 
 .brand-text .sub {
   font-size: 9px;
-
   letter-spacing: 0.2em;
-
   color: var(--muted);
-
   text-transform: uppercase;
-
   margin-top: 2px;
 }
 
-
-/* ---------- NAV LINKS ---------- */
-
+/* CENTER - NAVIGATION LINKS */
 .primary-links {
+  justify-self: center;
+
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
-  gap: 42px;
-
-  margin-left: auto;
+  gap: 34px;
 }
 
 .primary-links a {
+  font-family: 'Jost', sans-serif;
   font-size: 12.5px;
-
   letter-spacing: 0.14em;
-
   text-transform: uppercase;
 
   color: var(--parchment);
 
   position: relative;
-
   padding: 4px 0;
 
-  margin-right: 0;
+  text-decoration: none;
 }
 
 .primary-links a::after {
   content: '';
 
   position: absolute;
-
   left: 0;
-
   bottom: 0;
 
   width: 0;
-
   height: 1px;
 
   background: var(--gold);
 
-  transition: width 0.3s ease;
+  transition: width .3s ease;
 }
 
 .primary-links a:hover::after {
@@ -287,21 +247,14 @@ button {
   color: var(--gold-bright);
 }
 
-
-/* ---------- RIGHT NAV ---------- */
-
+/* RIGHT - QUOTE BUTTON */
 .nav-right {
+  justify-self: end;
+
   display: flex;
-
   align-items: center;
-
   gap: 28px;
-
-  flex-shrink: 0;
 }
-
-
-/* ---------- QUOTE BUTTON ---------- */
 
 .btn-quote {
   border: 1px solid var(--gold);
@@ -310,60 +263,52 @@ button {
 
   padding: 11px 22px;
 
+  font-family: 'Jost', sans-serif;
   font-size: 12px;
-
   letter-spacing: 0.16em;
 
   text-transform: uppercase;
-
   border-radius: 2px;
 
   display: inline-flex;
-
   align-items: center;
-
+  justify-content: center;
   gap: 8px;
 
   transition:
-    background 0.3s ease,
-    color 0.3s ease;
+    background .3s ease,
+    color .3s ease,
+    border-color .3s ease;
 
   white-space: nowrap;
 }
 
 .btn-quote:hover {
   background: var(--gold);
-
   color: var(--ink);
 }
 
-
-/* ---------- SCROLLED NAV ---------- */
-
+/* SCROLLED NAV */
 .nav.scrolled {
   background: rgba(18, 13, 10, 0.92);
 
   backdrop-filter: blur(10px);
 
-  padding: 14px 0;
+  padding: 14px 24px;
 
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
 
   border-bottom: 1px solid var(--hair);
 }
 
-
-/* ---------- HAMBURGER ---------- */
-
+/* MOBILE MENU BUTTON */
 .hamburger {
   display: none;
 
   flex-direction: column;
-
   gap: 5px;
 
   background: none;
-
   border: none;
 
   padding: 6px;
@@ -371,7 +316,6 @@ button {
 
 .hamburger span {
   width: 24px;
-
   height: 1.5px;
 
   background: var(--cream);
@@ -379,10 +323,47 @@ button {
   display: block;
 }
 
+@media (max-width: 768px) {
 
-/* =========================================================
-   HERO
-========================================================= */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 16px 18px;
+  }
+
+  .nav .wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0;
+  }
+
+  .primary-links {
+    display: none;
+  }
+
+  .nav-right .btn-quote {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+    margin-left: auto;
+  }
+
+  .hero {
+    padding-top: 120px;
+  }
+
+  .hero-content {
+    padding-top: 30px;
+  }
+}
+
+
+/* ---------- HERO ---------- */
 
 .hero {
   position: relative;
@@ -390,26 +371,18 @@ button {
   min-height: 100vh;
 
   background-image: url('/images/hero-bg.jpg');
-
   background-size: cover;
-
-  background-position: center center;
-
+  background-position: center 20%;
   background-repeat: no-repeat;
 
   display: flex;
-
   align-items: flex-end;
 
   overflow: hidden;
 }
 
-
-/* ---------- HERO OVERLAY ---------- */
-
 .hero-overlay {
   position: absolute;
-
   inset: 0;
 
   background: linear-gradient(
@@ -423,97 +396,77 @@ button {
   z-index: 1;
 }
 
-
-/* ---------- HERO CONTENT ---------- */
-
+/* FULL WIDTH HERO CONTENT */
 .hero-content {
   position: relative;
-
   z-index: 2;
 
   width: 100%;
-
   max-width: none;
 
   margin: 0;
 
-  padding: 0 28px 105px;
+  padding: 0 24px 105px;
 
   display: flex;
-
   align-items: flex-end;
+  justify-content: flex-start;
 
-  justify-content: space-between;
-
-  gap: 50px;
+  gap: 60px;
 }
 
-
-/* =========================================================
-   LEFT HERO TEXT
-========================================================= */
-
+/* LEFT SIDE TEXT */
 .hero-main {
-  max-width: 570px;
+  width: 100%;
+  max-width: 780px;
 
-  /* TEXT BILKUL LEFT SIDE KE QAREEB */
-
-  transform: translateX(0);
+  transform: none;
 }
 
-
-/* ---------- SUBTITLE ---------- */
-
+/* MANUFACTURER TEXT */
 .hero-subtitle {
   font-family: 'Fraunces', serif;
 
-  font-size: clamp(23px, 2.1vw, 32px);
+  font-size: clamp(25px, 2.15vw, 34px);
 
-  line-height: 1.05;
+  line-height: 1.02;
 
   font-weight: 500;
 
-  letter-spacing: 0.02em;
+  letter-spacing: 0.015em;
 
   color: var(--cream);
 
-  margin-bottom: 14px;
+  margin: 0 0 14px;
 
   text-transform: uppercase;
+
+  max-width: 760px;
 }
 
-
-/* ---------- CRAFTSMANSHIP ---------- */
-
+/* PREMIUM CRAFTSMANSHIP */
 .hero-craftsmanship {
-  font-family: 'Fraunces', serif;
-
-  font-size: clamp(38px, 4vw, 58px);
-
-  line-height: 1;
-
-  font-weight: 400;
-
-  font-style: italic;
-
-  color: var(--gold-bright);
-
-  margin-bottom: 14px;
+  font-family: 'Cormorant Garamond', 'Fraunces', serif !important;
+  font-size: clamp(42px, 5vw, 68px) !important;
+  font-weight: 500 !important;
+  font-style: italic !important;
+  color: #e6c675 !important;
+  margin: 0 0 18px 0 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
 }
 
+/* GOLD LINE */
 .hero-line {
   width: 90px;
-
   height: 1px;
 
   background: var(--gold);
 
-  margin-bottom: 38px;
+  margin: 0 0 38px;
 }
 
-
-/* ---------- ABOUT ---------- */
-
+/* ABOUT */
 .hero-about {
   max-width: 560px;
 }
@@ -521,7 +474,7 @@ button {
 .hero-about h2 {
   font-family: 'Jost', sans-serif;
 
-  font-size: 14px;
+  font-size: 15px;
 
   font-weight: 600;
 
@@ -529,7 +482,7 @@ button {
 
   color: var(--gold-bright);
 
-  margin-bottom: 14px;
+  margin: 0 0 14px;
 
   text-transform: uppercase;
 }
@@ -537,7 +490,7 @@ button {
 .hero-about p {
   font-family: 'Jost', sans-serif;
 
-  font-size: 14px;
+  font-size: 20px;
 
   line-height: 1.65;
 
@@ -545,14 +498,12 @@ button {
 
   color: var(--cream);
 
-  margin-bottom: 22px;
+  margin: 0 0 22px;
 
   max-width: 550px;
 }
 
-
-/* ---------- HERO BUTTONS ---------- */
-
+/* BUTTONS */
 .hero-actions {
   display: flex;
 
@@ -583,7 +534,6 @@ button {
   display: inline-flex;
 
   align-items: center;
-
   justify-content: center;
 
   gap: 10px;
@@ -621,122 +571,12 @@ button {
   transform: translateY(-2px);
 }
 
-
-/* =========================================================
-   RIGHT HERO BADGES
-========================================================= */
-
-.hero-badges {
-  width: 340px;
-
-  flex-shrink: 0;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 16px;
-
-  padding-bottom: 5px;
-}
-
-
-/* ---------- BADGE ---------- */
-
-.hero-badge {
-  display: flex;
-
-  align-items: center;
-
-  gap: 16px;
-
-  padding: 18px 20px;
-
-  background: rgba(20, 15, 11, 0.58);
-
-  border: 1px solid rgba(201, 163, 92, 0.35);
-
-  backdrop-filter: blur(5px);
-
-  transition: all 0.3s ease;
-}
-
-.hero-badge:hover {
-  border-color: var(--gold);
-
-  background: rgba(20, 15, 11, 0.72);
-
-  transform: translateX(-5px);
-}
-
-
-/* ---------- BADGE ICON ---------- */
-
-.badge-icon {
-  width: 42px;
-
-  height: 42px;
-
-  flex-shrink: 0;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border: 1px solid var(--gold);
-
-  border-radius: 50%;
-
-  color: var(--gold-bright);
-
-  font-size: 18px;
-}
-
-
-/* ---------- BADGE TEXT ---------- */
-
-.hero-badge strong {
-  display: block;
-
-  font-family: 'Jost', sans-serif;
-
-  font-size: 11px;
-
-  font-weight: 600;
-
-  letter-spacing: 0.12em;
-
-  text-transform: uppercase;
-
-  color: var(--cream);
-
-  margin-bottom: 5px;
-}
-
-.hero-badge span {
-  display: block;
-
-  font-family: 'Jost', sans-serif;
-
-  font-size: 10px;
-
-  line-height: 1.4;
-
-  color: var(--muted);
-}
-
-
-/* =========================================================
-   HERO SCROLL
-========================================================= */
+/* ---------- SCROLL INDICATOR ---------- */
 
 .hero-scroll {
   position: absolute;
 
   left: 50%;
-
   bottom: 26px;
 
   transform: translateX(-50%);
@@ -784,11 +624,9 @@ button {
   position: absolute;
 
   top: -34px;
-
   left: 0;
 
   width: 100%;
-
   height: 100%;
 
   background: linear-gradient(
@@ -798,6 +636,29 @@ button {
   );
 
   animation: slide 1.8s ease-in-out infinite;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-cormorant), serif !important;
+  font-size: 34px;
+  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: #f4ede0;
+  max-width: 650px;
+  margin: 0;
+}
+
+.hero-script {
+  font-family: var(--font-cormorant), serif !important;
+  font-size: 58px;
+  line-height: 1;
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: 0;
+  color: #e6c675;
+  white-space: nowrap;
+  margin: 12px 0 0;
 }
 
 @keyframes slide {
@@ -810,73 +671,58 @@ button {
   }
 }
 
+/* ---------- TABLET ---------- */
 
-/* =========================================================
-   TABLET
-========================================================= */
+@media (max-width: 1000px) {
 
-@media (max-width: 900px) {
+  .nav {
+    padding: 18px 20px;
+  }
 
   .nav .wrap {
-    padding-left: 20px;
-
-    padding-right: 20px;
-
-    gap: 20px;
+    grid-template-columns: auto 1fr auto;
   }
 
   .primary-links {
-    gap: 22px;
+    gap: 20px;
+  }
+
+  .primary-links a {
+    font-size: 11px;
   }
 
   .hero-content {
-    gap: 30px;
-
-    padding-left: 20px;
-
-    padding-right: 20px;
+    padding: 0 24px 95px;
   }
 
   .hero-main {
-    max-width: 560px;
-
-    transform: none;
+    max-width: 700px;
   }
 
-  .hero-badges {
-    width: 280px;
+  .hero-subtitle {
+    max-width: 680px;
   }
 
-  .hero-badge {
-    padding: 14px;
-  }
-
-  .badge-icon {
-    width: 36px;
-
-    height: 36px;
-
-    font-size: 15px;
+  .hero-craftsmanship {
+    font-size: clamp(42px, 5vw, 56px);
   }
 }
 
 
-/* =========================================================
-   MOBILE
-========================================================= */
+/* ---------- MOBILE ---------- */
 
 @media (max-width: 700px) {
 
-  /* NAV */
-
   .nav {
-    padding: 16px 0;
+    padding: 16px 18px;
   }
 
   .nav .wrap {
-    padding-left: 16px;
+    display: flex;
 
-    padding-right: 16px;
+    justify-content: space-between;
+
+    gap: 15px;
   }
 
   .brand img {
@@ -887,15 +733,27 @@ button {
     font-size: 16px;
   }
 
-  .primary-links,
-  .nav-right {
+  .brand-text .sub {
+    font-size: 7px;
+  }
+
+  .primary-links {
     display: none;
+  }
+
+  .nav-right {
+    gap: 10px;
+  }
+
+  .btn-quote {
+    padding: 9px 13px;
+
+    font-size: 9px;
   }
 
   .hamburger {
     display: flex;
   }
-
 
   /* HERO */
 
@@ -906,7 +764,7 @@ button {
   .hero-content {
     display: block;
 
-    padding: 0 18px 90px;
+    padding: 0 20px 88px;
   }
 
   .hero-main {
@@ -915,28 +773,44 @@ button {
     transform: none;
   }
 
-  .hero-badges {
-    width: 100%;
+  .hero-subtitle {
+    font-size: 22px;
 
-    margin-top: 30px;
+    line-height: 1.08;
 
-    display: grid;
-
-    grid-template-columns: 1fr;
-
-    gap: 10px;
+    max-width: 100%;
   }
 
-  .hero-badge {
-    padding: 12px 14px;
+  .hero-craftsmanship {
+    font-size: 39px;
+
+    line-height: 1;
+
+    white-space: normal;
   }
 
-  .hero-badge strong {
-    font-size: 10px;
+  .hero-line {
+    margin-bottom: 28px;
   }
 
-  .hero-badge span {
-    font-size: 9px;
+  .hero-about {
+    max-width: 100%;
+  }
+
+  .hero-about p {
+    font-size: 13px;
+
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    gap: 12px;
+  }
+
+  .btn {
+    padding: 12px 17px;
+
+    font-size: 11px;
   }
 }
 

@@ -23,6 +23,9 @@ import { HealthController } from './health.controller';
         username: config.get('DB_USER', 'hide_design'),
         password: config.get('DB_PASSWORD', 'hide_design'),
         database: config.get('DB_NAME', 'hide_design'),
+        ssl: {
+          rejectUnauthorized: false,
+        },
         entities: [User, Product, Quote],
         synchronize: config.get('DB_SYNCHRONIZE', 'false') === 'true',
       }),

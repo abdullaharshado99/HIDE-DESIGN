@@ -1,8 +1,19 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Cormorant_Garamond, Jost } from 'next/font/google'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const cormorant = Cormorant_Garamond({
+  variable: '--font-cormorant',
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
+})
+
+const jost = Jost({
+  variable: '--font-jost',
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+})
 
 export const metadata: Metadata = {
   title: 'HIDE DESIGN | Premium Coats & Leather',
@@ -16,15 +27,7 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link 
-          href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Jost:wght@300;400;500;600&display=swap" 
-          rel="stylesheet" 
-        />
-      </head>
-      <body className={inter.className}>
+      <body className={`${cormorant.variable} ${jost.variable}`}>
         {children}
       </body>
     </html>

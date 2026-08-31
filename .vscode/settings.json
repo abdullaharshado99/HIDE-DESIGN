@@ -3,6 +3,18 @@
         "/^ss -ltnp 'sport = :3002' \\|\\| true && printf '\\\\nProcesses:\\\\n' && pgrep -af 'nest\\|node\\|tsx\\|ts-node' \\|\\| true$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^cd /home/la/dev/hide_design/hd_nestjs && npm run start:dev$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd /home/la/dev/hide_design/hd_nestjs && docker compose up -d postgres && npm run start:dev$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^lsof -nP -iTCP:3002 -sTCP:LISTEN \\|\\| ss -lntp '\\( sport = :3002 \\)' \\|\\| netstat -lntp 2>/dev/null \\| grep 3002 \\|\\| echo 'NO_LISTENER_ON_3002'$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }
