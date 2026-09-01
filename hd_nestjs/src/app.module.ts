@@ -24,6 +24,9 @@ import { Quote } from './entities/quote.entity';
         database: config.get('DB_NAME', 'hide_design'),
         entities: [User, Product, Quote],
         synchronize: config.get('DB_SYNCHRONIZE', 'false') === 'true',
+        ssl: config.get('DB_SSL', 'false') === 'true' ? {
+          rejectUnauthorized: false,
+        } : false,
       }),
     }),
     AuthModule,
