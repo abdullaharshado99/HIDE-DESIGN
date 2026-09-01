@@ -9,7 +9,6 @@ import { QuoteModule } from './quotes/quote.module';
 import { User } from './entities/user.entity';
 import { Product } from './entities/product.entity';
 import { Quote } from './entities/quote.entity';
-import { HealthController } from './health.controller';
 
 @Module({
   imports: [
@@ -23,9 +22,6 @@ import { HealthController } from './health.controller';
         username: config.get('DB_USER', 'hide_design'),
         password: config.get('DB_PASSWORD', 'hide_design'),
         database: config.get('DB_NAME', 'hide_design'),
-        ssl: config.get('DB_SSL', 'false') === 'true' ? {
-          rejectUnauthorized: false,
-        } : false,
         entities: [User, Product, Quote],
         synchronize: config.get('DB_SYNCHRONIZE', 'false') === 'true',
       }),
@@ -34,7 +30,7 @@ import { HealthController } from './health.controller';
     ProductModule,
     QuoteModule,
   ],
-  controllers: [AppController, HealthController],
+  controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

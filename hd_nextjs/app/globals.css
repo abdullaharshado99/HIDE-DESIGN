@@ -460,9 +460,7 @@ button {
 .hero-line {
   width: 90px;
   height: 1px;
-
   background: var(--gold);
-
   margin: 0 0 38px;
 }
 
@@ -473,11 +471,8 @@ button {
 
 .hero-about h2 {
   font-family: 'Jost', sans-serif;
-
   font-size: 15px;
-
   font-weight: 600;
-
   letter-spacing: 0.12em;
 
   color: var(--gold-bright);
