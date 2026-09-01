@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Script&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
 :root {
   --ink: #120d0a;
   --espresso: #1c1611;
@@ -446,14 +446,14 @@ button {
 
 /* PREMIUM CRAFTSMANSHIP */
 .hero-craftsmanship {
-  font-family: 'Cormorant Garamond', 'Fraunces', serif !important;
-  font-size: clamp(42px, 5vw, 68px) !important;
-  font-weight: 500 !important;
-  font-style: italic !important;
-  color: #e6c675 !important;
-  margin: 0 0 18px 0 !important;
-  line-height: 1 !important;
-  letter-spacing: 0 !important;
+  font-family: 'League Script', cursive ;
+  font-size: clamp(42px, 5vw, 68px);
+  font-weight: 400;
+  font-style: normal;
+  color: #e6c675;
+  margin: 0 0 18px 0;
+  line-height: 1 ;
+  letter-spacing: 0
 }
 
 /* GOLD LINE */
