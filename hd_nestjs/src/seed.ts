@@ -71,7 +71,7 @@ async function seed() {
     console.log('🎉 Seeding completed successfully!');
     await dataSource.destroy();
     process.exit(0);
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ Seeding failed:', error.message);
     console.error('Error details:', error);
     await dataSource.destroy().catch(() => {});
