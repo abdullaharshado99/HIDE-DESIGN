@@ -16,8 +16,27 @@ const jost = Jost({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://hidesdesign.com'),
   title: 'HIDE DESIGN | Premium Coats & Leather',
   description: 'Manufacturer & Exporter of Leather Jackets and Long Coats.',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'HIDE DESIGN | Premium Coats & Leather',
+    description: 'Manufacturer & Exporter of Leather Jackets and Long Coats.',
+    url: 'https://hidesdesign.com/',
+    siteName: 'HIDE DESIGN',
+    type: 'website',
+    images: [
+      {
+        url: 'https://hidesdesign.com/file.svg',
+        width: 1200,
+        height: 630,
+        alt: 'HIDE DESIGN',
+      },
+    ],
+  },
 }
 
 interface RootLayoutProps {

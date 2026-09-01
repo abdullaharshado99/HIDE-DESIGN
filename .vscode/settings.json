@@ -15,6 +15,10 @@
         "/^lsof -nP -iTCP:3002 -sTCP:LISTEN \\|\\| ss -lntp '\\( sport = :3002 \\)' \\|\\| netstat -lntp 2>/dev/null \\| grep 3002 \\|\\| echo 'NO_LISTENER_ON_3002'$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^cd /home/la/dev/hide_design/hd_nextjs && npm run build$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }
