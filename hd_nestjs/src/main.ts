@@ -27,8 +27,13 @@ async function bootstrap() {
     disableErrorMessages: false,
   }));
 
-  const port = process.env.PORT ?? 3001;
-  await app.listen(port);
-  console.log(`🚀 Backend running on http://localhost:${port}`);
+  const port = Number(process.env.PORT ?? 3001);
+  try {
+    await app.listen(port);
+    console.log(`🚀 Backend running on http://localhost:${port}`);
+  } catch (error) {
+    console.error(`❌ Failed to start server on port ${port}:`, error.message);
+    process.exit(1);
+  }
 }
 bootstrap();
