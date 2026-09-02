@@ -22,6 +22,7 @@ export default function AccountDashboard() {
   const [name, setName] = useState('')
   const [company, setCompany] = useState('')
   const [saved, setSaved] = useState(false)
+  const [showAllProducts, setShowAllProducts] = useState(false)
 
   useEffect(() => {
     try {
@@ -108,7 +109,7 @@ export default function AccountDashboard() {
               <span className="account-note">Save a piece, then add it to your enquiry.</span>
             </div>
             <div className="account-products">
-              {products.map((product) => {
+  {(showAllProducts ? products : products.slice(0, 4)).map((product) => {
                 const isSaved = savedProducts.includes(product.id)
                 const isSelected = selectedProducts.includes(product.id)
                 return (
@@ -122,6 +123,16 @@ export default function AccountDashboard() {
                 )
               })}
             </div>
+            {products.length > 4 && (
+  <button
+    className="account-see-more"
+    type="button"
+    onClick={() => setShowAllProducts((current) => !current)}
+  >
+    {showAllProducts ? 'Show Less' : 'See More'}
+    <ArrowUpRight size={16} />
+  </button>
+)}
             <button className="account-save" type="button" onClick={saveWorkspace}>{saved ? 'Workspace saved' : 'Save workspace'} <ArrowUpRight size={16} /></button>
           </div>
         </div>

@@ -56,12 +56,47 @@ export default function Contact() {
           <span className="eyebrow">LET'S WORK TOGETHER</span>
           <h2>Request a <em>quote.</em></h2>
           <p>Tell us what you are looking for and our team will get back to you with the next steps.</p>
-          <div className="contact-details">
-            <a href="tel:+923044885277">+92 304 488 5277</a>
-            <a href="tel:+923434094678">+92 343 409 4678</a>
-            <a href="mailto:info@hidesdesign.com">info@hidesdesign.com</a>
-            <span>Pakistan · Worldwide Export</span>
-          </div>
+         <div className="contact-details">
+
+  <div className="contact-phone-row">
+    <a href="tel:+923044885277">
+      +92 304 488 5277
+    </a>
+
+    <a
+      href="https://www.facebook.com/profile.php?id=61592666757041"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="contact-social"
+      aria-label="Facebook"
+    >
+      f
+    </a>
+  </div>
+
+  <div className="contact-phone-row">
+    <a href="tel:+923434094678">
+      +92 343 409 4678
+    </a>
+
+    <a
+      href="https://www.instagram.com/hidedesign.official/?hl=en"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="contact-social"
+      aria-label="Instagram"
+    >
+      ◎
+    </a>
+  </div>
+
+  <a href="mailto:info@hidesdesign.com">
+    info@hidesdesign.com
+  </a>
+
+  <span>Pakistan · Worldwide Export</span>
+
+</div>
         </div>
 
         <form className="quote-form" onSubmit={handleSubmit}>
