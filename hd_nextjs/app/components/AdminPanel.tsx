@@ -1,7 +1,10 @@
 'use client'
 
-import { FormEvent, useState } from 'react'
+import { FormEvent, useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 import { getApiUrl } from '../api-config'
+import { useRouter } from 'next/navigation'
 
 interface Product {
   id: number
@@ -21,12 +24,13 @@ const emptyProduct: Omit<Product, 'id'> = {
   articleNumber: '', name: '', category: 'jackets', audience: 'men',
   material: '', description: '', price: null, currency: 'USD', imageUrl: '', published: true,
 }
-
 const CLOUD_NAME = 'gmqcr7ae';
 const UPLOAD_PRESET = 'hide_design_uploads';
 
 export default function AdminPanel() {
   const apiUrl = getApiUrl()
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [token, setToken] = useState('')
   const [credentials, setCredentials] = useState({ email: '', password: '' })
   const [products, setProducts] = useState<Product[]>([])
@@ -34,6 +38,30 @@ export default function AdminPanel() {
   const [editingId, setEditingId] = useState<number | null>(null)
   const [message, setMessage] = useState('')
   const [uploading, setUploading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const savedToken = localStorage.getItem('admin_token')
+    if (savedToken) {
+      setToken(savedToken)
+      loadProducts(savedToken)
+    } else {
+      setIsLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (token && products.length > 0) {
+      const editParam = searchParams.get('edit')
+      if (editParam) {
+        const productToEdit = products.find((p) => p.id === parseInt(editParam))
+        if (productToEdit) {
+          setEditingId(productToEdit.id)
+          setForm(productToEdit)
+        }
+      }
+    }
+  }, [searchParams, token, products])
 
   async function uploadImage(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -65,11 +93,16 @@ export default function AdminPanel() {
     }
   }
 
-
   async function loadProducts(accessToken: string) {
-    const response = await fetch(`${apiUrl}/products/admin/all`, { headers: { Authorization: `Bearer ${accessToken}` } })
-    if (!response.ok) throw new Error('Could not load articles')
-    setProducts(await response.json())
+    try {
+      const response = await fetch(`${apiUrl}/products/admin/all`, { headers: { Authorization: `Bearer ${accessToken}` } })
+      if (!response.ok) throw new Error('Could not load articles')
+      setProducts(await response.json())
+    } catch (error) {
+      console.error('Error loading products:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   async function login(event: FormEvent) {
@@ -77,8 +110,19 @@ export default function AdminPanel() {
     const response = await fetch(`${apiUrl}/auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(credentials) })
     if (!response.ok) return setMessage('Invalid admin credentials.')
     const result = await response.json()
+    localStorage.setItem('admin_token', result.accessToken)
     setToken(result.accessToken)
+    setIsLoading(true)
     await loadProducts(result.accessToken)
+  }
+
+  const handleSignOut = () => {
+    localStorage.removeItem('admin_token')
+    setToken('')
+    setProducts([])
+    setEditingId(null)
+    setForm(emptyProduct)
+    setMessage('')
   }
 
   async function saveProduct(event: FormEvent) {
@@ -132,7 +176,7 @@ export default function AdminPanel() {
           <h1>Article portal</h1>
           <p className="admin-intro">Upload and curate product articles for the public catalogue.</p>
         </div>
-        <button className="btn-quote" onClick={() => setToken('')}>Sign out</button>
+        <button className="btn-quote" onClick={handleSignOut}>Sign out</button>
       </div>
 
       <div className="admin-grid">
@@ -203,14 +247,32 @@ export default function AdminPanel() {
         </form>
 
         <section className="admin-list">
-          <h2>Published and draft articles</h2>
-          {products.map((product) => (
+          <div className="admin-list-header">
+            <h2>Published and draft articles</h2>
+            {products.length > 5 && (
+              <button className="btn-quote" onClick={() => router.push('/admin/all-products')}>
+                Show More ({products.length})
+              </button>
+            )}
+          </div>
+
+          {/* Sirf pehle 5 products dikhayenge */}
+          {products.slice(0, 5).map((product) => (
             <article className="admin-row" key={product.id}>
-              <div>
-                <strong>{product.articleNumber}</strong>
-                <span>{product.name} · {product.audience} · {product.price ? `${product.currency} ${product.price}` : 'No Price'}</span>
+              <div className="admin-row-product">
+                {product.imageUrl && (
+                  <img src={product.imageUrl} alt={product.name} className="admin-row-image" />
+                )}
+                <div className="admin-row-info">
+                  <strong className="admin-row-article">{product.articleNumber}</strong>
+                  <span className="admin-row-name">{product.name}</span>
+                  <small className="admin-row-audience">
+                    {product.audience} · {product.price ? `${product.currency} ${product.price}` : 'No Price'}
+                  </small>
+                </div>
               </div>
-              <div>
+              <div className="admin-row-actions">
+                <Link href={`/admin/${product.id}`} className="btn-quote" title="View full details">View</Link>
                 <button className="btn-quote" onClick={() => { setEditingId(product.id); setForm(product) }}>Edit</button>
                 <button className="admin-delete" onClick={() => removeProduct(product.id)}>Delete</button>
               </div>
