@@ -1,5 +1,6 @@
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
-import AdminPanel from '../components/AdminPanel'
+import AdminPanelWrapper from '../components/AdminPanelWrapper'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://hidesdesign.com'),
@@ -26,5 +27,9 @@ export const metadata: Metadata = {
 }
 
 export default function AdminPage() {
-  return <AdminPanel />
+  return (
+    <Suspense fallback={<div className="admin-shell"><p>Loading Admin...</p></div>}>
+      <AdminPanelWrapper />
+    </Suspense>
+  )
 }

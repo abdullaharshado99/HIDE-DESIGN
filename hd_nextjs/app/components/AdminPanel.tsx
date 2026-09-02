@@ -1,7 +1,6 @@
 'use client'
 
 import { FormEvent, useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { getApiUrl } from '../api-config'
 import { useRouter } from 'next/navigation'
@@ -27,15 +26,18 @@ const emptyProduct: Omit<Product, 'id'> = {
 const CLOUD_NAME = 'gmqcr7ae';
 const UPLOAD_PRESET = 'hide_design_uploads';
 
-export default function AdminPanel() {
+interface AdminPanelProps {
+  initialEditId?: number | null
+}
+
+export default function AdminPanel({ initialEditId }: AdminPanelProps) {
   const apiUrl = getApiUrl()
   const router = useRouter()
-  const searchParams = useSearchParams()
   const [token, setToken] = useState('')
   const [credentials, setCredentials] = useState({ email: '', password: '' })
   const [products, setProducts] = useState<Product[]>([])
   const [form, setForm] = useState<Omit<Product, 'id'>>(emptyProduct)
-  const [editingId, setEditingId] = useState<number | null>(null)
+  const [editingId, setEditingId] = useState<number | null>(initialEditId ?? null)
   const [message, setMessage] = useState('')
   const [uploading, setUploading] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -51,17 +53,14 @@ export default function AdminPanel() {
   }, [])
 
   useEffect(() => {
-    if (token && products.length > 0) {
-      const editParam = searchParams.get('edit')
-      if (editParam) {
-        const productToEdit = products.find((p) => p.id === parseInt(editParam))
-        if (productToEdit) {
-          setEditingId(productToEdit.id)
-          setForm(productToEdit)
-        }
+    if (token && products.length > 0 && initialEditId) {
+      const productToEdit = products.find((p) => p.id === initialEditId)
+      if (productToEdit) {
+        setEditingId(productToEdit.id)
+        setForm(productToEdit)
       }
     }
-  }, [searchParams, token, products])
+  }, [initialEditId, token, products])
 
   async function uploadImage(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
