@@ -1,14 +1,28 @@
+import Image from 'next/image'
+
 export default function Footer() {
   return (
     <footer className="footer">
+
+      {/* ---------- FOOTER TOP ---------- */}
       <div className="container footer-top">
+
         <div className="footer-brand">
-          <div className="footer-mark">H</div>
+          <div className="footer-mark">
+            <Image
+              src="/images/Logo.png"
+              alt="HIDE DESIGN"
+              width={44}
+              height={44}
+            />
+          </div>
+
           <div>
             <strong>HIDE DESIGN</strong>
             <span>MANUFACTURER &amp; EXPORTER</span>
           </div>
         </div>
+
         <div className="footer-links">
           <a href="#men">Men</a>
           <a href="#women">Women</a>
@@ -17,12 +31,52 @@ export default function Footer() {
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
         </div>
-        <a className="footer-quote" href="#contact">Request A Quote ↗</a>
+
+        <a className="footer-quote" href="#contact">
+          Request A Quote ↗
+        </a>
+
       </div>
+
+
+      {/* ---------- FOOTER BOTTOM ---------- */}
       <div className="container footer-bottom">
-        <span>© 2026 HIDE DESIGN. All rights reserved.</span>
-        <span>Manufacturer &amp; Exporter of Leather Jackets &amp; Long Coats.</span>
+
+        <span className="footer-copy">
+          © 2026 HIDE DESIGN. All rights reserved.
+        </span>
+
+
+        {/* SOCIAL LINKS */}
+        <div className="footer-social">
+
+  <a
+    href="https://www.facebook.com/profile.php?id=61592666757041"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Facebook"
+  >
+    f
+  </a>
+
+  <a
+    href="https://www.instagram.com/hidedesign.official/?hl=en"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Instagram"
+  >
+    ◎
+  </a>
+
+</div>
+
+
+        <span className="footer-description">
+          Manufacturer &amp; Exporter of Leather Jackets &amp; Long Coats.
+        </span>
+
       </div>
+
     </footer>
   )
 }

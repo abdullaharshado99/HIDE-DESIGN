@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import TrustStrip from './components/TrustStrip'
+import About from './components/About'
 import ProductCarousel from './components/ProductCarousel'
 import AccountDashboard from './components/AccountDashboard'
-import About from './components/About'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 
@@ -39,6 +39,7 @@ export default function Home() {
       <main>
         <Hero />
         <TrustStrip />
+                <About />
         <ProductCarousel gender="men" />
         <ProductCarousel gender="women" />
         <AccountDashboard />
@@ -68,25 +69,48 @@ export default function Home() {
               </div>
             </div>
             <div className="material-panel">
-              <div className="material-panel-inner">
-                <span>H</span>
-                <p>CRAFTED<br />WITH<br />PURPOSE</p>
-                <small>HIDE DESIGN · SINCE 2002</small>
-              </div>
-            </div>
+  <img
+    src="/images/materials.jpg"
+    alt="Premium leather and wool materials"
+  />
+</div>
           </div>
         </section>
 
-        <section className="custom-section" id="custom">
-          <div className="container custom-inner">
-            <span className="eyebrow">PRIVATE LABEL · WHOLESALE · BESPOKE</span>
-            <h2>Your design.<br /><em>Our craftsmanship.</em></h2>
-            <p>Share your sketches, references, fabric requirements or size specifications. Our team can develop custom coats for your collection or private label.</p>
-            <a className="btn btn-gold" href="#contact">Start A Custom Project <span>→</span></a>
-          </div>
-        </section>
+       <section className="custom-section" id="custom">
+  <div className="container custom-inner">
 
-        <About />
+    <div className="custom-image">
+      <img
+        src="/images/custom-project.jpg"
+        alt="Custom leather craftsmanship"
+      />
+    </div>
+
+    <div className="custom-copy">
+      <span className="eyebrow">
+        PRIVATE LABEL · WHOLESALE · BESPOKE
+      </span>
+
+      <h2>
+        Your design.<br />
+        <em>Our craftsmanship.</em>
+      </h2>
+
+      <p>
+        Share your sketches, references, fabric requirements or size
+        specifications. Our team can develop custom coats for your
+        collection or private label.
+      </p>
+
+      <a className="btn btn-gold" href="#contact">
+        Start A Custom Project <span>→</span>
+      </a>
+    </div>
+
+  </div>
+</section>
+
         <Contact />
       </main>
       <Footer />
