@@ -24,8 +24,8 @@ export default function Footer() {
         </div>
 
         <div className="footer-links">
-          <a href="#men">Men</a>
-          <a href="#women">Women</a>
+          <a href="#men-jackets">Men</a>
+          <a href="#women-jackets">Women</a>
           <a href="#leather">Leather</a>
           <a href="#custom">Custom</a>
           <a href="#about">About</a>
@@ -45,31 +45,6 @@ export default function Footer() {
         <span className="footer-copy">
           © 2026 HIDE DESIGN. All rights reserved.
         </span>
-
-
-        {/* SOCIAL LINKS */}
-        <div className="footer-social">
-
-  <a
-    href="https://www.facebook.com/profile.php?id=61592666757041"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Facebook"
-  >
-    f
-  </a>
-
-  <a
-    href="https://www.instagram.com/hidedesign.official/?hl=en"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Instagram"
-  >
-    ◎
-  </a>
-
-</div>
-
 
         <span className="footer-description">
           Manufacturer &amp; Exporter of Leather Jackets &amp; Long Coats.

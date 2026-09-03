@@ -6,6 +6,8 @@ export class CreateProductDto {
   @IsString() @MaxLength(160) name?: string;
   @IsString() @MaxLength(30) category?: string;
   @IsString() @MaxLength(30) audience?: string;
+  @IsString() @IsNotEmpty() @MaxLength(60) size?: string;
+  @IsString() @IsNotEmpty() @MaxLength(60) color?: string;
   @IsString() @MaxLength(120) material?: string;
   @IsString() description?: string;
   @IsOptional() @Type(() => Number) @IsNumber() @Min(0) price?: number;

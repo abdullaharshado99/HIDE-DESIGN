@@ -19,6 +19,10 @@
         "/^cd /home/la/dev/hide_design/hd_nextjs && npm run build$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^npm run lint -- --file app/layout\\.tsx$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }

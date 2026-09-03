@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { getApiUrl } from '../api-config'
@@ -22,9 +22,36 @@ interface Product {
 export default function AdminAllProducts() {
   const apiUrl = getApiUrl()
   const router = useRouter()
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<Product[] | null>(null)
   const [loading, setLoading] = useState(true)
   const [token, setToken] = useState('')
+
+  const redirectToLogin = useCallback(() => {
+    localStorage.removeItem('admin_token')
+    router.push('/admin')
+  }, [router])
+
+  useEffect(() => {
+    if (!token) return
+
+    let timeoutId = window.setTimeout(redirectToLogin, 5 * 60 * 1000)
+    const resetInactivityTimer = () => {
+      window.clearTimeout(timeoutId)
+      timeoutId = window.setTimeout(redirectToLogin, 5 * 60 * 1000)
+    }
+    const activityEvents = ['mousedown', 'keydown', 'scroll', 'touchstart']
+
+    activityEvents.forEach((eventName) => {
+      window.addEventListener(eventName, resetInactivityTimer)
+    })
+
+    return () => {
+      window.clearTimeout(timeoutId)
+      activityEvents.forEach((eventName) => {
+        window.removeEventListener(eventName, resetInactivityTimer)
+      })
+    }
+  }, [redirectToLogin, token])
 
   useEffect(() => {
     const savedToken = localStorage.getItem('admin_token')
@@ -37,11 +64,18 @@ export default function AdminAllProducts() {
     fetch(`${apiUrl}/products/admin/all`, {
       headers: { Authorization: `Bearer ${savedToken}` }
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 401) {
+          redirectToLogin()
+          throw new Error('Admin session expired')
+        }
+        if (!res.ok) throw new Error('Could not load articles')
+        return res.json()
+      })
       .then((data) => setProducts(data))
       .catch((err) => console.error(err))
       .finally(() => setLoading(false))
-  }, [])
+  }, [apiUrl, redirectToLogin, router])
 
   const removeProduct = async (id: number) => {
     if (!window.confirm('Delete this article?')) return
@@ -50,7 +84,7 @@ export default function AdminAllProducts() {
         method: 'DELETE', 
         headers: { Authorization: `Bearer ${token}` } 
       })
-      setProducts(products.filter(p => p.id !== id))
+      setProducts(products?.filter(p => p.id !== id) || null)
     } catch (error) {
       console.error('Delete failed:', error)
     }
@@ -70,7 +104,7 @@ export default function AdminAllProducts() {
       </div>
 
       <div className="admin-list">
-        {products.map((product) => (
+        {products?.map((product) => (
           <article className="admin-row" key={product.id}>
             <div className="admin-row-product">
               {product.imageUrl && (

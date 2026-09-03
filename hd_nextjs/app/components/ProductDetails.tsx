@@ -11,6 +11,8 @@ interface Product {
   name: string
   category: string
   audience: string
+  size?: string
+  color?: string
   material: string
   description: string
   price: number | null
@@ -21,6 +23,10 @@ interface Product {
 
 interface ProductDetailsProps {
   articleNumber: string
+}
+
+function displayLabel(value: string) {
+  return value ? value.charAt(0).toUpperCase() + value.slice(1) : value
 }
 
 export default function ProductDetails({
@@ -153,11 +159,11 @@ export default function ProductDetails({
 
           <div className="product-details-meta">
             <span>
-              {product.category}
+              {displayLabel(product.category)}
             </span>
 
             <span>
-              {product.audience}
+              {displayLabel(product.audience)}
             </span>
           </div>
 
@@ -224,14 +230,24 @@ export default function ProductDetails({
 
               <div>
                 <span>Category</span>
-                <strong>{product.category}</strong>
+                <strong>{displayLabel(product.category)}</strong>
               </div>
 
               <div>
                 <span>Collection</span>
                 <strong>
-                  {product.audience}
+                  {displayLabel(product.audience)}
                 </strong>
+              </div>
+
+              <div>
+                <span>Size</span>
+                <strong>{product.size || 'Not specified'}</strong>
+              </div>
+
+              <div>
+                <span>Color</span>
+                <strong>{product.color || 'Not specified'}</strong>
               </div>
 
               <div>
