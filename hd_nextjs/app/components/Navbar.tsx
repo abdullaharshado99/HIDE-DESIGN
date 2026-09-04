@@ -33,14 +33,14 @@ export default function Navbar() {
         </a>
 
         <nav className={`primary-links ${isOpen ? 'open' : ''}`}>
+                    <a href="#about" onClick={() => setIsOpen(false)}>About</a>
           <a href="#men-jackets" onClick={() => setIsOpen(false)}>Men&apos;s Jackets</a>
           <a href="#men-coats" onClick={() => setIsOpen(false)}>Men&apos;s Coats</a>
           <a href="#women-jackets" onClick={() => setIsOpen(false)}>Women&apos;s Jackets</a>
           <a href="#women-coats" onClick={() => setIsOpen(false)}>Women&apos;s Coats</a>
+                    <a href="#account" onClick={() => setIsOpen(false)}>My account</a>
           <a href="#leather" onClick={() => setIsOpen(false)}>Leather</a>
           <a href="#custom" onClick={() => setIsOpen(false)}>Custom</a>
-          <a href="#account" onClick={() => setIsOpen(false)}>My account</a>
-          <a href="#about" onClick={() => setIsOpen(false)}>About</a>
           <a href="#contact" onClick={() => setIsOpen(false)}>Contact Us</a>
         </nav>
 
