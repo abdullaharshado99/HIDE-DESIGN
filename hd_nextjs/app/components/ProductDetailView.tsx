@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { getApiUrl } from '../api-config'
+import Link from 'next/link'
 
 interface Product {
   id: number
@@ -11,6 +11,8 @@ interface Product {
   name: string
   category: string
   audience: string
+  size?: string
+  color?: string
   material: string
   description: string
   price: number | null
@@ -21,6 +23,10 @@ interface Product {
   updatedAt?: Date
 }
 
+function displayLabel(value: string) {
+  return value ? value.charAt(0).toUpperCase() + value.slice(1) : value
+}
+
 export default function ProductDetailView() {
   const apiUrl = getApiUrl()
   const router = useRouter()
@@ -28,6 +34,33 @@ export default function ProductDetailView() {
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [token, setToken] = useState('')
+
+  const redirectToLogin = useCallback(() => {
+    localStorage.removeItem('admin_token')
+    router.push('/admin')
+  }, [router])
+
+  useEffect(() => {
+    if (!token) return
+
+    let timeoutId = window.setTimeout(redirectToLogin, 5 * 60 * 1000)
+    const resetInactivityTimer = () => {
+      window.clearTimeout(timeoutId)
+      timeoutId = window.setTimeout(redirectToLogin, 5 * 60 * 1000)
+    }
+    const activityEvents = ['mousedown', 'keydown', 'scroll', 'touchstart']
+
+    activityEvents.forEach((eventName) => {
+      window.addEventListener(eventName, resetInactivityTimer)
+    })
+
+    return () => {
+      window.clearTimeout(timeoutId)
+      activityEvents.forEach((eventName) => {
+        window.removeEventListener(eventName, resetInactivityTimer)
+      })
+    }
+  }, [redirectToLogin, token])
 
   useEffect(() => {
     const savedToken = localStorage.getItem('admin_token')
@@ -40,15 +73,22 @@ export default function ProductDetailView() {
     const productId = params.id
 
     if (productId) {
-      fetch(`${apiUrl}/products/${productId}`, {
+      fetch(`${apiUrl}/products/admin/${productId}`, {
         headers: { Authorization: `Bearer ${savedToken}` }
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (res.status === 401) {
+            redirectToLogin()
+            throw new Error('Admin session expired')
+          }
+          if (!res.ok) throw new Error('Article not found')
+          return res.json()
+        })
         .then((data) => setProduct(data))
         .catch((err) => console.error(err))
         .finally(() => setLoading(false))
     }
-  }, [params.id])
+  }, [apiUrl, params.id, redirectToLogin])
 
   if (loading) return <div className="admin-shell"><p>Loading article...</p></div>
   if (!product) return <div className="admin-shell"><p>Article not found</p></div>
@@ -83,11 +123,19 @@ export default function ProductDetailView() {
             </div>
             <div className="detail-row">
               <span className="detail-label">Category:</span>
-              <span className="detail-value">{product.category}</span>
+              <span className="detail-value">{displayLabel(product.category)}</span>
             </div>
             <div className="detail-row">
               <span className="detail-label">Audience:</span>
-              <span className="detail-value">{product.audience}</span>
+              <span className="detail-value">{displayLabel(product.audience)}</span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-label">Size:</span>
+              <span className="detail-value">{product.size || 'Not specified'}</span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-label">Color:</span>
+              <span className="detail-value">{product.color || 'Not specified'}</span>
             </div>
           </div>
 

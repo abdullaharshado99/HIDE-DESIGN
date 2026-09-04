@@ -117,7 +117,7 @@ button {
   display: grid;
 }
 
-.admin-form input {
+.admin-form input, .admin-form select {
   border: 1px solid var(--hair);
   background: var(--espresso-2);
   color: var(--cream);
@@ -1754,14 +1754,24 @@ button {
 
 .material-section {
   background: var(--espresso-2);
-  padding: 90px 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 .material-grid {
-  grid-template-columns: 1.2fr 1fr;
-  align-items: center;
-  gap: 60px;
+  grid-template-columns: 50% 50%;
+  align-items: stretch;
+  gap: 0;
+  width: 100%;
   display: grid;
+}
+
+.material-copy {
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: center;
+  padding: 50px 60px;
+  display: flex;
 }
 
 .material-copy h2 {
@@ -1812,21 +1822,23 @@ button {
 }
 
 .material-panel {
-  border: 1px solid var(--hair);
-  background: var(--panel);
-  border-radius: 4px;
-  justify-content: center;
-  align-items: center;
-  height: 420px;
-  padding: 25px;
-  display: flex;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  border-radius: 0;
+  width: 100%;
+  min-height: 100px;
+  margin: 0;
+  padding: 0;
   overflow: hidden;
 }
 
 .material-panel img {
-  object-fit: contain;
+  object-fit: cover;
+  object-position: center;
   width: 100%;
   height: 100%;
+  min-height: 100px;
   display: block;
 }
 
@@ -1834,18 +1846,47 @@ button {
   background: var(--ink);
   border-top: 1px solid var(--hair);
   border-bottom: 1px solid var(--hair);
-  padding: 100px 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 .custom-inner {
-  grid-template-columns: .85fr 1fr;
-  align-items: center;
-  gap: 70px;
+  grid-template-columns: 50% 50%;
+  align-items: stretch;
+  gap: 0;
+  width: 100%;
   display: grid;
 }
 
+.custom-image {
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  border-radius: 0;
+  width: 100%;
+  min-height: 520px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.custom-image img {
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  height: 100%;
+  min-height: 520px;
+  display: block;
+}
+
 .custom-copy {
-  max-width: 600px;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  max-width: none;
+  padding: 90px 60px;
+  display: flex;
 }
 
 .custom-copy h2 {
@@ -1857,34 +1898,19 @@ button {
   margin: 22px 0 30px;
 }
 
-.custom-image {
-  border: 1px solid var(--hair);
-  background: var(--panel);
-  border-radius: 4px;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 400px;
-  padding: 18px;
-  display: flex;
-  overflow: hidden;
-}
-
-.custom-image img {
-  object-fit: contain;
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
 @media (max-width: 760px) {
-  .custom-inner {
+  .material-grid, .custom-inner {
     grid-template-columns: 1fr;
-    gap: 40px;
+    width: 100%;
   }
 
-  .custom-image {
+  .material-copy, .custom-copy {
+    padding: 70px 25px;
+  }
+
+  .material-panel, .custom-image, .material-panel img, .custom-image img {
     height: 360px;
+    min-height: 360px;
   }
 }
 
@@ -1900,17 +1926,14 @@ button {
 }
 
 .about-number {
-  color: var(--gold);
-  background-color: var(--cream);
-  justify-content: center;
-  align-items: center;
-  width: 250px;
-  height: 220px;
+  color: #d4c5a0;
+  opacity: 1;
+  opacity: 1;
   font-family: Fraunces, serif;
   font-size: 120px;
   font-weight: 600;
   line-height: 1;
-  display: flex;
+  display: block;
 }
 
 .about-grid h2 {
@@ -1987,6 +2010,45 @@ button {
   display: grid;
 }
 
+.contact-social-row {
+  border-top: 1px solid var(--hair);
+  justify-content: flex-end;
+  align-items: center;
+  gap: 14px;
+  margin-top: 20px;
+  padding-top: 20px;
+  display: flex;
+}
+
+.contact-social-label {
+  color: var(--muted);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.contact-social {
+  border: 1px solid var(--hair);
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color .3s, border-color .3s, transform .3s;
+  display: inline-flex;
+  color: var(--muted) !important;
+}
+
+.contact-social:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  color: var(--gold-bright) !important;
+}
+
 .quote-form label {
   letter-spacing: .14em;
   text-transform: uppercase;
@@ -2039,31 +2101,29 @@ button {
 }
 
 .contact-phone-row {
+  flex-wrap: wrap;
   align-items: center;
   gap: 14px;
   display: flex;
 }
 
-.contact-social {
-  border: 1px solid var(--hair);
-  border-radius: 50%;
-  justify-content: center;
-  align-items: center;
-  width: 28px;
-  height: 28px;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: color .3s, border-color .3s, transform .3s;
-  display: inline-flex;
-  color: var(--muted) !important;
-}
+@media (max-width: 768px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
 
-.contact-social:hover {
-  border-color: var(--gold);
-  transform: translateY(-2px);
-  color: var(--gold-bright) !important;
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-social-row {
+    justify-content: center;
+  }
+
+  .quote-form {
+    padding: 24px 20px;
+  }
 }
 
 .footer {
@@ -2154,7 +2214,7 @@ button {
 
 .footer-bottom {
   color: var(--muted);
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 30px;
   padding: 26px 0;
@@ -2169,32 +2229,6 @@ button {
 .footer-description {
   text-align: right;
   justify-self: end;
-}
-
-.footer-social {
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  display: flex;
-}
-
-.footer-social a {
-  width: 30px;
-  height: 30px;
-  color: var(--muted);
-  border: 1px solid #c9a24d40;
-  border-radius: 50%;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  transition: color .3s, border-color .3s, transform .3s;
-  display: flex;
-}
-
-.footer-social a:hover {
-  color: var(--gold-bright);
-  border-color: var(--gold);
-  transform: translateY(-2px);
 }
 
 @media (max-width: 980px) {

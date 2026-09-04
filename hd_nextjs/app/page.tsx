@@ -39,47 +39,69 @@ export default function Home() {
       <main>
         <Hero />
         <TrustStrip />
-                <About />
-        <ProductCarousel gender="men" />
-        <ProductCarousel gender="women" />
+              <About />
+              <ProductCarousel gender="men" category="jackets" />
+              <ProductCarousel gender="men" category="coats" />
+              <ProductCarousel gender="women" category="jackets" />
+              <ProductCarousel gender="women" category="coats" />
         <AccountDashboard />
 
-        <section className="material-section" id="leather">
-          <div className="container material-grid">
-            <div className="material-copy">
-              <span className="eyebrow">OUR MATERIALS</span>
-              <h2>From fine <em>leather</em><br />to premium wool.</h2>
-              <p>We work with carefully selected hides, wool, tweed and premium blends to create outerwear that feels exceptional and holds its character season after season.</p>
-              <div className="material-list">
-                <div>
-                  <span>01</span>
-                  <b>Leather</b>
-                  <small>Jackets · Coats · Custom Finishes</small>
-                </div>
-                <div>
-                  <span>02</span>
-                  <b>Wool &amp; Tweed</b>
-                  <small>Long Coats · Overcoats · Tailoring</small>
-                </div>
-                <div>
-                  <span>03</span>
-                  <b>Custom Fabrics</b>
-                  <small>Developed To Your Specification</small>
-                </div>
-              </div>
-            </div>
-            <div className="material-panel">
-  <img
-    src="/images/materials.jpg"
-    alt="Premium leather and wool materials"
-  />
-</div>
-          </div>
-        </section>
+<section className="material-section" id="leather">
+  <div className="material-grid">
 
-       <section className="custom-section" id="custom">
-  <div className="container custom-inner">
+    {/* LEFT — TEXT */}
+    <div className="material-copy">
+      <span className="eyebrow">OUR MATERIALS</span>
 
+      <h2>
+        From fine <em>leather</em>
+        <br />
+        to premium wool.
+      </h2>
+
+      <p>
+        We work with carefully selected hides, wool, tweed and premium
+        blends to create outerwear that feels exceptional and holds its
+        character season after season.
+      </p>
+
+      <div className="material-list">
+        <div>
+          <span>01</span>
+          <b>Leather</b>
+          <small>Jackets · Coats · Custom Finishes</small>
+        </div>
+
+        <div>
+          <span>02</span>
+          <b>Wool &amp; Tweed</b>
+          <small>Long Coats · Overcoats · Tailoring</small>
+        </div>
+
+        <div>
+          <span>03</span>
+          <b>Custom Fabrics</b>
+          <small>Developed To Your Specification</small>
+        </div>
+      </div>
+    </div>
+
+    {/* RIGHT — IMAGE */}
+    <div className="material-panel">
+      <img
+        src="/images/materials.jpg"
+        alt="Premium leather and wool materials"
+      />
+    </div>
+
+  </div>
+</section>
+
+
+<section className="custom-section" id="custom">
+  <div className="custom-inner">
+
+    {/* LEFT — IMAGE */}
     <div className="custom-image">
       <img
         src="/images/custom-project.jpg"
@@ -87,13 +109,15 @@ export default function Home() {
       />
     </div>
 
+    {/* RIGHT — TEXT */}
     <div className="custom-copy">
       <span className="eyebrow">
         PRIVATE LABEL · WHOLESALE · BESPOKE
       </span>
 
       <h2>
-        Your design.<br />
+        Your design.
+        <br />
         <em>Our craftsmanship.</em>
       </h2>
 
@@ -110,7 +134,6 @@ export default function Home() {
 
   </div>
 </section>
-
         <Contact />
       </main>
       <Footer />

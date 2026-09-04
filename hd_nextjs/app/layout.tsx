@@ -39,6 +39,14 @@ export const metadata: Metadata = {
   },
 }
 
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'HIDE DESIGN',
+  alternateName: ['Hide Design', 'hidesdesign.com'],
+  url: 'https://www.hidesdesign.com/',
+}
+
 interface RootLayoutProps {
   children: React.ReactNode
 }
@@ -47,6 +55,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body className={`${cormorant.variable} ${jost.variable}`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         {children}
       </body>
     </html>

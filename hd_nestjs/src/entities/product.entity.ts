@@ -17,6 +17,12 @@ export class Product {
   @Column({ length: 30 })
   audience?: string;
 
+  @Column({ length: 60, nullable: true })
+  size?: string;
+
+  @Column({ length: 60, nullable: true })
+  color?: string;
+
   @Column({ length: 120 })
   material?: string;
 

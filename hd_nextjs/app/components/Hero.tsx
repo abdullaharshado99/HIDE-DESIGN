@@ -41,7 +41,7 @@ export default function Hero() {
           </div>
 
           <div className="hero-actions">
-            <a className="btn btn-gold" href="#men">
+            <a className="btn btn-gold" href="#men-jackets">
               EXPLORE COLLECTION <span>→</span>
             </a>
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { FormEvent, useState, useEffect } from 'react'
+import { FormEvent, useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { getApiUrl } from '../api-config'
 import { useRouter } from 'next/navigation'
@@ -11,6 +11,8 @@ interface Product {
   name: string
   category: string
   audience: string
+  size: string
+  color: string
   material: string
   description: string
   price: number | null
@@ -21,8 +23,19 @@ interface Product {
 
 const emptyProduct: Omit<Product, 'id'> = {
   articleNumber: '', name: '', category: 'jackets', audience: 'men',
+  size: '', color: '',
   material: '', description: '', price: null, currency: 'USD', imageUrl: '', published: true,
 }
+const sizeOptions = [
+  { value: 'XS (32-34 in / 81-86 cm)', label: 'XS (32-34 in / 81-86 cm)' },
+  { value: 'SM (35-37 in / 89-94 cm)', label: 'SM (35-37 in / 89-94 cm)' },
+  { value: 'MD (38-40 in / 97-102 cm)', label: 'MD (38-40 in / 97-102 cm)' },
+  { value: 'LG (41-43 in / 104-109 cm)', label: 'LG (41-43 in / 104-109 cm)' },
+  { value: 'XL (44-46 in / 112-117 cm)', label: 'XL (44-46 in / 112-117 cm)' },
+  { value: '2XL (47-49 in / 119-124 cm)', label: '2XL (47-49 in / 119-124 cm)' },
+  { value: '3XL (50-52 in / 127-132 cm)', label: '3XL (50-52 in / 127-132 cm)' },
+  { value: '4XL (53-55 in / 135-140 cm)', label: '4XL (53-55 in / 135-140 cm)' },
+]
 const CLOUD_NAME = 'gmqcr7ae';
 const UPLOAD_PRESET = 'hide_design_uploads';
 
@@ -95,8 +108,19 @@ export default function AdminPanel({ initialEditId }: AdminPanelProps) {
   async function loadProducts(accessToken: string) {
     try {
       const response = await fetch(`${apiUrl}/products/admin/all`, { headers: { Authorization: `Bearer ${accessToken}` } })
+      if (response.status === 401) {
+        localStorage.removeItem('admin_token')
+        setToken('')
+        router.push('/admin')
+        return
+      }
       if (!response.ok) throw new Error('Could not load articles')
-      setProducts(await response.json())
+      const loadedProducts: Product[] = await response.json()
+      setProducts(loadedProducts.map((product) => ({
+        ...product,
+        size: product.size || '',
+        color: product.color || '',
+      })))
     } catch (error) {
       console.error('Error loading products:', error)
     } finally {
@@ -115,14 +139,37 @@ export default function AdminPanel({ initialEditId }: AdminPanelProps) {
     await loadProducts(result.accessToken)
   }
 
-  const handleSignOut = () => {
+  const handleSignOut = useCallback(() => {
     localStorage.removeItem('admin_token')
     setToken('')
     setProducts([])
     setEditingId(null)
     setForm(emptyProduct)
     setMessage('')
-  }
+    router.push('/admin')
+  }, [router])
+
+  useEffect(() => {
+    if (!token) return
+
+    let timeoutId = window.setTimeout(handleSignOut, 5 * 60 * 1000)
+    const resetInactivityTimer = () => {
+      window.clearTimeout(timeoutId)
+      timeoutId = window.setTimeout(handleSignOut, 5 * 60 * 1000)
+    }
+    const activityEvents = ['mousedown', 'keydown', 'scroll', 'touchstart']
+
+    activityEvents.forEach((eventName) => {
+      window.addEventListener(eventName, resetInactivityTimer)
+    })
+
+    return () => {
+      window.clearTimeout(timeoutId)
+      activityEvents.forEach((eventName) => {
+        window.removeEventListener(eventName, resetInactivityTimer)
+      })
+    }
+  }, [handleSignOut, token])
 
   async function saveProduct(event: FormEvent) {
     event.preventDefault()
@@ -141,7 +188,14 @@ export default function AdminPanel({ initialEditId }: AdminPanelProps) {
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(productToSave)
     })
-    if (!response.ok) return setMessage('Article could not be saved.')
+    if (!response.ok) {
+      const errorBody = await response.json().catch(() => null)
+      const validationMessage = Array.isArray(errorBody?.message)
+        ? errorBody.message.join(', ')
+        : errorBody?.message
+      setMessage(validationMessage || 'Article could not be saved.')
+      return
+    }
     setMessage('Article saved.')
     setEditingId(null)
     setForm(emptyProduct)
@@ -211,6 +265,21 @@ export default function AdminPanel({ initialEditId }: AdminPanelProps) {
               <option value="men">Men</option>
               <option value="women">Women</option>
             </select>
+          </label>
+
+          <label>
+            Size
+            <select value={form.size ?? ''} onChange={(e) => setForm({ ...form, size: e.target.value })} required>
+              <option value="" disabled>Select a size</option>
+              {sizeOptions.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            Color
+            <input type="text" value={form.color} onChange={(e) => setForm({ ...form, color: e.target.value })} required />
           </label>
 
           <label>

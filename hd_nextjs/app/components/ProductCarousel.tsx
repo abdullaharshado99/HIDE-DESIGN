@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { startTransition, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getApiUrl } from '../api-config'
@@ -17,6 +17,7 @@ interface Product {
 
 interface ProductCarouselProps {
   gender: 'men' | 'women'
+  category: 'jackets' | 'coats'
 }
 
 interface ApiProduct {
@@ -28,10 +29,12 @@ interface ApiProduct {
   price: number | null
   currency: string
   audience: string
+  category?: string
 }
 
 export default function ProductCarousel({
   gender,
+  category,
 }: ProductCarouselProps) {
   const carouselRef = useRef<HTMLDivElement>(null)
 
@@ -40,20 +43,16 @@ export default function ProductCarousel({
     useState<Product | null>(null)
 
   const [loading, setLoading] = useState(true)
-  const title =
-    gender === 'men'
-      ? "Men's Long Coats"
-      : "Women's Long Coats"
+  const title = `${gender === 'men' ? "Men's" : "Women's"} ${category === 'coats' ? 'Long Coats' : 'Jackets'}`
 
-  const eyebrow =
-    gender === 'men'
-      ? "THE MEN'S EDIT"
-      : "THE WOMEN'S EDIT"
+  const eyebrow = `THE ${gender === 'men' ? "MEN'S" : "WOMEN'S"} ${category === 'coats' ? 'COAT' : 'JACKET'} EDIT`
 
   useEffect(() => {
     const apiUrl = getApiUrl()
 
-    setLoading(true)
+    startTransition(() => {
+      setLoading(true)
+    })
 
     fetch(`${apiUrl}/products`)
       .then((response) => {
@@ -67,7 +66,8 @@ export default function ProductCarousel({
         const matchingProducts = remoteProducts
           .filter(
             (product) =>
-              product.audience?.toLowerCase() === gender
+              product.audience?.toLowerCase() === gender &&
+              (product.category?.toLowerCase() || 'coats') === category
           )
           .map((product) => ({
             id: product.articleNumber,
@@ -92,7 +92,7 @@ export default function ProductCarousel({
       .finally(() => {
         setLoading(false)
       })
-  }, [gender])
+  }, [gender, category])
 
   useEffect(() => {
     const carousel = carouselRef.current
@@ -194,7 +194,7 @@ export default function ProductCarousel({
             ? 'section-dark'
             : ''
         }`}
-        id={gender}
+        id={`${gender}-${category}`}
       >
         <div className="container">
           <div className="section-heading">
