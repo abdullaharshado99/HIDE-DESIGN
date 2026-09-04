@@ -1,25 +1,13 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
-
-import { AdminGuard } from '../auth/admin.guard';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ProductService } from './product.service';
+import { AdminGuard } from '../auth/admin.guard';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly products: ProductService) {}
+  constructor(private readonly products: ProductService) { }
 
   @Get()
   findPublished() {

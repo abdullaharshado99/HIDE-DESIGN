@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import Link from 'next/link'
 import { useRouter, useParams } from 'next/navigation'
 import { getApiUrl } from '../api-config'
+import Link from 'next/link'
 
 interface Product {
   id: number

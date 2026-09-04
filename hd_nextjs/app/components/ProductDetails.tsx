@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { getApiUrl } from '../api-config'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getApiUrl } from '../api-config'
 
 interface Product {
   id: number
@@ -29,9 +29,7 @@ function displayLabel(value: string) {
   return value ? value.charAt(0).toUpperCase() + value.slice(1) : value
 }
 
-export default function ProductDetails({
-  articleNumber,
-}: ProductDetailsProps) {
+export default function ProductDetails({ articleNumber }: ProductDetailsProps) {
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -66,8 +64,6 @@ export default function ProductDetails({
     loadProduct()
   }, [articleNumber])
 
-  /* ---------- LOADING ---------- */
-
   if (loading) {
     return (
       <main className="product-details-page">
@@ -77,8 +73,6 @@ export default function ProductDetails({
       </main>
     )
   }
-
-  /* ---------- ERROR ---------- */
 
   if (error || !product) {
     return (
@@ -96,13 +90,8 @@ export default function ProductDetails({
     )
   }
 
-  /* ---------- PRODUCT ---------- */
-
   return (
     <main className="product-details-page">
-
-      {/* ---------- TOP BAR ---------- */}
-
       <div className="product-details-topbar">
         <Link href="/" className="product-back-link">
           ← Back To Collection
@@ -112,13 +101,7 @@ export default function ProductDetails({
           PRODUCT / {product.articleNumber}
         </span>
       </div>
-
-      {/* ---------- MAIN PRODUCT AREA ---------- */}
-
       <section className="product-details-container">
-
-        {/* ---------- IMAGE ---------- */}
-
         <div className="product-details-image-section">
 
           <div className="product-details-image">
@@ -138,25 +121,13 @@ export default function ProductDetails({
           </div>
 
         </div>
-
-        {/* ---------- PRODUCT INFORMATION ---------- */}
-
         <div className="product-details-info">
-
-          {/* ARTICLE NUMBER */}
-
           <span className="product-details-id">
             {product.articleNumber}
           </span>
-
-          {/* PRODUCT NAME */}
-
           <h1 className="product-details-title">
             {product.name}
           </h1>
-
-          {/* CATEGORY / AUDIENCE */}
-
           <div className="product-details-meta">
             <span>
               {displayLabel(product.category)}
@@ -166,9 +137,6 @@ export default function ProductDetails({
               {displayLabel(product.audience)}
             </span>
           </div>
-
-          {/* PRICE */}
-
           {product.price !== null && (
             <div className="product-details-price">
               <span className="product-currency">
@@ -180,13 +148,7 @@ export default function ProductDetails({
               </span>
             </div>
           )}
-
-          {/* DIVIDER */}
-
           <div className="product-details-line" />
-
-          {/* MATERIAL */}
-
           <div className="product-detail-block">
 
             <span className="product-detail-label">
@@ -198,9 +160,6 @@ export default function ProductDetails({
             </p>
 
           </div>
-
-          {/* DESCRIPTION */}
-
           <div className="product-detail-block">
 
             <span className="product-detail-label">
@@ -212,9 +171,6 @@ export default function ProductDetails({
             </p>
 
           </div>
-
-          {/* PRODUCT INFORMATION */}
-
           <div className="product-detail-block">
 
             <span className="product-detail-label">
@@ -260,9 +216,6 @@ export default function ProductDetails({
             </div>
 
           </div>
-
-          {/* ACTIONS */}
-
           <div className="product-details-actions">
 
             <button

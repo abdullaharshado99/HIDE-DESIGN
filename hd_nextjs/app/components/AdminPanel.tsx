@@ -115,7 +115,12 @@ export default function AdminPanel({ initialEditId }: AdminPanelProps) {
         return
       }
       if (!response.ok) throw new Error('Could not load articles')
-      setProducts(await response.json())
+      const loadedProducts: Product[] = await response.json()
+      setProducts(loadedProducts.map((product) => ({
+        ...product,
+        size: product.size || '',
+        color: product.color || '',
+      })))
     } catch (error) {
       console.error('Error loading products:', error)
     } finally {
@@ -183,7 +188,14 @@ export default function AdminPanel({ initialEditId }: AdminPanelProps) {
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(productToSave)
     })
-    if (!response.ok) return setMessage('Article could not be saved.')
+    if (!response.ok) {
+      const errorBody = await response.json().catch(() => null)
+      const validationMessage = Array.isArray(errorBody?.message)
+        ? errorBody.message.join(', ')
+        : errorBody?.message
+      setMessage(validationMessage || 'Article could not be saved.')
+      return
+    }
     setMessage('Article saved.')
     setEditingId(null)
     setForm(emptyProduct)
