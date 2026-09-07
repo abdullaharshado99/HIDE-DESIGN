@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Cormorant_Garamond, Jost } from 'next/font/google'
+import { Cormorant_Garamond, Jost, League_Script } from 'next/font/google'
 import { Toaster } from 'sonner'
 import './globals.css'
 
@@ -8,6 +8,14 @@ const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
   weight: ['400', '500', '600'],
   style: ['normal', 'italic'],
+  display: 'block',
+})
+
+const leagueScript = League_Script({
+  variable: '--font-league-script',
+  subsets: ['latin'],
+  weight: '400',
+  display: 'block',
 })
 
 const jost = Jost({
@@ -55,7 +63,7 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body className={`${cormorant.variable} ${jost.variable}`}>
+      <body className={`${cormorant.variable} ${leagueScript.variable} ${jost.variable}`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
