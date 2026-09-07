@@ -1,4 +1,10 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('products')
 export class Product {
@@ -17,11 +23,13 @@ export class Product {
   @Column({ length: 30 })
   audience?: string;
 
-  @Column({ length: 60, nullable: true })
-  size?: string;
+  // Multiple sizes per product
+  @Column('simple-array', { nullable: true })
+  sizes?: string[];
 
-  @Column({ length: 60, nullable: true })
-  color?: string;
+  // Multiple colors per product
+  @Column('simple-array', { nullable: true })
+  colors?: string[];
 
   @Column({ length: 120 })
   material?: string;
@@ -29,7 +37,12 @@ export class Product {
   @Column({ type: 'text' })
   description?: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    nullable: true,
+  })
   price?: number | null;
 
   @Column({ length: 3, default: 'USD' })

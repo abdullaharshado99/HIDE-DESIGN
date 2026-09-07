@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Cormorant_Garamond, Jost } from 'next/font/google'
+import { Toaster } from 'sonner'
 import './globals.css'
 
 const cormorant = Cormorant_Garamond({
@@ -57,9 +58,19 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body className={`${cormorant.variable} ${jost.variable}`}>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteJsonLd),
+          }}
         />
+
         {children}
+
+        <Toaster
+          position="top-right"
+          richColors
+          closeButton
+          duration={3000}
+        />
       </body>
     </html>
   )

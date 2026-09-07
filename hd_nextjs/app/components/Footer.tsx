@@ -23,19 +23,6 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="footer-links">
-          <a href="#men-jackets">Men</a>
-          <a href="#women-jackets">Women</a>
-          <a href="#leather">Leather</a>
-          <a href="#custom">Custom</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
-        </div>
-
-        <a className="footer-quote" href="#contact">
-          Request A Quote ↗
-        </a>
-
       </div>
 
 

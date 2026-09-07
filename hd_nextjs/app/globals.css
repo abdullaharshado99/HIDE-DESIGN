@@ -1729,6 +1729,50 @@ button {
   align-items: stretch;
 }
 
+.material-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.services-copy {
+  padding: 50px 60px;
+   box-sizing: border-box;
+}
+
+.services-copy h2 {
+  font-size: clamp(28px, 3.4vw, 44px);
+  margin-bottom: 25px;
+}
+
+.services-copy h2 em {
+  font-style: italic;
+  color: var(--gold-bright);
+}
+
+.services-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.services-list > div {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.services-list > div span {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  color: var(--gold);
+  min-width: 32px;
+}
+
+.services-list > div b {
+  font-size: 15px;
+  color: var(--cream);
+}
+
 .material-copy {
   padding: 50px 60px;
   display: flex;
@@ -2018,6 +2062,7 @@ button {
   }
 }
 /* ---------- CONTACT SECTION ---------- */
+
 .contact-section {
   padding: 90px 0 110px;
   background: var(--espresso);
@@ -2025,8 +2070,23 @@ button {
 
 .contact-grid {
   display: grid;
-  grid-template-columns: 1fr 1.3fr;
-  gap: 60px;
+
+  /*
+    LEFT        CENTER       RIGHT
+    Numbers     Socials      Send Request
+  */
+  grid-template-columns: minmax(0, 1fr) 80px minmax(0, 1.3fr);
+
+  gap: 30px;
+
+  align-items: center;
+}
+
+
+/* ---------- LEFT CONTACT TEXT ---------- */
+
+.contact-copy {
+  min-width: 0;
 }
 
 .contact-copy h2 {
@@ -2042,9 +2102,223 @@ button {
 .contact-copy p {
   color: var(--muted);
   font-size: 15.5px;
+  line-height: 1.7;
   margin-bottom: 30px;
 }
 
+
+/* ---------- PHONE NUMBERS ---------- */
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-details a {
+  font-size: 15px;
+  color: var(--parchment);
+  text-decoration: none;
+
+  transition:
+    color .3s ease,
+    transform .3s ease;
+}
+
+.contact-details a:hover {
+  color: var(--gold-bright);
+  transform: translateX(3px);
+}
+
+
+/* ---------- SOCIAL ICONS — CENTER ---------- */
+
+.contact-socials {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+}
+
+
+/* ---------- SOCIAL ICON BOX ---------- */
+
+.contact-social {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--hair);
+  border-radius: 50%;
+
+  color: var(--parchment);
+
+  background: rgba(201, 162, 77, 0.04);
+
+  text-decoration: none;
+
+  transition:
+    color .3s ease,
+    border-color .3s ease,
+    background .3s ease,
+    transform .3s ease,
+    box-shadow .3s ease;
+}
+
+.contact-social svg {
+  width: 20px;
+  height: 20px;
+
+  display: block;
+}
+
+
+/* ---------- SOCIAL HOVER ---------- */
+
+.contact-social:hover {
+  color: var(--gold-bright);
+
+  border-color: var(--gold);
+
+  background: rgba(201, 162, 77, 0.10);
+
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.22);
+}
+
+
+/* ---------- QUOTE FORM ---------- */
+
+.quote-form {
+  background: var(--panel);
+
+  padding: 40px;
+
+  border: 1px solid var(--hair);
+
+  border-radius: 4px;
+
+  min-width: 0;
+}
+
+.form-row {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 20px;
+
+  margin-bottom: 20px;
+}
+
+
+/* ---------- FORM LABELS ---------- */
+
+.quote-form label {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+
+  font-size: 11px;
+
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+
+  color: var(--muted);
+
+  width: 100%;
+}
+
+
+/* ---------- FORM INPUTS ---------- */
+
+.quote-form input,
+.quote-form select,
+.quote-form textarea {
+  background: transparent;
+
+  border: none;
+
+  border-bottom: 1px solid var(--hair);
+
+  color: var(--cream);
+
+  font-family: 'Jost', sans-serif;
+
+  font-size: 15px;
+
+  padding: 10px 2px;
+
+  outline: none;
+
+  transition: border-color .3s ease;
+
+  width: 100%;
+
+  box-sizing: border-box;
+}
+
+
+/* ---------- SELECT ---------- */
+
+.quote-form select option {
+  background: var(--espresso-2);
+
+  color: var(--cream);
+}
+
+
+/* ---------- FOCUS ---------- */
+
+.quote-form input:focus,
+.quote-form select:focus,
+.quote-form textarea:focus {
+  border-color: var(--gold);
+}
+
+
+/* ---------- TEXTAREA ---------- */
+
+.quote-form textarea {
+  resize: vertical;
+
+  min-height: 90px;
+}
+
+
+/* ---------- SEND BUTTON ---------- */
+
+.form-submit {
+  margin-top: 16px;
+
+  width: 100%;
+
+  justify-content: center;
+}
+
+
+/* ---------- FORM SUCCESS ---------- */
+
+.form-success {
+  color: var(--gold-bright);
+
+  font-size: 14px;
+
+  margin-top: 16px;
+
+  text-align: center;
+}
 .contact-details {
   display: flex;
   flex-direction: column;
@@ -2055,6 +2329,7 @@ button {
 .contact-details span {
   font-size: 15px;
   color: var(--parchment);
+  text-decoration: none;
   transition: color .3s ease;
 }
 
@@ -2062,143 +2337,71 @@ button {
   color: var(--gold-bright);
 }
 
-.quote-form {
-  background: var(--panel);
-  padding: 40px;
-  border: 1px solid var(--hair);
-  border-radius: 4px;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-/* ---------- SOCIAL LINKS IN FORM - RIGHT SIDE ---------- */
-
-.contact-social-row {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 14px;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid var(--hair);
-}
-
-.contact-social-label {
-  color: var(--muted);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.contact-social {
-  width: 32px;
-  height: 32px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--hair);
-  border-radius: 50%;
-  color: var(--muted) !important;
-  text-decoration: none;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  transition: color .3s ease, border-color .3s ease, transform .3s ease;
-}
-
-.contact-social:hover {
-  color: var(--gold-bright) !important;
-  border-color: var(--gold);
-  transform: translateY(-2px);
-}
-.quote-form label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  width: 100%;
-}
-
-.quote-form input,
-.quote-form select,
-.quote-form textarea {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--hair);
-  color: var(--cream);
-  font-family: 'Jost', sans-serif;
-  font-size: 15px;
-  padding: 10px 2px;
-  outline: none;
-  transition: border-color .3s ease;
-  width: 100%;
-}
-
-.quote-form select option {
-  background: var(--espresso-2);
-  color: var(--cream);
-}
-
-.quote-form input:focus,
-.quote-form select:focus,
-.quote-form textarea:focus {
-  border-color: var(--gold);
-}
-
-.quote-form textarea {
-  resize: vertical;
-  min-height: 90px;
-}
-
-.form-submit {
-  margin-top: 16px;
-  width: 100%;
-  justify-content: center;
-}
-
-.form-success {
-  color: var(--gold-bright);
-  font-size: 14px;
-  margin-top: 16px;
-  text-align: center;
-}
-
-/* ---------- CONTACT PHONE + SOCIAL (Left Side) ---------- */
-
-.contact-phone-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-
 /* ---------- RESPONSIVE ---------- */
-@media (max-width: 768px) {
+
+@media (max-width: 900px) {
+
   .contact-grid {
     grid-template-columns: 1fr;
+
     gap: 40px;
+  }
+
+  .contact-socials {
+    flex-direction: row;
+
+    justify-content: center;
+
+    order: 2;
+  }
+
+  .contact-copy {
+    order: 1;
+  }
+
+  .quote-form {
+    order: 3;
   }
 
   .form-row {
     grid-template-columns: 1fr;
   }
+}
 
-  .contact-social-row {
-    justify-content: center; /* Center on mobile */
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 768px) {
+
+  .contact-section {
+    padding: 70px 0 80px;
+  }
+
+  .contact-grid {
+    gap: 35px;
+  }
+
+  .contact-copy {
+    text-align: center;
+  }
+
+  .contact-details {
+    align-items: center;
+  }
+
+  .contact-socials {
+    gap: 12px;
+  }
+
+  .contact-social {
+    width: 42px;
+    height: 42px;
   }
 
   .quote-form {
     padding: 24px 20px;
   }
-} 
+}
 /* ---------- FOOTER ---------- */
 .footer {
   background: var(--espresso);
@@ -2208,14 +2411,11 @@ button {
 
 .footer-top {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 30px;
   padding-bottom: 40px;
   border-bottom: 1px solid var(--hair);
 }
-
 .footer-brand {
   display: flex;
   align-items: center;
@@ -2251,41 +2451,6 @@ button {
   color: var(--muted);
   text-transform: uppercase;
 }
-
-.footer-links {
-  display: flex;
-  gap: 28px;
-  flex-wrap: wrap;
-}
-
-.footer-links a {
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--parchment);
-  transition: color .3s ease;
-}
-
-.footer-links a:hover {
-  color: var(--gold-bright);
-}
-
-.footer-quote {
-  border: 1px solid var(--gold);
-  color: var(--gold-bright);
-  padding: 10px 22px;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  border-radius: 2px;
-  transition: background .3s ease, color .3s ease;
-}
-
-.footer-quote:hover {
-  background: var(--gold);
-  color: var(--ink);
-}
-
 .footer-bottom {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2507,6 +2672,11 @@ button {
 }
 
 .product-back-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
   color: var(--parchment);
   font-family: 'Jost', sans-serif;
   font-size: 12px;
@@ -2805,3 +2975,168 @@ button {
   }
 
 }
+/* ---------- ADMIN LOADER ---------- */
+
+.admin-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  display: inline-block;
+  animation: admin-spin 0.7s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes admin-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn:disabled,
+.admin-delete:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.admin-upload-status {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+/* ---------- ADMIN GOLD BUTTONS ---------- */
+
+.admin-gold-btn {
+  border: 1px solid var(--gold);
+  background: var(--gold);
+  color: var(--ink);
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+/* ---------- ADMIN GOLD BUTTONS ---------- */
+
+.admin-gold-btn {
+  min-height: 52px;
+  padding: 14px 22px;
+
+  border: 1px solid var(--gold);
+  background: var(--gold);
+  color: var(--ink);
+
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+  border-radius: 2px;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.admin-gold-btn:hover {
+  border-color: var(--gold-bright);
+  background: var(--gold-bright);
+  color: var(--ink);
+  transform: translateY(-2px);
+}
+
+.admin-gold-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.account-product > div:first-child {
+  min-width: 0;
+}
+
+.account-product-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 28px;
+  margin-top: 16px;
+}
+
+.account-option-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.account-option-title {
+  color: var(--brass);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.account-option-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.account-option {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border: 1px solid rgba(18, 13, 10, .18);
+  color: var(--ink) !important;
+  font-size: 11px !important;
+  letter-spacing: .03em !important;
+  text-transform: none !important;
+  cursor: pointer;
+}
+
+.account-option input {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  accent-color: var(--brass);
+  cursor: pointer;
+}
+
+.account-option:hover {
+  border-color: var(--brass);
+}
+
+@media (max-width: 760px) {
+  .account-product {
+    align-items: flex-start;
+  }
+
+  .account-product-actions {
+    flex-shrink: 0;
+  }
+
+  .account-product-options {
+    gap: 14px 18px;
+  }
+
+  .account-option-list {
+    gap: 6px;
+  }
+}
+

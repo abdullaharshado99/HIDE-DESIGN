@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { getApiUrl } from '../api-config'
 import Image from 'next/image'
-import Link from 'next/link'
 
 interface Product {
   id: number
@@ -26,10 +26,17 @@ interface ProductDetailsProps {
 }
 
 function displayLabel(value: string) {
-  return value ? value.charAt(0).toUpperCase() + value.slice(1) : value
+  return value
+    ? value.charAt(0).toUpperCase() + value.slice(1)
+    : value
 }
 
-export default function ProductDetails({ articleNumber }: ProductDetailsProps) {
+export default function ProductDetails({
+  articleNumber,
+}: ProductDetailsProps) {
+
+  const router = useRouter()
+
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -53,9 +60,11 @@ export default function ProductDetails({ articleNumber }: ProductDetailsProps) {
         const data: Product = await response.json()
 
         setProduct(data)
+
       } catch (err) {
         console.error('Product details error:', err)
         setError(true)
+
       } finally {
         setLoading(false)
       }
@@ -63,6 +72,8 @@ export default function ProductDetails({ articleNumber }: ProductDetailsProps) {
 
     loadProduct()
   }, [articleNumber])
+
+  /* ---------- LOADING ---------- */
 
   if (loading) {
     return (
@@ -74,37 +85,68 @@ export default function ProductDetails({ articleNumber }: ProductDetailsProps) {
     )
   }
 
+  /* ---------- ERROR ---------- */
+
   if (error || !product) {
     return (
       <main className="product-details-page">
+
         <div className="product-not-found">
+
           <span>PRODUCT NOT FOUND</span>
 
-          <h1>This product is currently unavailable.</h1>
+          <h1>
+            This product is currently unavailable.
+          </h1>
 
-          <Link href="/" className="back-to-collection">
+          <button
+            type="button"
+            className="back-to-collection"
+            onClick={() => router.back()}
+          >
             ← Back To Collection
-          </Link>
+          </button>
+
         </div>
+
       </main>
     )
   }
 
+  /* ---------- PRODUCT DETAILS ---------- */
+
   return (
     <main className="product-details-page">
+
+      {/* TOP BAR */}
+
       <div className="product-details-topbar">
-        <Link href="/" className="product-back-link">
+
+        <button
+          type="button"
+          className="product-back-link"
+          onClick={() => router.back()}
+        >
           ← Back To Collection
-        </Link>
+        </button>
 
         <span className="product-counter">
           PRODUCT / {product.articleNumber}
         </span>
+
       </div>
+
+
+      {/* PRODUCT CONTENT */}
+
       <section className="product-details-container">
+
+        {/* IMAGE */}
+
         <div className="product-details-image-section">
 
           <div className="product-details-image">
+
             <Image
               src={product.imageUrl}
               alt={product.name}
@@ -118,17 +160,28 @@ export default function ProductDetails({ articleNumber }: ProductDetailsProps) {
                 target.style.display = 'none'
               }}
             />
+
           </div>
 
         </div>
+
+
+        {/* PRODUCT INFO */}
+
         <div className="product-details-info">
+
           <span className="product-details-id">
             {product.articleNumber}
           </span>
+
+
           <h1 className="product-details-title">
             {product.name}
           </h1>
+
+
           <div className="product-details-meta">
+
             <span>
               {displayLabel(product.category)}
             </span>
@@ -136,9 +189,15 @@ export default function ProductDetails({ articleNumber }: ProductDetailsProps) {
             <span>
               {displayLabel(product.audience)}
             </span>
+
           </div>
+
+
+          {/* PRICE */}
+
           {product.price !== null && (
             <div className="product-details-price">
+
               <span className="product-currency">
                 {product.currency}
               </span>
@@ -146,9 +205,16 @@ export default function ProductDetails({ articleNumber }: ProductDetailsProps) {
               <span>
                 {Number(product.price).toLocaleString()}
               </span>
+
             </div>
           )}
+
+
           <div className="product-details-line" />
+
+
+          {/* MATERIAL */}
+
           <div className="product-detail-block">
 
             <span className="product-detail-label">
@@ -160,6 +226,10 @@ export default function ProductDetails({ articleNumber }: ProductDetailsProps) {
             </p>
 
           </div>
+
+
+          {/* DESCRIPTION */}
+
           <div className="product-detail-block">
 
             <span className="product-detail-label">
@@ -171,6 +241,10 @@ export default function ProductDetails({ articleNumber }: ProductDetailsProps) {
             </p>
 
           </div>
+
+
+          {/* PRODUCT INFORMATION */}
+
           <div className="product-detail-block">
 
             <span className="product-detail-label">
@@ -181,33 +255,52 @@ export default function ProductDetails({ articleNumber }: ProductDetailsProps) {
 
               <div>
                 <span>Article Number</span>
-                <strong>{product.articleNumber}</strong>
+
+                <strong>
+                  {product.articleNumber}
+                </strong>
               </div>
+
 
               <div>
                 <span>Category</span>
-                <strong>{displayLabel(product.category)}</strong>
+
+                <strong>
+                  {displayLabel(product.category)}
+                </strong>
               </div>
+
 
               <div>
                 <span>Collection</span>
+
                 <strong>
                   {displayLabel(product.audience)}
                 </strong>
               </div>
 
+
               <div>
                 <span>Size</span>
-                <strong>{product.size || 'Not specified'}</strong>
+
+                <strong>
+                  {product.size || 'Not specified'}
+                </strong>
               </div>
+
 
               <div>
                 <span>Color</span>
-                <strong>{product.color || 'Not specified'}</strong>
+
+                <strong>
+                  {product.color || 'Not specified'}
+                </strong>
               </div>
+
 
               <div>
                 <span>Material</span>
+
                 <strong>
                   {product.material}
                 </strong>
@@ -216,6 +309,10 @@ export default function ProductDetails({ articleNumber }: ProductDetailsProps) {
             </div>
 
           </div>
+
+
+          {/* ACTIONS */}
+
           <div className="product-details-actions">
 
             <button
@@ -224,6 +321,7 @@ export default function ProductDetails({ articleNumber }: ProductDetailsProps) {
             >
               ADD TO CART
             </button>
+
 
             <button
               type="button"
