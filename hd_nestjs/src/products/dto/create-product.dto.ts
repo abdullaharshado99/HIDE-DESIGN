@@ -1,17 +1,67 @@
-import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, Min } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Min,
+} from 'class-validator';
+
 import { Type } from 'class-transformer';
 
 export class CreateProductDto {
-  @IsString() @MaxLength(60) articleNumber?: string;
-  @IsString() @MaxLength(160) name?: string;
-  @IsString() @MaxLength(30) category?: string;
-  @IsString() @MaxLength(30) audience?: string;
-  @IsString() @IsNotEmpty() @MaxLength(60) size?: string;
-  @IsString() @IsNotEmpty() @MaxLength(60) color?: string;
-  @IsString() @MaxLength(120) material?: string;
-  @IsString() description?: string;
-  @IsOptional() @Type(() => Number) @IsNumber() @Min(0) price?: number;
-  @IsOptional() @IsString() @MaxLength(3) currency?: string;
-  @IsString() @IsNotEmpty() @MaxLength(1500) imageUrl?: string;
-  @IsOptional() @IsBoolean() published?: boolean;
+  @IsString()
+  @MaxLength(60)
+  articleNumber?: string;
+
+  @IsString()
+  @MaxLength(160)
+  name?: string;
+
+  @IsString()
+  @MaxLength(30)
+  category?: string;
+
+  @IsString()
+  @MaxLength(30)
+  audience?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  sizes?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  colors?: string[];
+
+  @IsString()
+  @MaxLength(120)
+  material?: string;
+
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  price?: number;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(3)
+  currency?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(1500)
+  imageUrl?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  published?: boolean;
 }

@@ -4,8 +4,6 @@ export default function About() {
   return (
     <section className="about-section" id="about">
       <div className="container about-grid">
-
-        {/* LEFT — FOUNDER */}
         <div className="about-founder">
           <div className="about-founder-image">
             <Image
@@ -21,8 +19,6 @@ export default function About() {
             <strong>Arshad Javiad Chaudhry</strong>
           </div>
         </div>
-
-        {/* CENTER — ABOUT TEXT */}
         <div className="about-content">
           <span className="eyebrow">ABOUT HIDE DESIGN</span>
 
@@ -36,8 +32,6 @@ export default function About() {
             </p>
           </div>
         </div>
-
-        {/* RIGHT — YEAR */}
         <div className="about-number">
           2002
         </div>

@@ -40,33 +40,7 @@ async function seed() {
     } else {
       console.log(`✅ Admin user already exists: ${email}`);
     }
-    const products = dataSource.getRepository(Product);
-    const catalogue = [
-      ['HD-M01', 'The Regent', 'men', 'Wool · Tailored Double-Breasted', '/images/men/men-01.jpg'],
-      ['HD-M02', 'The Heritage', 'men', 'Tweed · Classic Longline', '/images/men/men-02.jpg'],
-      ['HD-M03', 'The Executive', 'men', 'Wool Blend · Modern Fit', '/images/men/men-03.jpg'],
-      ['HD-M04', 'The Sovereign', 'men', 'Cashmere Blend · Luxury Finish', '/images/men/men-04.jpg'],
-      ['HD-M05', 'The Traveller', 'men', 'Wool · Relaxed Tailoring', '/images/men/men-05.jpg'],
-      ['HD-W01', 'The Elena', 'women', 'Wool · Sculpted Silhouette', '/images/women/women-01.jpg'],
-      ['HD-W02', 'The Camille', 'women', 'Tweed · Soft Tailoring', '/images/women/women-02.jpg'],
-      ['HD-W03', 'The Victoria', 'women', 'Wool Blend · Refined Fit', '/images/women/women-03.jpg'],
-      ['HD-W04', 'The Celeste', 'women', 'Cashmere Blend · Signature Finish', '/images/women/women-04.jpg'],
-      ['HD-W05', 'The Grace', 'women', 'Wool · Contemporary Longline', '/images/women/women-05.jpg'],
-    ] as const;
-    
-    let productCount = 0;
-    for (const [articleNumber, name, audience, material, imageUrl] of catalogue) {
-      const exists = await products.findOne({ where: { articleNumber } });
-      if (!exists) {
-        await products.save(products.create({ articleNumber, name, audience, material, imageUrl, category: 'coats', description: material, price: null, currency: 'USD', published: true }));
-        productCount++;
-      }
-    }
-    if (productCount > 0) {
-      console.log(`📦 Created ${productCount} products`);
-    } else {
-      console.log('✅ All products already exist');
-    }
+    console.log('✅ Product seeding skipped (managed via admin panel)');
     
     console.log('🎉 Seeding completed successfully!');
     await dataSource.destroy();

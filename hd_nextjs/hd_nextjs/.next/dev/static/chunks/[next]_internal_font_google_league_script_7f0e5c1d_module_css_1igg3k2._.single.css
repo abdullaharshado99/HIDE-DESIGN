@@ -1,0 +1,30 @@
+/* [next]/internal/font/google/league_script_7f0e5c1d.module.css [app-client] (css) */
+@font-face {
+  font-family: League Script;
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("../media/99f7c1a04671c305-s.p.05zuy9-m8c_q9.woff2") format("woff2");
+  unicode-range: U+??, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: League Script Fallback;
+  src: local(Arial);
+  ascent-override: 71.8%;
+  descent-override: 39.16%;
+  line-gap-override: 0.0%;
+  size-adjust: 99.74%;
+}
+
+.league_script_7f0e5c1d-module__o9AaFG__className {
+  font-family: League Script, League Script Fallback;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.league_script_7f0e5c1d-module__o9AaFG__variable {
+  --font-league-script: "League Script", "League Script Fallback";
+}
+
+/*# sourceMappingURL=%5Bnext%5D_internal_font_google_league_script_7f0e5c1d_module_css_1igg3k2._.single.css.map*/
