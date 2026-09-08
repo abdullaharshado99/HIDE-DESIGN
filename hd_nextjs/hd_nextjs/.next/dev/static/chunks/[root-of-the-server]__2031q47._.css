@@ -1380,7 +1380,7 @@ button {
   width: 100%;
   max-width: none;
   margin: 0;
-  padding: 0 24px 105px;
+  padding: 0 24px 105px 56px;
   display: flex;
   position: relative;
 }
@@ -1408,7 +1408,7 @@ button {
   color: #e6c675;
   letter-spacing: 0;
   margin: 0 0 18px;
-  font-size: clamp(42px, 5vw, 68px);
+  font-size: clamp(38px, 4.4vw, 58px);
   font-style: normal;
   font-weight: 400;
   line-height: 1;
@@ -3433,6 +3433,57 @@ button {
 
   .account-option-list {
     gap: 6px;
+  }
+}
+
+.reveal {
+  opacity: 0;
+  will-change: opacity, transform;
+  transition: opacity .8s, transform .8s;
+  transform: translateY(40px);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-stagger > * {
+  opacity: 0;
+  transition: opacity .7s, transform .7s;
+  transform: translateY(30px);
+}
+
+.reveal-stagger.visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-stagger.visible > :first-child {
+  transition-delay: 50ms;
+}
+
+.reveal-stagger.visible > :nth-child(2) {
+  transition-delay: .15s;
+}
+
+.reveal-stagger.visible > :nth-child(3) {
+  transition-delay: .25s;
+}
+
+.reveal-stagger.visible > :nth-child(4) {
+  transition-delay: .35s;
+}
+
+.reveal-stagger.visible > :nth-child(5) {
+  transition-delay: .45s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-stagger > * {
+    opacity: 1;
+    transition: none;
+    transform: none;
   }
 }
 
