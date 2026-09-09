@@ -1,9 +1,17 @@
+'use client';
+
 import Image from 'next/image'
+import { useScrollReveal } from './ScrollReveal'
 
 export default function About() {
+  const { ref, isVisible } = useScrollReveal()
+
   return (
     <section className="about-section" id="about">
-      <div className="container about-grid">
+      <div
+        ref={ref}
+        className={`container about-grid reveal-stagger ${isVisible ? 'visible' : ''}`}
+      >
         <div className="about-founder">
           <div className="about-founder-image">
             <Image

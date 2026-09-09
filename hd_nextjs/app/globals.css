@@ -631,7 +631,7 @@ button {
 
   margin: 0;
 
-  padding: 0 24px 105px;
+  padding: 0 24px 105px 56px;
 
   display: flex;
   align-items: flex-end;
@@ -672,7 +672,7 @@ button {
 /* PREMIUM CRAFTSMANSHIP */
 .hero-craftsmanship {
   font-family: var(--font-league-script), cursive;
-  font-size: clamp(42px, 5vw, 68px);
+  font-size: clamp(38px, 4.4vw, 58px);
   font-weight: 400;
   font-style: normal;
   color: #e6c675;
@@ -3139,3 +3139,44 @@ button {
   }
 }
 
+/* ---------- SCROLL REVEAL ANIMATION ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  will-change: opacity, transform;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Optional: stagger children (e.g. product cards) */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal-stagger.visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-stagger.visible > *:nth-child(1) { transition-delay: 0.05s; }
+.reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.15s; }
+.reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.25s; }
+.reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.35s; }
+.reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.45s; }
+
+/* Respect users who disable animations */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-stagger > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
