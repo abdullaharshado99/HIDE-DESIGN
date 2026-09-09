@@ -14,10 +14,7 @@ export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(node); // sirf ek baar animate ho
-        }
+        setIsVisible(entry.isIntersecting);
       },
       {
         threshold: 0.15,

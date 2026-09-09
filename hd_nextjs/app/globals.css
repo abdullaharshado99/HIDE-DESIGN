@@ -1274,9 +1274,15 @@ button {
 .product-image {
   height: 340px;
 
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
   overflow: hidden;
 
-  background: var(--panel);
+  background: #1c1611;
 
   position: relative;
 }
@@ -1286,13 +1292,13 @@ button {
 
   height: 100%;
 
-  object-fit: cover;
+  object-fit: contain;
 
-  transition: transform 0.6s ease;
+  background: #1c1611;
 }
 
 .product-card:hover .product-image img {
-  transform: scale(1.06);
+  transform: none;
 }
 
 
@@ -1471,7 +1477,13 @@ button {
 .product-modal-image {
   min-height: 520px;
 
-  background: var(--panel);
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #1c1611;
 
   overflow: hidden;
 }
@@ -1483,7 +1495,9 @@ button {
 
   min-height: 520px;
 
-  object-fit: cover;
+  object-fit: contain;
+
+  background: #1c1611;
 }
 
 
@@ -3179,4 +3193,38 @@ button {
     transform: none;
     transition: none;
   }
+}
+.admin-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.admin-checkbox-option {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--hair);
+  background: var(--espresso-2);
+  color: var(--cream) !important;
+  font-size: 11px !important;
+  text-transform: none !important;
+  letter-spacing: 0.03em !important;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.admin-checkbox-option:hover {
+  border-color: var(--gold);
+}
+
+.admin-checkbox-option input {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  accent-color: var(--gold);
+  cursor: pointer;
 }

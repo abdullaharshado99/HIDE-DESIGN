@@ -11,8 +11,8 @@ interface Product {
   name: string
   category: string
   audience: string
-  size?: string
-  color?: string
+  sizes?: string[]
+  colors?: string[]
   material: string
   description: string
   price: number | null
@@ -284,7 +284,7 @@ export default function ProductDetails({
                 <span>Size</span>
 
                 <strong>
-                  {product.size || 'Not specified'}
+                  {product.sizes?.join(', ') || 'Not specified'}
                 </strong>
               </div>
 
@@ -293,7 +293,7 @@ export default function ProductDetails({
                 <span>Color</span>
 
                 <strong>
-                  {product.color || 'Not specified'}
+                  {product.colors?.join(', ') || 'Not specified'}
                 </strong>
               </div>
 
