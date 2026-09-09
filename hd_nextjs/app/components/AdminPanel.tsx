@@ -40,7 +40,6 @@ const emptyProduct: Omit<Product, 'id'> = {
 const CLOUD_NAME = 'gmqcr7ae'
 const UPLOAD_PRESET = 'hide_design_uploads'
 
-// ---------- FIXED SIZE & COLOR OPTIONS ----------
 const SIZE_OPTIONS = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
 
 const COLOR_OPTIONS = [
@@ -490,18 +489,12 @@ export default function AdminPanel({
     }
 
     if (form.sizes.length === 0) {
-      toast.error(
-        'Please select at least one size.'
-      )
-
+      toast.error('Please select at least one size.')
       return
     }
 
     if (form.colors.length === 0) {
-      toast.error(
-        'Please select at least one color.'
-      )
-
+      toast.error('Please select at least one color.')
       return
     }
 
@@ -886,26 +879,20 @@ export default function AdminPanel({
             </select>
           </label>
 
-          {/* SIZES — CHECKBOXES */}
+          {/* SIZES */}
           <label>
             Sizes
 
             <div className="admin-checkbox-group">
               {SIZE_OPTIONS.map((size) => (
-                <label
-                  className="admin-checkbox-option"
-                  key={size}
-                >
+                <label className="admin-checkbox-option" key={size}>
                   <input
                     type="checkbox"
                     checked={form.sizes.includes(size)}
                     onChange={() =>
                       setForm({
                         ...form,
-                        sizes: toggleArrayValue(
-                          form.sizes,
-                          size
-                        ),
+                        sizes: toggleArrayValue(form.sizes, size),
                       })
                     }
                   />
@@ -914,31 +901,23 @@ export default function AdminPanel({
               ))}
             </div>
 
-            <small>
-              Select all sizes available for this article.
-            </small>
+            <small>Select all sizes available for this article.</small>
           </label>
 
-          {/* COLORS — CHECKBOXES */}
+          {/* COLORS */}
           <label>
             Colors
 
             <div className="admin-checkbox-group">
               {COLOR_OPTIONS.map((color) => (
-                <label
-                  className="admin-checkbox-option"
-                  key={color}
-                >
+                <label className="admin-checkbox-option" key={color}>
                   <input
                     type="checkbox"
                     checked={form.colors.includes(color)}
                     onChange={() =>
                       setForm({
                         ...form,
-                        colors: toggleArrayValue(
-                          form.colors,
-                          color
-                        ),
+                        colors: toggleArrayValue(form.colors, color),
                       })
                     }
                   />
@@ -947,9 +926,7 @@ export default function AdminPanel({
               ))}
             </div>
 
-            <small>
-              Select all colors available for this article.
-            </small>
+            <small>Select all colors available for this article.</small>
           </label>
 
           {/* MATERIAL */}
@@ -998,16 +975,9 @@ export default function AdminPanel({
             <input
               type="file"
               accept="image/*"
-              required={
-                !editingId
-              }
-              disabled={
-                uploading ||
-                saving
-              }
-              onChange={
-                uploadImage
-              }
+              required={!editingId}
+              disabled={uploading || saving}
+              onChange={uploadImage}
             />
 
             {uploading && (

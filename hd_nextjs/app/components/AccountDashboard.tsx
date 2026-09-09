@@ -3,12 +3,14 @@
 import { useEffect, useState } from 'react'
 import { ArrowUpRight, Check, Heart, UserRound } from 'lucide-react'
 import { getApiUrl } from '../api-config'
+import ProductInquiryForm from './ProductInquiryForm'
 
 interface Product {
   id: string
   name: string
   detail: string
   audience: string
+  imageUrl?: string
   description?: string
   colors: string[]
   sizes: string[]
@@ -57,6 +59,7 @@ export default function AccountDashboard() {
   const [saved, setSaved] = useState(false)
   const [showAllProducts, setShowAllProducts] = useState(false)
   const [loadingProducts, setLoadingProducts] = useState(true)
+  const [showInquiry, setShowInquiry] = useState(false)
 
   useEffect(() => {
     // Load saved workspace data
@@ -116,6 +119,7 @@ export default function AccountDashboard() {
             material?: string
             audience?: string
             description?: string
+            imageUrl?: string
             sizes?: string[] | string | null
             colors?: string[] | string | null
           }>
@@ -131,6 +135,7 @@ export default function AccountDashboard() {
               name: product.name as string,
               detail: product.material ?? '',
               audience: product.audience ?? '',
+              imageUrl: product.imageUrl,
               description: product.description ?? '',
               colors: normalizeOptions(product.colors),
               sizes: normalizeOptions(product.sizes),
@@ -257,10 +262,21 @@ export default function AccountDashboard() {
   }
 
   function startEnquiry() {
+    const enquiryProductIds =
+      selectedProducts.length > 0
+        ? selectedProducts
+        : savedProducts
+
     const chosen = products.filter(
       (product) =>
-        selectedProducts.includes(product.id)
+        enquiryProductIds.includes(product.id)
     )
+
+    if (chosen.length === 0) {
+      return
+    }
+
+    setShowInquiry(true)
 
     window.dispatchEvent(
       new CustomEvent('hide-design-enquiry', {
@@ -288,12 +304,18 @@ export default function AccountDashboard() {
       })
     )
 
-    document
-      .querySelector('#contact')
-      ?.scrollIntoView({
-        behavior: 'smooth',
-      })
+    window.setTimeout(() => {
+      document
+        .querySelector('#product-inquiry')
+        ?.scrollIntoView({
+          behavior: 'smooth',
+        })
+    }, 0)
   }
+
+  const enquiryProducts = products.filter((product) =>
+    (selectedProducts.length > 0 ? selectedProducts : savedProducts).includes(product.id)
+  )
 
   return (
     <section
@@ -375,6 +397,14 @@ export default function AccountDashboard() {
               Start an enquiry
               <ArrowUpRight size={16} />
             </button>
+
+            {enquiryProducts.length > 0 && (
+              <p className="account-profile-hint">
+                {selectedProducts.length > 0
+                  ? 'Your selected products are ready for a custom sample brief.'
+                  : 'Your saved products are ready for a custom sample brief.'}
+              </p>
+            )}
 
           </aside>
 
@@ -486,9 +516,6 @@ export default function AccountDashboard() {
                       product.id
                     )
 
-                  const selection =
-                    getSelection(product.id)
-
                   return (
                     <article
                       className={`account-product ${
@@ -518,117 +545,6 @@ export default function AccountDashboard() {
                         <small>
                           {product.audience}
                         </small>
-
-                        {/* ---------- COLORS & SIZES ---------- */}
-
-                        {(
-                          product.colors.length > 0 ||
-                          product.sizes.length > 0
-                        ) && (
-
-                          <div className="account-product-options">
-
-                            {/* COLORS */}
-
-                            {product.colors.length > 0 && (
-
-                              <div className="account-option-group">
-
-                                <span className="account-option-title">
-                                  Colors
-                                </span>
-
-                                <div className="account-option-list">
-
-                                  {product.colors.map(
-                                    (color) => (
-
-                                      <label
-                                        className="account-option"
-                                        key={`${product.id}-color-${color}`}
-                                      >
-
-                                        <input
-                                          type="checkbox"
-                                          checked={selection.colors.includes(
-                                            color
-                                          )}
-                                          onChange={() =>
-                                            toggleOption(
-                                              product.id,
-                                              'colors',
-                                              color
-                                            )
-                                          }
-                                        />
-
-                                        <span>
-                                          {color}
-                                        </span>
-
-                                      </label>
-
-                                    )
-                                  )}
-
-                                </div>
-
-                              </div>
-
-                            )}
-
-                            {/* SIZES */}
-
-                            {product.sizes.length > 0 && (
-
-                              <div className="account-option-group">
-
-                                <span className="account-option-title">
-                                  Sizes
-                                </span>
-
-                                <div className="account-option-list">
-
-                                  {product.sizes.map(
-                                    (size) => (
-
-                                      <label
-                                        className="account-option"
-                                        key={`${product.id}-size-${size}`}
-                                      >
-
-                                        <input
-                                          type="checkbox"
-                                          checked={selection.sizes.includes(
-                                            size
-                                          )}
-                                          onChange={() =>
-                                            toggleOption(
-                                              product.id,
-                                              'sizes',
-                                              size
-                                            )
-                                          }
-                                        />
-
-                                        <span>
-                                          {size}
-                                        </span>
-
-                                      </label>
-
-                                    )
-                                  )}
-
-                                </div>
-
-                              </div>
-
-                            )}
-
-                          </div>
-
-                        )}
 
                       </div>
 
@@ -728,6 +644,17 @@ export default function AccountDashboard() {
 
               <ArrowUpRight size={16} />
             </button>
+
+            {showInquiry && enquiryProducts.length > 0 && (
+              <div id="product-inquiry" className="account-inquiry-shell">
+                <ProductInquiryForm
+                  products={enquiryProducts}
+                  initialProductId={enquiryProducts[0]?.id}
+                  clientName={name}
+                  company={company}
+                />
+              </div>
+            )}
 
           </div>
         </div>
