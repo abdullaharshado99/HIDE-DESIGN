@@ -239,6 +239,7 @@ export default function ProductCarousel({
                         alt={product.name}
                         width={280}
                         height={340}
+                        style={{ objectFit: 'contain' }}
                         onError={(event) => {
                           const target =
                             event.target as HTMLImageElement
@@ -299,6 +300,7 @@ export default function ProductCarousel({
                 }
                 width={500}
                 height={600}
+                style={{ objectFit: 'contain' }}
               />
             </div>
             <div className="product-modal-content">

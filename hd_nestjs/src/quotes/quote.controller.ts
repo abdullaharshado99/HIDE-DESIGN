@@ -1,14 +1,14 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AdminGuard } from '../auth/admin.guard';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { CreateQuoteDto } from './dto/create-quote.dto';
+import { CreateCustomInquiryDto, CreateQuoteDto } from './dto/create-quote.dto';
 import { QuoteService } from './quote.service';
 
-@Controller('quotes')
+@Controller()
 export class QuoteController {
   constructor(private readonly quotes: QuoteService) { }
 
-  @Post()
+  @Post('quotes')
   create(@Body() dto: CreateQuoteDto) {
     try {
       return this.quotes.create(dto);
@@ -18,7 +18,12 @@ export class QuoteController {
     }
   }
 
-  @Get()
+  @Post('workspace-inquiries')
+  createWorkspaceInquiry(@Body() dto: CreateCustomInquiryDto) {
+    return this.quotes.createWorkspaceInquiry(dto);
+  }
+
+  @Get('quotes')
   @UseGuards(JwtAuthGuard, AdminGuard)
   findAll() { return this.quotes.findAll(); }
 }

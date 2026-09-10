@@ -11,8 +11,8 @@ interface Product {
   name: string
   category: string
   audience: string
-  size?: string
-  color?: string
+  sizes?: string[]
+  colors?: string[]
   material: string
   description: string
   price: number | null
@@ -131,11 +131,11 @@ export default function ProductDetailView() {
             </div>
             <div className="detail-row">
               <span className="detail-label">Size:</span>
-              <span className="detail-value">{product.size || 'Not specified'}</span>
+              <span className="detail-value">{product.sizes?.join(', ') || 'Not specified'}</span>
             </div>
             <div className="detail-row">
               <span className="detail-label">Color:</span>
-              <span className="detail-value">{product.color || 'Not specified'}</span>
+              <span className="detail-value">{product.colors?.join(', ') || 'Not specified'}</span>
             </div>
           </div>
 

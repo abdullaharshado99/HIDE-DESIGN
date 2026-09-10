@@ -40,6 +40,19 @@ const emptyProduct: Omit<Product, 'id'> = {
 const CLOUD_NAME = 'gmqcr7ae'
 const UPLOAD_PRESET = 'hide_design_uploads'
 
+const SIZE_OPTIONS = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
+
+const COLOR_OPTIONS = [
+  'Black',
+  'Blue',
+  'Brown',
+  'Grey',
+  'Green',
+  'Red',
+  'Tan',
+  'White',
+]
+
 interface AdminPanelProps {
   initialEditId?: number | null
 }
@@ -65,12 +78,13 @@ function normalizeOptions(
   return []
 }
 
-function optionsToText(
-  value: string[] | undefined
-): string {
-  return Array.isArray(value)
-    ? value.join(', ')
-    : ''
+function toggleArrayValue(
+  current: string[],
+  value: string
+): string[] {
+  return current.includes(value)
+    ? current.filter((item) => item !== value)
+    : [...current, value]
 }
 
 /* ---------- COMPONENT ---------- */
@@ -475,18 +489,12 @@ export default function AdminPanel({
     }
 
     if (form.sizes.length === 0) {
-      toast.error(
-        'Please enter at least one size.'
-      )
-
+      toast.error('Please select at least one size.')
       return
     }
 
     if (form.colors.length === 0) {
-      toast.error(
-        'Please enter at least one color.'
-      )
-
+      toast.error('Please select at least one color.')
       return
     }
 
@@ -871,60 +879,54 @@ export default function AdminPanel({
             </select>
           </label>
 
-          {/* MULTIPLE SIZES */}
+          {/* SIZES */}
           <label>
             Sizes
 
-            <input
-              type="text"
-              value={optionsToText(
-                form.sizes
-              )}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  sizes:
-                    normalizeOptions(
-                      e.target.value
-                    ),
-                })
-              }
-              placeholder="e.g. S, M, L, XL"
-              required
-            />
+            <div className="admin-checkbox-group">
+              {SIZE_OPTIONS.map((size) => (
+                <label className="admin-checkbox-option" key={size}>
+                  <input
+                    type="checkbox"
+                    checked={form.sizes.includes(size)}
+                    onChange={() =>
+                      setForm({
+                        ...form,
+                        sizes: toggleArrayValue(form.sizes, size),
+                      })
+                    }
+                  />
+                  <span>{size}</span>
+                </label>
+              ))}
+            </div>
 
-            <small>
-              Enter multiple sizes separated
-              by commas.
-            </small>
+            <small>Select all sizes available for this article.</small>
           </label>
 
-          {/* MULTIPLE COLORS */}
+          {/* COLORS */}
           <label>
             Colors
 
-            <input
-              type="text"
-              value={optionsToText(
-                form.colors
-              )}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  colors:
-                    normalizeOptions(
-                      e.target.value
-                    ),
-                })
-              }
-              placeholder="e.g. BLK, BRN, TAN"
-              required
-            />
+            <div className="admin-checkbox-group">
+              {COLOR_OPTIONS.map((color) => (
+                <label className="admin-checkbox-option" key={color}>
+                  <input
+                    type="checkbox"
+                    checked={form.colors.includes(color)}
+                    onChange={() =>
+                      setForm({
+                        ...form,
+                        colors: toggleArrayValue(form.colors, color),
+                      })
+                    }
+                  />
+                  <span>{color}</span>
+                </label>
+              ))}
+            </div>
 
-            <small>
-              Enter multiple colors separated
-              by commas.
-            </small>
+            <small>Select all colors available for this article.</small>
           </label>
 
           {/* MATERIAL */}
@@ -973,16 +975,9 @@ export default function AdminPanel({
             <input
               type="file"
               accept="image/*"
-              required={
-                !editingId
-              }
-              disabled={
-                uploading ||
-                saving
-              }
-              onChange={
-                uploadImage
-              }
+              required={!editingId}
+              disabled={uploading || saving}
+              onChange={uploadImage}
             />
 
             {uploading && (
@@ -1088,7 +1083,7 @@ export default function AdminPanel({
             {products.length >
               5 && (
               <button
-                className="btn-quote"
+                className="admin-gold-btn"
                 onClick={() =>
                   router.push(
                     '/admin/all-products'
