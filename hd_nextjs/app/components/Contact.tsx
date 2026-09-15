@@ -5,7 +5,6 @@ import { getApiUrl } from '../api-config'
 
 export default function Contact() {
   const [status, setStatus] = useState<'idle' | 'submitted' | 'error'>('idle')
-  const [whatsappLink, setWhatsappLink] = useState('')
 
   useEffect(() => {
     const handleEnquiry = (event: Event) => {
@@ -63,24 +62,6 @@ export default function Contact() {
         throw new Error('Quote submission failed')
       }
 
-      const adminPhone = '+923044885277'
-
-      const messageBody =
-        `New Quote Request\n\n` +
-        `Name: ${data.name}\n` +
-        `Email: ${data.email}\n` +
-        `Phone: ${data.phone}\n` +
-        `Category: ${data.category}\n` +
-        `Message: ${data.message}`
-
-      const encodedMessage = encodeURIComponent(messageBody)
-
-      const link = `https://wa.me/${adminPhone.replace(
-        '+',
-        ''
-      )}?text=${encodedMessage}`
-
-      setWhatsappLink(link)
       setStatus('submitted')
 
       form.reset()
@@ -114,9 +95,6 @@ export default function Contact() {
     </a>
     <a href="tel:+923008441503">
       +92 300 844 1503
-    </a>
-    <a href="mailto:info@hidesdesign.com">
-      info@hidesdesign.com
     </a>
     <span>
       Pakistan · Worldwide Export
@@ -258,23 +236,9 @@ export default function Contact() {
           </button>
           {status === 'submitted' && (
             <div className="form-success">
-
               <p>
                 Thank you. Your request has been received.
               </p>
-
-              {whatsappLink && (
-                <a
-                  href={whatsappLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-gold"
-                  style={{ marginTop: '10px' }}
-                >
-                  📲 Send via WhatsApp
-                </a>
-              )}
-
             </div>
           )}
           {status === 'error' && (

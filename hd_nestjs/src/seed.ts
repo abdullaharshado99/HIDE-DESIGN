@@ -27,7 +27,7 @@ async function seed() {
     console.log('✅ Database connection established');
     
     const users = dataSource.getRepository(User);
-    const email = (process.env.ADMIN_EMAIL ?? 'admin@hidesdesign.com').toLowerCase();
+    const email = (process.env.ADMIN_EMAIL ?? 'info@hidesdesign.com').toLowerCase();
     const existing = await users.findOne({ where: { email } });
     if (!existing) {
       console.log(`👤 Creating admin user: ${email}`);

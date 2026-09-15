@@ -739,6 +739,10 @@ export default function AdminPanel({
             articles for the public
             catalogue.
           </p>
+          <nav className="admin-inquiry-links" aria-label="Inquiry management">
+            <Link href="/admin/quotes">Contact inquiries</Link>
+            <Link href="/admin/invoices">Workspace inquiries</Link>
+          </nav>
         </div>
 
         <button

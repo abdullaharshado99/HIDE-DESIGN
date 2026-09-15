@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import Image from 'next/image'
 import { getApiUrl } from '../api-config'
 
@@ -21,8 +21,15 @@ interface ProductInquiryFormProps {
 }
 
 const ACCEPTED_FILE_TYPES = '.pdf,.jpg,.jpeg,.png,.ai,application/pdf,image/jpeg,image/png,application/postscript'
+const SIZE_OPTIONS = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
 
 type SubmitStatus = 'idle' | 'uploading' | 'submitting' | 'success' | 'error'
+
+function toggleSizeValue(current: string[], size: string) {
+  return current.includes(size)
+    ? current.filter((item) => item !== size)
+    : [...current, size]
+}
 
 export default function ProductInquiryForm({
   products,
@@ -35,6 +42,7 @@ export default function ProductInquiryForm({
   const [name, setName] = useState(clientName)
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([])
   const [fabricType, setFabricType] = useState('')
   const [fabricGsm, setFabricGsm] = useState('')
   const [fitStyle, setFitStyle] = useState('')
@@ -52,6 +60,7 @@ export default function ProductInquiryForm({
   const [errorMessage, setErrorMessage] = useState('')
 
   const selectedProduct = products.find((product) => product.id === selectedProductId)
+  const sizeOptions = selectedProduct?.sizes?.length ? selectedProduct.sizes : SIZE_OPTIONS
   const progress = `${(step / 5) * 100}%`
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
@@ -94,9 +103,10 @@ export default function ProductInquiryForm({
     return result.secure_url
   }
 
-  function validateStep() {
-    if (step === 1 && !selectedProduct) return 'Please select a product.'
-    if (step === 4 && (!quantity || Number(quantity) < 1)) return 'Please enter a valid quantity.'
+  function validateStep(currentStep = step) {
+    if (currentStep === 1 && !selectedProduct) return 'Please select a product.'
+    if (currentStep === 3 && selectedSizes.length === 0) return 'Please select at least one size.'
+    if (currentStep === 4 && (!quantity || Number(quantity) < 1)) return 'Please enter a valid quantity.'
     return ''
   }
 
@@ -119,8 +129,10 @@ export default function ProductInquiryForm({
     setStep((current) => Math.max(1, current - 1))
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+  async function handleSubmit() {
+    if (step !== 5 || status === 'uploading' || status === 'submitting') {
+      return
+    }
 
     const message = validateStep()
     if (message || !selectedProduct) {
@@ -144,7 +156,7 @@ export default function ProductInquiryForm({
       }
 
       setStatus('submitting')
-      const response = await fetch(`${getApiUrl()}/workspace-inquiries`, {
+      const response = await fetch(`${getApiUrl()}/invoices`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -157,7 +169,7 @@ export default function ProductInquiryForm({
           color: selectedProduct.colors.join(', ') || 'Not specified',
           fabricType,
           fabricGsm,
-          sizes: selectedProduct.sizes,
+          sizes: selectedSizes,
           quantity: Number(quantity),
           unit,
           additionalNotes: [
@@ -189,13 +201,33 @@ export default function ProductInquiryForm({
     }
   }
 
+  function resetForm() {
+    setStep(1)
+    setSelectedSizes([])
+    setFabricType('')
+    setFabricGsm('')
+    setFitStyle('')
+    setPrintingTechnique('')
+    setRhinestones('')
+    setLabelsBranding('')
+    setVintageEffects('')
+    setCustomSpecifications('')
+    setQuantity('')
+    setUnit('pieces')
+    setAdditionalNotes('')
+    setDesignFile(null)
+    setDesignFileUrl('')
+    setErrorMessage('')
+    setStatus('idle')
+  }
+
   if (status === 'success') {
     return (
       <div className="inquiry-success">
         <span className="account-kicker">INQUIRY RECEIVED</span>
         <h3>Thank you, we have your brief.</h3>
         <p>Our team will review the product, specifications, and design file and respond within 48 hours.</p>
-        <button className="btn btn-gold" type="button" onClick={() => setStatus('idle')}>
+        <button className="btn btn-gold" type="button" onClick={resetForm}>
           Send another inquiry
         </button>
       </div>
@@ -203,7 +235,19 @@ export default function ProductInquiryForm({
   }
 
   return (
-    <form className="product-inquiry" onSubmit={handleSubmit}>
+    <form
+      className="product-inquiry"
+      onSubmit={(event) => event.preventDefault()}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' && event.target instanceof HTMLTextAreaElement) {
+          return
+        }
+
+        if (event.key === 'Enter') {
+          event.preventDefault()
+        }
+      }}
+    >
       <div className="inquiry-header">
         <div>
           <span className="account-kicker">CUSTOM SAMPLE / PRODUCT INQUIRY</span>
@@ -235,7 +279,10 @@ export default function ProductInquiryForm({
                 type="button"
                 className={product.id === selectedProductId ? 'inquiry-product is-selected' : 'inquiry-product'}
                 key={product.id}
-                onClick={() => setSelectedProductId(product.id)}
+                onClick={() => {
+                  setSelectedProductId(product.id)
+                  setSelectedSizes([])
+                }}
               >
                 <span className="inquiry-product-image">
                   {product.imageUrl ? <Image src={product.imageUrl} alt="" fill sizes="96px" /> : null}
@@ -263,6 +310,24 @@ export default function ProductInquiryForm({
         <div className="inquiry-step">
           <span className="inquiry-kicker">03 / SPECIFICATIONS</span>
           <h4>Tell us how the sample should be made.</h4>
+          <div className="inquiry-field-block">
+            <span className="inquiry-field-label">Sizes</span>
+            <div className="inquiry-size-grid">
+              {sizeOptions.map((size) => (
+                <label
+                  className={`inquiry-choice${selectedSizes.includes(size) ? ' is-selected' : ''}`}
+                  key={size}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedSizes.includes(size)}
+                    onChange={() => setSelectedSizes((current) => toggleSizeValue(current, size))}
+                  />
+                  {size}
+                </label>
+              ))}
+            </div>
+          </div>
           <div className="inquiry-fields-grid">
             <label>Fabric type<select value={fabricType} onChange={(event) => setFabricType(event.target.value)}><option value="">Select fabric type</option><option>Leather</option><option>Cotton</option><option>Polyester</option><option>Wool</option><option>Fleece</option><option>Custom</option></select></label>
             <label>Fabric GSM<input value={fabricGsm} onChange={(event) => setFabricGsm(event.target.value)} placeholder="e.g. 220 GSM" /></label>
@@ -295,7 +360,25 @@ export default function ProductInquiryForm({
       {errorMessage && <p className="inquiry-error" role="alert">{errorMessage}</p>}
       <div className="inquiry-actions">
         {step > 1 && <button className="inquiry-secondary" type="button" onClick={previousStep}>Back</button>}
-        {step < 5 ? <button className="btn btn-gold" type="button" onClick={nextStep}>Continue <span>→</span></button> : <button className="btn btn-gold" type="submit" disabled={status === 'uploading' || status === 'submitting'}>{status === 'uploading' ? 'Uploading design...' : status === 'submitting' ? 'Sending inquiry...' : 'Submit inquiry'} <span>→</span></button>}
+        {step < 5 ? (
+          <button className="btn btn-gold" type="button" onClick={nextStep}>
+            Continue <span>→</span>
+          </button>
+        ) : (
+          <button
+            className="btn btn-gold"
+            type="button"
+            onClick={handleSubmit}
+            disabled={status === 'uploading' || status === 'submitting'}
+          >
+            {status === 'uploading'
+              ? 'Uploading design...'
+              : status === 'submitting'
+                ? 'Sending inquiry...'
+                : 'Submit inquiry'}
+            {' '}<span>→</span>
+          </button>
+        )}
       </div>
     </form>
   )

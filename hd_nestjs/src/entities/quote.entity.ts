@@ -14,8 +14,8 @@ export class Quote {
   @Column({ type: 'varchar', length: 40, nullable: true })
   phone?: string | null;
 
-  @Column({ length: 80 })
-  category?: string;
+  @Column({ type: 'varchar', length: 80, nullable: true })
+  category?: string | null;
 
   @Column({ type: 'text' })
   message?: string;
