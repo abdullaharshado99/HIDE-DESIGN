@@ -30,7 +30,7 @@ ssl: config.get('DB_SSL', 'false') === 'true' ? {
 
 **Configuration:**
 ```typescript
-const email = (process.env.ADMIN_EMAIL ?? 'admin@hidesdesign.com').toLowerCase();
+const email = (process.env.ADMIN_EMAIL ?? 'info@hidesdesign.com').toLowerCase();
 passwordHash: await bcrypt.hash(process.env.ADMIN_PASSWORD ?? 'change-this-password', 12),
 ```
 
@@ -49,7 +49,7 @@ DB_PASSWORD=your_db_password
 DB_NAME=your_db_name
 DB_SSL=true                              # ← CRITICAL for Render PostgreSQL
 DB_SYNCHRONIZE=false                     # Set to false for production
-ADMIN_EMAIL=admin@hidesdesign.com        # ← Your admin email
+ADMIN_EMAIL=info@hidesdesign.com        # ← Your admin email
 ADMIN_PASSWORD=Admin123                  # ← Your admin password
 PORT=3001                                # ← Backend port
 FRONTEND_URL=https://hidesdesign.com     # ← Your Next.js frontend URL
@@ -77,7 +77,7 @@ This will:
 2. Render will automatically deploy with the new configuration
 3. Check Render logs to verify seed runs successfully:
    ```
-   ✓ Seeding admin user: admin@hidesdesign.com
+   ✓ Seeding admin user: info@hidesdesign.com
    ✓ Seeding 10 products
    ✓ Backend running on http://localhost:3001
    ```
@@ -91,7 +91,7 @@ This will:
 curl -X POST https://your-backend.render.com/auth/login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "admin@hidesdesign.com",
+    "email": "info@hidesdesign.com",
     "password": "Admin123"
   }'
 ```

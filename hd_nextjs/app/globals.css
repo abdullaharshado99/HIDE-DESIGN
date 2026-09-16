@@ -69,6 +69,15 @@ button {
 .admin-header h1, .admin-login h1 { font-size: clamp(34px, 5vw, 58px); color: var(--cream); }
 .admin-grid { display: grid; grid-template-columns: minmax(280px, 380px) 1fr; gap: 48px; }
 .admin-form, .admin-list { border-top: 1px solid var(--hair); padding-top: 22px; }
+.admin-inquiry-links { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 22px; }
+.admin-inquiry-links a { color: var(--gold-bright); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+.admin-inquiry-list { display: grid; gap: 0; }
+.admin-inquiry-row { display: grid; grid-template-columns: minmax(180px, .8fr) minmax(260px, 1.5fr) auto; gap: 24px; align-items: start; padding: 22px 0; border-bottom: 1px solid var(--hair); color: var(--cream); }
+.admin-inquiry-row strong, .admin-inquiry-row small { display: block; }
+.admin-inquiry-row small { margin-top: 7px; color: var(--muted); font-size: 12px; }
+.admin-inquiry-row p { margin: 0; color: var(--parchment); white-space: pre-wrap; line-height: 1.6; }
+.admin-status { display: inline-block; padding: 6px 9px; border: 1px solid var(--gold); color: var(--gold-bright); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.admin-inquiry-actions { display: grid; gap: 12px; justify-items: end; }
 .admin-form { display: grid; gap: 12px; align-content: start; }
 .admin-form h2, .admin-list h2 { color: var(--gold-bright); margin-bottom: 8px; }
 .admin-form label { display: grid; gap: 5px; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; }
@@ -78,6 +87,7 @@ button {
 .admin-delete { color: #d88372; background: none; border: 0; padding: 11px; }
 .admin-login { max-width: 420px; margin: 12vh auto; display: grid; gap: 14px; }.admin-login input { background: var(--espresso-2); color: var(--cream); border: 1px solid var(--hair); padding: 13px; }
 @media (max-width: 760px) { .admin-shell { padding: 42px 20px; }.admin-header { align-items: start; gap: 20px; }.admin-grid { grid-template-columns: 1fr; gap: 36px; }.admin-row { align-items: start; flex-direction: column; } .admin-row-image { width: 100%; height: auto; } }
+@media (max-width: 760px) { .admin-inquiry-row { grid-template-columns: 1fr; gap: 14px; }.admin-inquiry-actions { justify-items: start; } }
 
 .admin-list-header {
   display: flex;
@@ -551,12 +561,25 @@ button {
   text-transform: none;
 }
 
+.inquiry-field-block {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+
+.inquiry-field-label {
+  color: #75675a;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
 .inquiry-swatches,
 .inquiry-size-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 22px;
+  margin-bottom: 0;
 }
 
 .inquiry-swatch,
