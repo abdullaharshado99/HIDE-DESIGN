@@ -1,5 +1,5 @@
-const localApiUrl = 'http://localhost:3002'
-const productionApiUrl = 'https://hide-design.onrender.com'
+const localApiUrl = 'http://localhost:4000'
+const productionApiUrl = 'https://hide-design-q2o9.onrender.com'
 
 export function getApiUrl() {
   if (process.env.NEXT_PUBLIC_API_URL) {
