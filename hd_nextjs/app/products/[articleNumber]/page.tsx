@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import ProductDetails from '../../components/ProductDetails'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hidesdesign.com'
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://hide-design.onrender.com'
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://hide-design-q2o9.onrender.com'
 
 interface ProductPageProps {
   params: Promise<{
