@@ -319,7 +319,7 @@ export default function ProductDetails({
               type="button"
               className="product-action-button product-action-primary"
             >
-              ADD TO CART
+              ADD TO WARDROBE
             </button>
 
 
