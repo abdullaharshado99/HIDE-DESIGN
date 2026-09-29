@@ -1,137 +1,135 @@
 'use client'
 
-import { ArrowUpRight } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
-interface CollectionCard {
-  id: string
-  gender: string
-  title: string
-  description: string
-  image: string
-}
-
-const collections: CollectionCard[] = [
-  {
-    id: 'mens-jacket',
-    gender: 'MEN',
-    title: "Men's Jacket",
-    description:
-      'Premium jackets crafted for comfort, style, and confidence.',
-    image: '/images/collections/mens-jacket.jpg',
-  },
-  {
-    id: 'womens-jacket',
-    gender: 'WOMEN',
-    title: "Women's Jacket",
-    description:
-      'Premium jackets engineered for fit, comfort, and everyday wear.',
-    image: '/images/collections/womens-jacket.jpg',
-  },
-  {
-    id: 'mens-long-coat',
-    gender: 'MEN',
-    title: "Men's Long Coat",
-    description:
-      'Premium long coats designed for durability and a sharp silhouette.',
-    image: '/images/collections/mens-long-coat.jpg',
-  },
-  {
-    id: 'womens-long-coat',
-    gender: 'WOMEN',
-    title: "Women's Long Coat",
-    description:
-      'Premium long coats made for warmth, drape, and everyday elegance.',
-    image: '/images/collections/womens-long-coat.jpg',
-  },
-]
-
-export default function AccountDashboard() {
-  const router = useRouter()
-
-  function handleExplore(id: string) {
-    router.push(`/collection/${id}`)
-  }
-
+export default function CollectionPage() {
   return (
-    <section className="account-section" id="account">
-      <div className="container">
+    <main className="collection-page">
+      <section className="collection-section">
+        <div className="collection-shell">
 
-        {/* =========================================================
-            OLD ACCOUNT DASHBOARD CODE
-            ---------------------------------------------------------
-            The previous product workspace / shortlist / enquiry
-            dashboard has been replaced by the collection flow below.
-            ========================================================= */}
+          {/* HEADING */}
+          <div className="collection-heading">
+            <div className="collection-eyebrow">
+              <span className="collection-eyebrow-line" />
+              <span>COLLECTION</span>
+            </div>
 
-        {/* ---------- HEADING ---------- */}
-
-        <div className="account-heading">
-          <div>
-            <span className="eyebrow">
-              CATEGORIES
-            </span>
-
-            <h2>
-              Explore Our <em>Collection</em>
-            </h2>
+            <div className="collection-heading-row">
+              <h1>
+                Explore Your <em>Wardrobe</em>
+              </h1>
+            </div>
           </div>
-        </div>
 
-        {/* ---------- COLLECTION GRID ---------- */}
+          {/* SINGLE COLLECTION BOX */}
+          <div className="collection-single-card">
 
-        <div className="collection-grid">
+            <Link
+  href="/collection"
+  className="collection-single-card-link"
+  aria-label="Start a custom sample order"
+>
 
-          {collections.map((collection) => (
-            <article
-              className="collection-card"
-              key={collection.id}
-            >
+              <div className="collection-single-card-image">
+                <div className="collection-image-glow" />
 
-              {/* ---------- IMAGE ---------- */}
+                <svg
+                  className="collection-single-garment"
+                  viewBox="0 0 220 260"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  {/* Left sleeve */}
+                  <path
+                    d="M82 42L48 58L25 98L51 113L72 83"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
 
-              <div className="collection-image">
-                <img
-                  src={collection.image}
-                  alt={collection.title}
-                />
+                  {/* Right sleeve */}
+                  <path
+                    d="M138 42L172 58L195 98L169 113L148 83"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+
+                  {/* Garment body */}
+                  <path
+                    d="M82 42L70 76L64 218H156L150 76L138 42"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinejoin="round"
+                  />
+
+                  {/* Collar */}
+                  <path
+                    d="M82 42L110 62L138 42"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+
+                  {/* Center */}
+                  <path
+                    d="M110 62V218"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeDasharray="5 5"
+                  />
+
+                  {/* Pockets */}
+                  <path
+                    d="M72 157L96 166"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+
+                  <path
+                    d="M148 157L124 166"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
               </div>
 
-              {/* ---------- CONTENT ---------- */}
+              <div className="collection-single-card-content">
 
-              <div className="collection-content">
-
-                <span className="collection-gender">
-                  {collection.gender}
+                <span className="collection-card-audience">
+                  HIDE DESIGN
                 </span>
 
-                <h3>
-                  {collection.title}
-                </h3>
+                <h2>
+                  Custom Outerwear
+                </h2>
 
                 <p>
-                  {collection.description}
+                  Choose your product category, select an available article,
+                  and tell us about your required materials, colors, sizing,
+                  quantity, and custom specifications.
                 </p>
 
-                <button
-                  type="button"
-                  className="collection-explore"
-                  onClick={() =>
-                    handleExplore(collection.id)
-                  }
-                >
-                  Explore
-                  <ArrowUpRight size={17} />
-                </button>
+                <span className="collection-explore">
+                  <span>START YOUR INQUIRY</span>
+                  <span className="collection-arrow">↗</span>
+                </span>
 
               </div>
 
-            </article>
-          ))}
+            </Link>
+
+          </div>
 
         </div>
-
-      </div>
-    </section>
+      </section>
+    </main>
   )
 }

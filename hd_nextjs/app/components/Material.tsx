@@ -52,7 +52,6 @@ export default function Material() {
             </div>
           </div>
 
-
           {/* OUR SERVICES */}
           <div className="services-copy">
             <span className="eyebrow">OUR SERVICES</span>
@@ -86,14 +85,22 @@ export default function Material() {
 
         </div>
 
+       {/* RIGHT — TWO IMAGES */}
+<div className="material-panel">
+  <div className="material-image">
+    <img
+      src="/images/materials.jpg"
+      alt="Premium leather and wool materials"
+    />
+  </div>
 
-        {/* RIGHT — ONE IMAGE ONLY */}
-        <div className="material-panel">
-          <img
-            src="/images/materials.jpg"
-            alt="Premium leather and wool materials"
-          />
-        </div>
+  <div className="material-image">
+    <img
+      src="/images/materials-2.jpg"
+      alt="Premium leather and wool materials"
+    />
+  </div>
+</div>
 
       </div>
     </section>

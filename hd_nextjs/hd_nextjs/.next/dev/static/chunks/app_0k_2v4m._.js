@@ -201,198 +201,421 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 
 __turbopack_context__.s([
     "default",
-    ()=>AccountDashboard
+    ()=>CollectionPage
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$arrow$2d$up$2d$right$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ArrowUpRight$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/arrow-up-right.mjs [app-client] (ecmascript) <export default as ArrowUpRight>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/navigation.js [app-client] (ecmascript)");
-;
-var _s = __turbopack_context__.k.signature();
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/client/app-dir/link.js [app-client] (ecmascript)");
 'use client';
 ;
 ;
-const collections = [
+const categories = [
     {
-        id: 'mens-jacket',
-        gender: 'MEN',
+        audience: 'MEN',
         title: "Men's Jacket",
         description: 'Premium jackets crafted for comfort, style, and confidence.',
-        image: '/images/collections/mens-jacket.jpg'
+        href: '/collection/mens-jacket',
+        type: 'jacket',
+        gender: 'men'
     },
     {
-        id: 'womens-jacket',
-        gender: 'WOMEN',
+        audience: 'WOMEN',
         title: "Women's Jacket",
         description: 'Premium jackets engineered for fit, comfort, and everyday wear.',
-        image: '/images/collections/womens-jacket.jpg'
+        href: '/collection/womens-jacket',
+        type: 'jacket',
+        gender: 'women'
     },
     {
-        id: 'mens-long-coat',
-        gender: 'MEN',
+        audience: 'MEN',
         title: "Men's Long Coat",
         description: 'Premium long coats designed for durability and a sharp silhouette.',
-        image: '/images/collections/mens-long-coat.jpg'
+        href: '/collection/mens-long-coat',
+        type: 'long-coat',
+        gender: 'men'
     },
     {
-        id: 'womens-long-coat',
-        gender: 'WOMEN',
+        audience: 'WOMEN',
         title: "Women's Long Coat",
         description: 'Premium long coats made for warmth, drape, and everyday elegance.',
-        image: '/images/collections/womens-long-coat.jpg'
+        href: '/collection/womens-long-coat',
+        type: 'long-coat',
+        gender: 'women'
     }
 ];
-function AccountDashboard() {
-    _s();
-    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
-    function handleExplore(id) {
-        router.push(`/collection/${id}`);
-    }
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
-        className: "account-section",
-        id: "account",
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "container",
+function GarmentIcon({ type, gender }) {
+    const isCoat = type === 'long-coat';
+    const isWomen = gender === 'women';
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+        className: `category-garment ${isCoat ? 'category-garment-coat' : 'category-garment-jacket'} ${isWomen ? 'category-garment-women' : 'category-garment-men'}`,
+        viewBox: "0 0 220 260",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg",
+        "aria-hidden": "true",
+        children: isCoat ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
             children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "account-heading",
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M82 35L43 58L25 91L50 108L68 82",
+                    stroke: "currentColor",
+                    strokeWidth: "2.2",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round"
+                }, void 0, false, {
+                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                    lineNumber: 76,
+                    columnNumber: 11
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M138 35L177 58L195 91L170 108L152 82",
+                    stroke: "currentColor",
+                    strokeWidth: "2.2",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round"
+                }, void 0, false, {
+                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                    lineNumber: 85,
+                    columnNumber: 11
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: isWomen ? 'M82 35L70 78L66 218H154L150 78L138 35' : 'M82 35L69 78L60 218H160L151 78L138 35',
+                    stroke: "currentColor",
+                    strokeWidth: "2.2",
+                    strokeLinejoin: "round"
+                }, void 0, false, {
+                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                    lineNumber: 94,
+                    columnNumber: 11
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M82 35L110 57L138 35",
+                    stroke: "currentColor",
+                    strokeWidth: "2.2",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round"
+                }, void 0, false, {
+                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                    lineNumber: 106,
+                    columnNumber: 11
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M110 57V218",
+                    stroke: "currentColor",
+                    strokeWidth: "1.8",
+                    strokeDasharray: "5 5"
+                }, void 0, false, {
+                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                    lineNumber: 115,
+                    columnNumber: 11
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M75 132H101",
+                    stroke: "currentColor",
+                    strokeWidth: "1.5",
+                    strokeLinecap: "round"
+                }, void 0, false, {
+                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                    lineNumber: 123,
+                    columnNumber: 11
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M119 132H145",
+                    stroke: "currentColor",
+                    strokeWidth: "1.5",
+                    strokeLinecap: "round"
+                }, void 0, false, {
+                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                    lineNumber: 130,
+                    columnNumber: 11
+                }, this)
+            ]
+        }, void 0, true, {
+            fileName: "[project]/app/components/AccountDashboard.tsx",
+            lineNumber: 74,
+            columnNumber: 9
+        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M82 42L48 58L25 98L51 113L72 83",
+                    stroke: "currentColor",
+                    strokeWidth: "2.2",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round"
+                }, void 0, false, {
+                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                    lineNumber: 140,
+                    columnNumber: 11
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M138 42L172 58L195 98L169 113L148 83",
+                    stroke: "currentColor",
+                    strokeWidth: "2.2",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round"
+                }, void 0, false, {
+                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                    lineNumber: 149,
+                    columnNumber: 11
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: isWomen ? 'M82 42L70 76L68 190H152L150 76L138 42' : 'M82 42L70 76L64 190H156L150 76L138 42',
+                    stroke: "currentColor",
+                    strokeWidth: "2.2",
+                    strokeLinejoin: "round"
+                }, void 0, false, {
+                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                    lineNumber: 158,
+                    columnNumber: 11
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M82 42L110 62L138 42",
+                    stroke: "currentColor",
+                    strokeWidth: "2.2",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round"
+                }, void 0, false, {
+                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                    lineNumber: 170,
+                    columnNumber: 11
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M110 62V190",
+                    stroke: "currentColor",
+                    strokeWidth: "1.8",
+                    strokeDasharray: "5 5"
+                }, void 0, false, {
+                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                    lineNumber: 179,
+                    columnNumber: 11
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M72 137L96 146",
+                    stroke: "currentColor",
+                    strokeWidth: "1.5",
+                    strokeLinecap: "round"
+                }, void 0, false, {
+                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                    lineNumber: 187,
+                    columnNumber: 11
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M148 137L124 146",
+                    stroke: "currentColor",
+                    strokeWidth: "1.5",
+                    strokeLinecap: "round"
+                }, void 0, false, {
+                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                    lineNumber: 194,
+                    columnNumber: 11
+                }, this)
+            ]
+        }, void 0, true, {
+            fileName: "[project]/app/components/AccountDashboard.tsx",
+            lineNumber: 138,
+            columnNumber: 9
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/app/components/AccountDashboard.tsx",
+        lineNumber: 64,
+        columnNumber: 5
+    }, this);
+}
+_c = GarmentIcon;
+function CollectionPage() {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
+        className: "collection-page",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+            className: "collection-section",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "collection-shell",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "collection-heading",
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "eyebrow",
-                                children: "CATEGORIES"
-                            }, void 0, false, {
-                                fileName: "[project]/app/components/AccountDashboard.tsx",
-                                lineNumber: 71,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "collection-eyebrow",
                                 children: [
-                                    "Explore Our ",
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("em", {
-                                        children: "Collection"
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "collection-eyebrow-line"
                                     }, void 0, false, {
                                         fileName: "[project]/app/components/AccountDashboard.tsx",
-                                        lineNumber: 76,
-                                        columnNumber: 27
+                                        lineNumber: 213,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        children: "CATEGORIES"
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/components/AccountDashboard.tsx",
+                                        lineNumber: 214,
+                                        columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/components/AccountDashboard.tsx",
-                                lineNumber: 75,
+                                lineNumber: 212,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "collection-heading-row",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                                        children: [
+                                            "Explore Our ",
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("em", {
+                                                children: "Collection"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/components/AccountDashboard.tsx",
+                                                lineNumber: 219,
+                                                columnNumber: 29
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/app/components/AccountDashboard.tsx",
+                                        lineNumber: 218,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        children: "Made-to-spec outerwear for private-label brands and exporters — choose a category to begin a custom sample or request a bulk quote."
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/components/AccountDashboard.tsx",
+                                        lineNumber: 222,
+                                        columnNumber: 15
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/app/components/AccountDashboard.tsx",
+                                lineNumber: 217,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/components/AccountDashboard.tsx",
-                        lineNumber: 70,
+                        lineNumber: 211,
                         columnNumber: 11
-                    }, this)
-                }, void 0, false, {
-                    fileName: "[project]/app/components/AccountDashboard.tsx",
-                    lineNumber: 69,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "collection-grid",
-                    children: collections.map((collection)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("article", {
-                            className: "collection-card",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "collection-image",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                                        src: collection.image,
-                                        alt: collection.title
-                                    }, void 0, false, {
-                                        fileName: "[project]/app/components/AccountDashboard.tsx",
-                                        lineNumber: 94,
-                                        columnNumber: 17
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/app/components/AccountDashboard.tsx",
-                                    lineNumber: 93,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "collection-content",
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "collection-grid",
+                        children: categories.map((category)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("article", {
+                                className: "collection-card",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                    href: category.href,
+                                    className: "collection-card-link",
+                                    "aria-label": `Explore ${category.title}`,
                                     children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "collection-gender",
-                                            children: collection.gender
-                                        }, void 0, false, {
-                                            fileName: "[project]/app/components/AccountDashboard.tsx",
-                                            lineNumber: 104,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                            children: collection.title
-                                        }, void 0, false, {
-                                            fileName: "[project]/app/components/AccountDashboard.tsx",
-                                            lineNumber: 108,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            children: collection.description
-                                        }, void 0, false, {
-                                            fileName: "[project]/app/components/AccountDashboard.tsx",
-                                            lineNumber: 112,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                            type: "button",
-                                            className: "collection-explore",
-                                            onClick: ()=>handleExplore(collection.id),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "collection-card-image",
                                             children: [
-                                                "Explore",
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$arrow$2d$up$2d$right$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ArrowUpRight$3e$__["ArrowUpRight"], {
-                                                    size: 17
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "collection-image-glow"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/components/AccountDashboard.tsx",
-                                                    lineNumber: 124,
-                                                    columnNumber: 19
+                                                    lineNumber: 239,
+                                                    columnNumber: 21
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(GarmentIcon, {
+                                                    type: category.type,
+                                                    gender: category.gender
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                                                    lineNumber: 241,
+                                                    columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/components/AccountDashboard.tsx",
-                                            lineNumber: 116,
-                                            columnNumber: 17
+                                            lineNumber: 238,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "collection-card-content",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "collection-card-audience",
+                                                    children: category.audience
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                                                    lineNumber: 248,
+                                                    columnNumber: 21
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                                    children: category.title
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                                                    lineNumber: 252,
+                                                    columnNumber: 21
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    children: category.description
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                                                    lineNumber: 254,
+                                                    columnNumber: 21
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "collection-explore",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            children: "EXPLORE"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/app/components/AccountDashboard.tsx",
+                                                            lineNumber: 257,
+                                                            columnNumber: 23
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            className: "collection-arrow",
+                                                            children: "↗"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/app/components/AccountDashboard.tsx",
+                                                            lineNumber: 258,
+                                                            columnNumber: 23
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/app/components/AccountDashboard.tsx",
+                                                    lineNumber: 256,
+                                                    columnNumber: 21
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/app/components/AccountDashboard.tsx",
+                                            lineNumber: 247,
+                                            columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/components/AccountDashboard.tsx",
-                                    lineNumber: 102,
-                                    columnNumber: 15
+                                    lineNumber: 233,
+                                    columnNumber: 17
                                 }, this)
-                            ]
-                        }, collection.id, true, {
-                            fileName: "[project]/app/components/AccountDashboard.tsx",
-                            lineNumber: 86,
-                            columnNumber: 13
-                        }, this))
-                }, void 0, false, {
-                    fileName: "[project]/app/components/AccountDashboard.tsx",
-                    lineNumber: 83,
-                    columnNumber: 9
-                }, this)
-            ]
-        }, void 0, true, {
+                            }, category.href, false, {
+                                fileName: "[project]/app/components/AccountDashboard.tsx",
+                                lineNumber: 232,
+                                columnNumber: 15
+                            }, this))
+                    }, void 0, false, {
+                        fileName: "[project]/app/components/AccountDashboard.tsx",
+                        lineNumber: 230,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/app/components/AccountDashboard.tsx",
+                lineNumber: 210,
+                columnNumber: 9
+            }, this)
+        }, void 0, false, {
             fileName: "[project]/app/components/AccountDashboard.tsx",
-            lineNumber: 58,
+            lineNumber: 209,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/components/AccountDashboard.tsx",
-        lineNumber: 57,
+        lineNumber: 208,
         columnNumber: 5
     }, this);
 }
-_s(AccountDashboard, "fN7XvhJ+p5oE6+Xlo0NJmXpxjC8=", false, function() {
-    return [
-        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
-    ];
-});
-_c = AccountDashboard;
-var _c;
-__turbopack_context__.k.register(_c, "AccountDashboard");
+_c1 = CollectionPage;
+var _c, _c1;
+__turbopack_context__.k.register(_c, "GarmentIcon");
+__turbopack_context__.k.register(_c1, "CollectionPage");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
