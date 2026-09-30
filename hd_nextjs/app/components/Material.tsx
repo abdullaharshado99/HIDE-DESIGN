@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { useScrollReveal } from './ScrollReveal'
 
@@ -9,13 +9,23 @@ export default function Material() {
     <section className="material-section" id="leather">
       <div
         ref={ref}
-        className={`material-grid reveal-stagger ${isVisible ? 'visible' : ''}`}
+        className={`material-grid reveal-stagger ${
+          isVisible ? 'visible' : ''
+        }`}
       >
 
-        {/* LEFT — MATERIALS + SERVICES */}
-        <div className="material-left">
+        {/* LEFT — IMAGE */}
+        <div className="material-panel">
+          <div className="material-image">
+            <img
+              src="/images/materials.jpg"
+              alt="Premium leather and wool materials"
+            />
+          </div>
+        </div>
 
-          {/* OUR MATERIALS */}
+        {/* RIGHT — MATERIALS */}
+        <div className="material-left">
           <div className="material-copy">
             <span className="eyebrow">OUR MATERIALS</span>
 
@@ -51,56 +61,7 @@ export default function Material() {
               </div>
             </div>
           </div>
-
-          {/* OUR SERVICES */}
-          <div className="services-copy">
-            <span className="eyebrow">OUR SERVICES</span>
-
-            <h2>
-              Built for <em>business.</em>
-            </h2>
-
-            <div className="services-list">
-              <div>
-                <span>01</span>
-                <b>Retail</b>
-              </div>
-
-              <div>
-                <span>02</span>
-                <b>Wholesale</b>
-              </div>
-
-              <div>
-                <span>03</span>
-                <b>Exporter</b>
-              </div>
-
-              <div>
-                <span>04</span>
-                <b>Manufacturing Departmentsip</b>
-              </div>
-            </div>
-          </div>
-
         </div>
-
-       {/* RIGHT — TWO IMAGES */}
-<div className="material-panel">
-  <div className="material-image">
-    <img
-      src="/images/materials.jpg"
-      alt="Premium leather and wool materials"
-    />
-  </div>
-
-  <div className="material-image">
-    <img
-      src="/images/materials-2.jpg"
-      alt="Premium leather and wool materials"
-    />
-  </div>
-</div>
 
       </div>
     </section>
