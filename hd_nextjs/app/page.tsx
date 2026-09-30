@@ -4,8 +4,9 @@ import Hero from './components/Hero'
 import TrustStrip from './components/TrustStrip'
 import About from './components/About'
 import ProductCarousel from './components/ProductCarousel'
-import AccountDashboard from './components/AccountDashboard'
+import AccountDashboard from './components/CollectionPage'
 import Material from './components/Material'
+import Services from './components/Services'
 import Custom from './components/Custom'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
@@ -38,21 +39,26 @@ export default function Home() {
   return (
     <>
       <Navbar />
+
       <main>
         <Hero />
         <TrustStrip />
         <About />
+
         <ProductCarousel gender="men" category="jackets" />
         <ProductCarousel gender="men" category="coats" />
         <ProductCarousel gender="women" category="jackets" />
         <ProductCarousel gender="women" category="coats" />
+
         <AccountDashboard />
 
         <Material />
+        <Services />
         <Custom />
 
         <Contact />
       </main>
+
       <Footer />
     </>
   )
