@@ -1,23 +1,35 @@
 'use client'
-
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { getApiUrl } from '@/app/api-config'
 
 interface Inquiry {
   id: number
+
+  // CUSTOMER INFORMATION
+  name?: string | null
+  phone?: string | null
+  email?: string | null
+
+  // PRODUCT INFORMATION
   category: string
   productCategory: string
   productDetail?: string | null
+
+  // FABRIC & STYLE
   color?: string | null
   fabricType?: string | null
   gsm?: string | null
   vintageEffect?: string | null
   fitStyle?: string | null
   printingTechnique?: string | null
+
+  // CUSTOMIZATION
   rhinestone?: string | null
   label?: string | null
   sizes?: string | null
+
+  // OTHER
   quantity?: string | null
   fileName?: string | null
   notes?: string | null
@@ -197,6 +209,7 @@ export default function InquiriesPage() {
         {/* CONTENT */}
         <section className="inquiries-content">
 
+          {/* LOADING */}
           {loading && (
             <div className="state-box">
               <div className="loader" />
@@ -204,6 +217,7 @@ export default function InquiriesPage() {
             </div>
           )}
 
+          {/* ERROR */}
           {!loading && error && (
             <div className="state-box error-box">
               <h2>Something went wrong</h2>
@@ -221,6 +235,7 @@ export default function InquiriesPage() {
             </div>
           )}
 
+          {/* EMPTY */}
           {!loading &&
             !error &&
             inquiries.length === 0 && (
@@ -236,6 +251,7 @@ export default function InquiriesPage() {
               </div>
             )}
 
+          {/* INQUIRIES */}
           {!loading &&
             !error &&
             inquiries.length > 0 && (
@@ -290,6 +306,38 @@ export default function InquiriesPage() {
                           inquiry.createdAt
                         )}
                       </span>
+
+                    </div>
+
+                    {/* CUSTOMER INFORMATION */}
+                    <div className="customer-info">
+
+                      <div className="customer-info-item">
+                        <span>Name</span>
+
+                        <strong>
+                          {inquiry.name ||
+                            'Not specified'}
+                        </strong>
+                      </div>
+
+                      <div className="customer-info-item">
+                        <span>Phone</span>
+
+                        <strong>
+                          {inquiry.phone ||
+                            'Not specified'}
+                        </strong>
+                      </div>
+
+                      <div className="customer-info-item">
+                        <span>Email</span>
+
+                        <strong>
+                          {inquiry.email ||
+                            'Not specified'}
+                        </strong>
+                      </div>
 
                     </div>
 
@@ -371,7 +419,10 @@ export default function InquiriesPage() {
         </section>
       </div>
 
-      {/* MODAL */}
+      {/* =====================================================
+          MODAL
+      ===================================================== */}
+
       {selectedInquiry && (
         <div
           className="modal-overlay"
@@ -423,6 +474,45 @@ export default function InquiriesPage() {
             {/* MODAL BODY */}
             <div className="modal-body">
 
+              {/* CUSTOMER INFORMATION */}
+              <div className="modal-section">
+
+                <h3>Customer Information</h3>
+
+                <div className="info-grid">
+
+                  <div className="info-item">
+                    <span>Name</span>
+
+                    <strong>
+                      {selectedInquiry.name ||
+                        'Not specified'}
+                    </strong>
+                  </div>
+
+                  <div className="info-item">
+                    <span>Phone Number</span>
+
+                    <strong>
+                      {selectedInquiry.phone ||
+                        'Not specified'}
+                    </strong>
+                  </div>
+
+                  <div className="info-item">
+                    <span>Email</span>
+
+                    <strong>
+                      {selectedInquiry.email ||
+                        'Not specified'}
+                    </strong>
+                  </div>
+
+                </div>
+
+              </div>
+
+              {/* STATUS */}
               <div className="modal-status-row">
 
                 <span
@@ -487,6 +577,7 @@ export default function InquiriesPage() {
                   </div>
 
                 </div>
+
               </div>
 
               {/* FABRIC */}
@@ -551,6 +642,7 @@ export default function InquiriesPage() {
                   </div>
 
                 </div>
+
               </div>
 
               {/* CUSTOMIZATION */}
@@ -589,6 +681,7 @@ export default function InquiriesPage() {
                   </div>
 
                 </div>
+
               </div>
 
               {/* FILE */}
@@ -598,6 +691,7 @@ export default function InquiriesPage() {
                   <h3>Design File</h3>
 
                   <div className="file-box">
+
                     <span className="file-icon">
                       ◇
                     </span>
@@ -605,6 +699,7 @@ export default function InquiriesPage() {
                     <span>
                       {selectedInquiry.fileName}
                     </span>
+
                   </div>
 
                 </div>
