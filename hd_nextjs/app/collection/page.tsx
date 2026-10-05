@@ -101,6 +101,9 @@ interface Article {
 
 interface CartItem {
   id: string;
+  name: string;
+  phone: string;
+  email: string;
   articleNumber: string;
   articleName: string;
   productCategory: string;
@@ -144,6 +147,11 @@ export default function CollectionPage() {
   const [quantity, setQuantity] = useState("");
   const [customQuantity, setCustomQuantity] = useState("");
   const [file, setFile] = useState<File | null>(null);
+
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+
   const [notes, setNotes] = useState("");
 
   /* =========================================================
@@ -353,6 +361,9 @@ export default function CollectionPage() {
     setQuantity("");
     setCustomQuantity("");
     setFile(null);
+    setName("");
+    setPhone("");
+    setEmail("");
     setNotes("");
     setSubmitError("");
   };
@@ -400,6 +411,10 @@ export default function CollectionPage() {
 
     try {
       const inquiryData = {
+        name,
+        phone,
+        email,
+
         category: selectedProduct,
 
         productCategory: selectedProduct,
@@ -483,6 +498,10 @@ export default function CollectionPage() {
 
       const cartItem: CartItem = {
         id: `${selectedArticle}-${Date.now()}`,
+
+        name,
+        phone,
+        email,
 
         articleNumber:
           selectedArticleData.articleNumber,
@@ -622,7 +641,7 @@ export default function CollectionPage() {
                 <div>
 
                   <span className="eyebrow">
-                    01 · PRODUCT DETAILS
+                   PRODUCT DETAILS
                   </span>
 
                   <h2>
@@ -777,7 +796,7 @@ export default function CollectionPage() {
                 <div>
 
                   <span className="eyebrow">
-                    02 · COLOR
+                  COLOR
                   </span>
 
                   <h2>
@@ -840,7 +859,7 @@ export default function CollectionPage() {
                 <div>
 
                   <span className="eyebrow">
-                    03 · FABRIC & FINISH
+                 FABRIC & FINISH
                   </span>
 
                   <h2>
@@ -975,7 +994,7 @@ export default function CollectionPage() {
                 <div>
 
                   <span className="eyebrow">
-                    04 · CUSTOMIZATION
+                   CUSTOMIZATION
                   </span>
 
                   <h2>
@@ -1042,7 +1061,7 @@ export default function CollectionPage() {
                 <div>
 
                   <span className="eyebrow">
-                    05 · SIZING
+                  SIZING
                   </span>
 
                   <h2>
@@ -1107,7 +1126,7 @@ export default function CollectionPage() {
                 <div>
 
                   <span className="eyebrow">
-                    06 · QUANTITY
+                   QUANTITY
                   </span>
 
                   <h2>
@@ -1197,13 +1216,87 @@ export default function CollectionPage() {
             ================================================= */}
 
             <section className="inquiry-section">
+                  <div className="inquiry-section-head">
+
+                    <div>
+                      <span className="eyebrow">
+                       CONTACT INFORMATION
+                      </span>
+
+                      <h2>
+                        Your Contact Details
+                      </h2>
+
+                      <p>
+                        Please provide your contact details so our
+                        team can get back to you about your inquiry.
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                  <div className="inquiry-spec-grid">
+
+                    <label className="inquiry-field">
+                      <span>
+                        Name
+                      </span>
+
+                      <input
+                        type="text"
+                        value={name}
+                        onChange={(e) =>
+                          setName(e.target.value)
+                        }
+                        placeholder="Enter your name"
+                        required
+                      />
+                    </label>
+
+                    <label className="inquiry-field">
+                      <span>
+                        Phone Number
+                      </span>
+
+                      <input
+                        type="tel"
+                        value={phone}
+                        onChange={(e) =>
+                          setPhone(e.target.value)
+                        }
+                        placeholder="Enter your phone number"
+                        required
+                      />
+                    </label>
+
+                    <label className="inquiry-field">
+                      <span>
+                        Email
+                      </span>
+
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) =>
+                          setEmail(e.target.value)
+                        }
+                        placeholder="Enter your email address"
+                        required
+                      />
+                    </label>
+
+                  </div>
+                </section>
+
+                <section className="inquiry-section">
 
               <div className="inquiry-section-head">
 
                 <div>
 
                   <span className="eyebrow">
-                    07 · ADDITIONAL INFORMATION
+                    ADDITIONAL INFORMATION
                   </span>
 
                   <h2>

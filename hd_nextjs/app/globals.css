@@ -12100,3 +12100,42 @@ button {
     width: 100%;
   }
 }
+.customer-info {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+  padding: 16px;
+  border: 1px solid var(--hair);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.customer-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.customer-info-item span {
+  font-size: 10px;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.customer-info-item strong {
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 500;
+  color: var(--cream);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 700px) {
+  .customer-info {
+    grid-template-columns: 1fr;
+  }
+}
+
