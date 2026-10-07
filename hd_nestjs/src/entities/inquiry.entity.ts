@@ -10,6 +10,17 @@ export class Inquiry {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  // CUSTOMER INFORMATION
+  @Column({ nullable: true })
+  name?: string;
+
+  @Column({ nullable: true })
+  phone?: string;
+
+  @Column({ nullable: true })
+  email?: string;
+
+  // PRODUCT INFORMATION
   @Column()
   category!: string;
 
@@ -19,6 +30,7 @@ export class Inquiry {
   @Column({ nullable: true })
   productDetail?: string;
 
+  // FABRIC & STYLE
   @Column({ nullable: true })
   color?: string;
 
@@ -29,34 +41,21 @@ export class Inquiry {
   gsm?: string;
 
   @Column({ nullable: true })
-  vintageEffect?: string;
-
-  @Column({ nullable: true })
   fitStyle?: string;
 
-  @Column({ nullable: true })
-  printingTechnique?: string;
-
-  @Column({ nullable: true })
-  rhinestone?: string;
-
+  // CUSTOMIZATION
   @Column({ nullable: true })
   label?: string;
 
   @Column({ type: 'text', nullable: true })
   sizes?: string;
 
+  // OTHER
   @Column({ nullable: true })
   quantity?: string;
 
-  @Column({ nullable: true })
-  fileName?: string;
-
   @Column({ type: 'text', nullable: true })
   notes?: string;
-
-  @Column({ default: 'pending' })
-  status!: string;
 
   @CreateDateColumn()
   createdAt!: Date;

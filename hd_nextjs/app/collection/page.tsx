@@ -17,6 +17,20 @@ import { useEffect, useMemo, useState } from "react";
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
+/* =========================================================
+   IMAGE URL HELPER
+   - poora URL ho to waisa hi rehne deta hai
+   - sirf path/file ka naam ho to backend ka URL aage lagata hai
+========================================================= */
+
+const getImageSrc = (url?: string) => {
+  if (!url) return "";
+
+  if (/^(https?:|data:)/.test(url)) return url;
+
+  return `${API_URL}${url.startsWith("/") ? "" : "/"}${url}`;
+};
+
 const colors = [
   "Black",
   "Brown",
@@ -55,21 +69,9 @@ const fitStyles = [
   "Boxy Fit",
 ];
 
-const labels = [
-  "Company Label",
-  "Custom Label",
-];
+const labels = ["Company Label", "Custom Label"];
 
-const sizes = [
-  "XXS",
-  "XS",
-  "S",
-  "M",
-  "L",
-  "XL",
-  "XXL",
-  "3XL",
-];
+const sizes = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"];
 
 const quantities = [
   "Sample",
@@ -116,14 +118,13 @@ interface CartItem {
   quantity: string;
   notes: string;
   fileName: string;
+  imageUrl?: string;
 }
 
 export default function CollectionPage() {
   const router = useRouter();
 
-  /* =========================================================
-     ARTICLES
-  ========================================================= */
+  /* ARTICLES */
 
   const [articles, setArticles] = useState<Article[]>([]);
   const [loadingArticles, setLoadingArticles] = useState(false);
@@ -131,9 +132,7 @@ export default function CollectionPage() {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [selectedArticle, setSelectedArticle] = useState("");
 
-  /* =========================================================
-     FORM STATES
-  ========================================================= */
+  /* FORM STATES */
 
   const [selectedColor, setSelectedColor] = useState("");
   const [fabricType, setFabricType] = useState("");
@@ -154,22 +153,16 @@ export default function CollectionPage() {
 
   const [notes, setNotes] = useState("");
 
-  /* =========================================================
-     SUBMISSION
-  ========================================================= */
+  /* SUBMISSION */
 
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
-  /* =========================================================
-     CART
-  ========================================================= */
+  /* CART */
 
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  /* =========================================================
-     LOAD ARTICLES FROM DATABASE
-  ========================================================= */
+  /* LOAD ARTICLES FROM DATABASE */
 
   useEffect(() => {
     const loadArticles = async () => {
@@ -181,9 +174,7 @@ export default function CollectionPage() {
         });
 
         if (!response.ok) {
-          throw new Error(
-            `Failed to load products (${response.status})`,
-          );
+          throw new Error(`Failed to load products (${response.status})`);
         }
 
         const data = await response.json();
@@ -206,9 +197,7 @@ export default function CollectionPage() {
     loadArticles();
   }, []);
 
-  /* =========================================================
-     FILTER ARTICLES BY SELECTED CATEGORY
-  ========================================================= */
+  /* FILTER ARTICLES BY SELECTED CATEGORY */
 
   const filteredArticles = useMemo(() => {
     if (!selectedProduct) {
@@ -227,44 +216,34 @@ export default function CollectionPage() {
       if (selectedProduct === "Men's Jacket") {
         return (
           audience === "men" &&
-          (
-            articleCategory === "jacket" ||
-            articleCategory === "jackets"
-          )
+          (articleCategory === "jacket" || articleCategory === "jackets")
         );
       }
 
       if (selectedProduct === "Women's Jacket") {
         return (
           audience === "women" &&
-          (
-            articleCategory === "jacket" ||
-            articleCategory === "jackets"
-          )
+          (articleCategory === "jacket" || articleCategory === "jackets")
         );
       }
 
       if (selectedProduct === "Men's Coat") {
         return (
           audience === "men" &&
-          (
-            articleCategory === "coat" ||
+          (articleCategory === "coat" ||
             articleCategory === "coats" ||
             articleCategory === "long coat" ||
-            articleCategory === "long coats"
-          )
+            articleCategory === "long coats")
         );
       }
 
       if (selectedProduct === "Women's Coat") {
         return (
           audience === "women" &&
-          (
-            articleCategory === "coat" ||
+          (articleCategory === "coat" ||
             articleCategory === "coats" ||
             articleCategory === "long coat" ||
-            articleCategory === "long coats"
-          )
+            articleCategory === "long coats")
         );
       }
 
@@ -279,27 +258,19 @@ export default function CollectionPage() {
     });
   }, [articles, selectedProduct]);
 
-  /* =========================================================
-     FINAL QUANTITY
-  ========================================================= */
+  /* FINAL QUANTITY */
 
   const finalQuantity = customQuantity.trim()
     ? `${customQuantity.trim()} Units`
     : quantity;
 
-  /* =========================================================
-     SELECTED ARTICLE DATA
-  ========================================================= */
+  /* SELECTED ARTICLE DATA */
 
   const selectedArticleData =
-    articles.find(
-      (article) =>
-        article.articleNumber === selectedArticle,
-    ) || null;
+    articles.find((article) => article.articleNumber === selectedArticle) ||
+    null;
 
-  /* =========================================================
-     TOGGLE SIZE
-  ========================================================= */
+  /* TOGGLE SIZE */
 
   const toggleSize = (size: string) => {
     setSelectedSizes((current) =>
@@ -309,9 +280,7 @@ export default function CollectionPage() {
     );
   };
 
-  /* =========================================================
-     PRODUCT CATEGORY SELECT
-  ========================================================= */
+  /* PRODUCT CATEGORY SELECT */
 
   const handleProductCategory = (item: string) => {
     setSelectedProduct(item);
@@ -319,18 +288,14 @@ export default function CollectionPage() {
     setSubmitError("");
   };
 
-  /* =========================================================
-     PRESET QUANTITY
-  ========================================================= */
+  /* PRESET QUANTITY */
 
   const handlePresetQuantity = (item: string) => {
     setQuantity(item);
     setCustomQuantity("");
   };
 
-  /* =========================================================
-     CUSTOM QUANTITY
-  ========================================================= */
+  /* CUSTOM QUANTITY */
 
   const handleCustomQuantity = (value: string) => {
     const cleanedValue = value.replace(/\D/g, "");
@@ -342,9 +307,7 @@ export default function CollectionPage() {
     }
   };
 
-  /* =========================================================
-     RESET FORM AFTER ADD TO CART
-  ========================================================= */
+  /* RESET FORM AFTER ADD TO CART */
 
   const resetForm = () => {
     setSelectedProduct("");
@@ -368,42 +331,30 @@ export default function CollectionPage() {
     setSubmitError("");
   };
 
-  /* =========================================================
-     ADD TO CART / SUBMIT INQUIRY
-  ========================================================= */
+  /* ADD TO CART / SUBMIT INQUIRY */
 
-  const handleSubmit = async (
-    e: React.FormEvent,
-  ) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     setSubmitError("");
 
     if (!selectedProduct) {
-      setSubmitError(
-        "Please select a product category first.",
-      );
+      setSubmitError("Please select a product category first.");
       return;
     }
 
     if (!selectedArticle) {
-      setSubmitError(
-        "Please select an article first.",
-      );
+      setSubmitError("Please select an article first.");
       return;
     }
 
     if (!finalQuantity) {
-      setSubmitError(
-        "Please select or enter a quantity.",
-      );
+      setSubmitError("Please select or enter a quantity.");
       return;
     }
 
     if (!selectedArticleData) {
-      setSubmitError(
-        "Selected article could not be found.",
-      );
+      setSubmitError("Selected article could not be found.");
       return;
     }
 
@@ -421,11 +372,9 @@ export default function CollectionPage() {
 
         productDetail: selectedArticleData.name,
 
-        articleNumber:
-          selectedArticleData.articleNumber,
+        articleNumber: selectedArticleData.articleNumber,
 
-        articleName:
-          selectedArticleData.name,
+        articleName: selectedArticleData.name,
 
         color: selectedColor,
 
@@ -452,49 +401,31 @@ export default function CollectionPage() {
         notes,
       };
 
-      console.log(
-        "Sending inquiry:",
-        inquiryData,
-      );
+      console.log("Sending inquiry:", inquiryData);
 
-      const response = await fetch(
-        `${API_URL}/inquiries`,
-        {
-          method: "POST",
+      const response = await fetch(`${API_URL}/inquiries`, {
+        method: "POST",
 
-          headers: {
-            "Content-Type": "application/json",
-          },
-
-          body: JSON.stringify(inquiryData),
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+
+        body: JSON.stringify(inquiryData),
+      });
 
       if (!response.ok) {
-        const errorText =
-          await response.text();
+        const errorText = await response.text();
 
-        console.error(
-          "Inquiry API error:",
-          errorText,
-        );
+        console.error("Inquiry API error:", errorText);
 
-        throw new Error(
-          `Failed to submit inquiry (${response.status})`,
-        );
+        throw new Error(`Failed to submit inquiry (${response.status})`);
       }
 
-      const savedInquiry =
-        await response.json();
+      const savedInquiry = await response.json();
 
-      console.log(
-        "Inquiry saved successfully:",
-        savedInquiry,
-      );
+      console.log("Inquiry saved successfully:", savedInquiry);
 
-      /* -----------------------------------------
-         ADD COMPLETED ARTICLE TO CART
-      ----------------------------------------- */
+      /* ADD COMPLETED ARTICLE TO CART */
 
       const cartItem: CartItem = {
         id: `${selectedArticle}-${Date.now()}`,
@@ -503,14 +434,13 @@ export default function CollectionPage() {
         phone,
         email,
 
-        articleNumber:
-          selectedArticleData.articleNumber,
+        articleNumber: selectedArticleData.articleNumber,
 
-        articleName:
-          selectedArticleData.name,
+        articleName: selectedArticleData.name,
 
-        productCategory:
-          selectedProduct,
+        imageUrl: selectedArticleData.imageUrl,
+
+        productCategory: selectedProduct,
 
         color: selectedColor,
 
@@ -531,21 +461,13 @@ export default function CollectionPage() {
         fileName: file?.name || "",
       };
 
-      setCartItems((current) => [
-        ...current,
-        cartItem,
-      ]);
+      setCartItems((current) => [...current, cartItem]);
 
-      /* -----------------------------------------
-         RESET FORM
-      ----------------------------------------- */
+      /* RESET FORM */
 
       resetForm();
     } catch (error) {
-      console.error(
-        "Inquiry submission failed:",
-        error,
-      );
+      console.error("Inquiry submission failed:", error);
 
       setSubmitError(
         "We could not add this article to your cart. Please try again.",
@@ -555,25 +477,17 @@ export default function CollectionPage() {
     }
   };
 
-  /* =========================================================
-     REMOVE CART ITEM
-  ========================================================= */
+  /* REMOVE CART ITEM */
 
   const removeCartItem = (id: string) => {
-    setCartItems((current) =>
-      current.filter(
-        (item) => item.id !== id,
-      ),
-    );
+    setCartItems((current) => current.filter((item) => item.id !== id));
   };
 
   return (
     <main className="inquiry-page">
       <div className="inquiry-shell">
 
-        {/* =================================================
-            BACK BUTTON
-        ================================================= */}
+        {/* BACK BUTTON */}
 
         <button
           type="button"
@@ -584,14 +498,10 @@ export default function CollectionPage() {
           Back
         </button>
 
-        {/* =================================================
-            HERO
-        ================================================= */}
+        {/* HERO */}
 
         <header className="inquiry-hero">
-          <span className="eyebrow">
-            CUSTOM SAMPLE ORDER
-          </span>
+          <span className="eyebrow">CUSTOM SAMPLE ORDER</span>
 
           <h1>
             Tell Us About
@@ -599,95 +509,56 @@ export default function CollectionPage() {
           </h1>
 
           <p>
-            Share your product requirements
-            below and our team will use these
-            details to understand your sample
-            request.
+            Share your product requirements below and our team will use these
+            details to understand your sample request.
           </p>
 
           <div className="inquiry-category">
-            <span>
-              HIDE DESIGN
-            </span>
+            <span>HIDE DESIGN</span>
 
-            <strong>
-              CUSTOM OUTERWEAR
-            </strong>
+            <strong>CUSTOM OUTERWEAR</strong>
           </div>
         </header>
 
-        {/* =================================================
-            MAIN TWO COLUMN AREA
-        ================================================= */}
+        {/* MAIN TWO COLUMN AREA */}
 
         <div className="inquiry-layout">
 
-          {/* =================================================
-              LEFT FORM
-          ================================================= */}
+          {/* LEFT FORM */}
 
-          <form
-            className="inquiry-form"
-            onSubmit={handleSubmit}
-          >
+          <form className="inquiry-form" onSubmit={handleSubmit}>
 
-            {/* =================================================
-                01 PRODUCT
-            ================================================= */}
+            {/* 01 PRODUCT */}
 
             <section className="inquiry-section">
 
               <div className="inquiry-section-head">
                 <div>
+                  <span className="eyebrow">PRODUCT DETAILS</span>
 
-                  <span className="eyebrow">
-                   PRODUCT DETAILS
-                  </span>
+                  <h2>Choose Your Product</h2>
 
-                  <h2>
-                    Choose Your Product
-                  </h2>
-
-                  <p>
-                    Select a product category
-                    to view available articles.
-                  </p>
-
+                  <p>Select a product category to view available articles.</p>
                 </div>
               </div>
 
               {/* FIVE CATEGORY CARDS */}
 
               <div className="inquiry-product-category-grid">
+                {productCategories.map((item) => (
+                  <button
+                    type="button"
+                    key={item}
+                    className={`inquiry-product-category ${
+                      selectedProduct === item ? "active" : ""
+                    }`}
+                    onClick={() => handleProductCategory(item)}
+                  >
+                    {selectedProduct === item && <Check size={13} />}
 
-                {productCategories.map(
-                  (item) => (
-                    <button
-                      type="button"
-                      key={item}
-                      className={`inquiry-product-category ${
-                        selectedProduct === item
-                          ? "active"
-                          : ""
-                      }`}
-                      onClick={() =>
-                        handleProductCategory(
-                          item,
-                        )
-                      }
-                    >
-                      {selectedProduct ===
-                        item && (
-                        <Check size={13} />
-                      )}
-
-                      <span>
-                        {item}
-                      </span>
-                    </button>
-                  ),
-                )}
-
+                    <span>{item}</span>
+                  </button>
+                ))}
               </div>
 
               {/* ARTICLES */}
@@ -696,87 +567,71 @@ export default function CollectionPage() {
                 <div className="inquiry-articles-area">
 
                   <div className="inquiry-articles-heading">
+                    <span className="eyebrow">AVAILABLE ARTICLES</span>
 
-                    <span className="eyebrow">
-                      AVAILABLE ARTICLES
-                    </span>
-
-                    <h3>
-                      {selectedProduct}
-                    </h3>
-
+                    <h3>{selectedProduct}</h3>
                   </div>
 
                   {loadingArticles ? (
                     <div className="inquiry-article-message">
                       Loading articles...
                     </div>
-                  ) : filteredArticles.length >
-                    0 ? (
+                  ) : filteredArticles.length > 0 ? (
                     <div className="inquiry-article-grid">
 
-                      {filteredArticles.map(
-                        (article) => (
-                          <button
-                            type="button"
-                            key={
-                              article.articleNumber
-                            }
-                            className={`inquiry-article-card ${
-                              selectedArticle ===
-                              article.articleNumber
-                                ? "active"
-                                : ""
-                            }`}
-                            onClick={() =>
-                              setSelectedArticle(
-                                article.articleNumber,
-                              )
-                            }
-                          >
+                      {filteredArticles.map((article) => (
+                        <button
+                          type="button"
+                          key={article.articleNumber}
+                          className={`inquiry-article-card ${
+                            selectedArticle === article.articleNumber
+                              ? "active"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            setSelectedArticle(article.articleNumber)
+                          }
+                        >
 
-                            <div className="inquiry-article-content">
+                          {/* ARTICLE IMAGE */}
 
-                              <span className="inquiry-article-number">
-                                {
-                                  article.articleNumber
-                                }
-                              </span>
-
-                              <strong>
-                                {article.name}
-                              </strong>
-
-                              {article.material && (
-                                <span className="inquiry-article-material">
-                                  {
-                                    article.material
-                                  }
-                                </span>
-                              )}
-
+                          {article.imageUrl && (
+                            <div className="inquiry-article-image">
+                              <img
+                                src={getImageSrc(article.imageUrl)}
+                                alt={article.name}
+                                loading="lazy"
+                              />
                             </div>
+                          )}
 
-                            <span className="inquiry-article-check">
-
-                              {selectedArticle ===
-                              article.articleNumber ? (
-                                <Check
-                                  size={13}
-                                />
-                              ) : null}
-
+                          <div className="inquiry-article-content">
+                            <span className="inquiry-article-number">
+                              {article.articleNumber}
                             </span>
 
-                          </button>
-                        ),
-                      )}
+                            <strong>{article.name}</strong>
+
+                            {article.material && (
+                              <span className="inquiry-article-material">
+                                {article.material}
+                              </span>
+                            )}
+                          </div>
+
+                          <span className="inquiry-article-check">
+                            {selectedArticle === article.articleNumber ? (
+                              <Check size={13} />
+                            ) : null}
+                          </span>
+
+                        </button>
+                      ))}
 
                     </div>
                   ) : (
                     <div className="inquiry-article-message">
-                      No articles are available
-                      for this category yet.
+                      No articles are available for this category yet.
                     </div>
                   )}
 
@@ -785,398 +640,214 @@ export default function CollectionPage() {
 
             </section>
 
-            {/* =================================================
-                02 COLOR
-            ================================================= */}
+            {/* 02 COLOR */}
 
             <section className="inquiry-section">
 
               <div className="inquiry-section-head">
-
                 <div>
+                  <span className="eyebrow">COLOR</span>
 
-                  <span className="eyebrow">
-                  COLOR
-                  </span>
+                  <h2>Select Your Color</h2>
 
-                  <h2>
-                    Select Your Color
-                  </h2>
-
-                  <p>
-                    Choose your preferred base
-                    color.
-                  </p>
-
+                  <p>Choose your preferred base color.</p>
                 </div>
-
               </div>
 
               <div className="inquiry-color-grid">
+                {colors.map((color) => (
+                  <button
+                    type="button"
+                    key={color}
+                    className={`inquiry-color ${
+                      selectedColor === color ? "active" : ""
+                    }`}
+                    onClick={() => setSelectedColor(color)}
+                  >
+                    {selectedColor === color && <Check size={13} />}
 
-                {colors.map(
-                  (color) => (
-                    <button
-                      type="button"
-                      key={color}
-                      className={`inquiry-color ${
-                        selectedColor === color
-                          ? "active"
-                          : ""
-                      }`}
-                      onClick={() =>
-                        setSelectedColor(
-                          color,
-                        )
-                      }
-                    >
-
-                      {selectedColor ===
-                        color && (
-                        <Check size={13} />
-                      )}
-
-                      <span>
-                        {color}
-                      </span>
-
-                    </button>
-                  ),
-                )}
-
+                    <span>{color}</span>
+                  </button>
+                ))}
               </div>
 
             </section>
 
-            {/* =================================================
-                03 FABRIC
-            ================================================= */}
+            {/* 03 FABRIC */}
 
             <section className="inquiry-section">
 
               <div className="inquiry-section-head">
-
                 <div>
+                  <span className="eyebrow">FABRIC & FINISH</span>
 
-                  <span className="eyebrow">
-                 FABRIC & FINISH
-                  </span>
+                  <h2>Material Specifications</h2>
 
-                  <h2>
-                    Material Specifications
-                  </h2>
-
-                  <p>
-                    Define the material and
-                    construction requirements.
-                  </p>
-
+                  <p>Define the material and construction requirements.</p>
                 </div>
-
               </div>
 
               <div className="inquiry-spec-grid">
 
                 <label className="inquiry-field">
-
-                  <span>
-                    Fabric Type
-                  </span>
+                  <span>Fabric Type</span>
 
                   <select
                     value={fabricType}
-                    onChange={(e) =>
-                      setFabricType(
-                        e.target.value,
-                      )
-                    }
+                    onChange={(e) => setFabricType(e.target.value)}
                   >
+                    <option value="">Select fabric type</option>
 
-                    <option value="">
-                      Select fabric type
-                    </option>
-
-                    {fabricTypes.map(
-                      (item) => (
-                        <option
-                          key={item}
-                          value={item}
-                        >
-                          {item}
-                        </option>
-                      ),
-                    )}
-
+                    {fabricTypes.map((item) => (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    ))}
                   </select>
-
                 </label>
 
                 <label className="inquiry-field">
+                  <span>Fabric GSM</span>
 
-                  <span>
-                    Fabric GSM
-                  </span>
+                  <select value={gsm} onChange={(e) => setGsm(e.target.value)}>
+                    <option value="">Select GSM</option>
 
-                  <select
-                    value={gsm}
-                    onChange={(e) =>
-                      setGsm(
-                        e.target.value,
-                      )
-                    }
-                  >
-
-                    <option value="">
-                      Select GSM
-                    </option>
-
-                    {fabricGsm.map(
-                      (item) => (
-                        <option
-                          key={item}
-                          value={item}
-                        >
-                          {item}
-                        </option>
-                      ),
-                    )}
-
+                    {fabricGsm.map((item) => (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    ))}
                   </select>
-
                 </label>
 
                 <label className="inquiry-field">
-
-                  <span>
-                    Fit Style
-                  </span>
+                  <span>Fit Style</span>
 
                   <select
                     value={fitStyle}
-                    onChange={(e) =>
-                      setFitStyle(
-                        e.target.value,
-                      )
-                    }
+                    onChange={(e) => setFitStyle(e.target.value)}
                   >
+                    <option value="">Select fit</option>
 
-                    <option value="">
-                      Select fit
-                    </option>
-
-                    {fitStyles.map(
-                      (item) => (
-                        <option
-                          key={item}
-                          value={item}
-                        >
-                          {item}
-                        </option>
-                      ),
-                    )}
-
+                    {fitStyles.map((item) => (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    ))}
                   </select>
-
                 </label>
 
               </div>
 
             </section>
 
-            {/* =================================================
-                04 CUSTOMIZATION
-            ================================================= */}
+            {/* 04 CUSTOMIZATION */}
 
             <section className="inquiry-section">
 
               <div className="inquiry-section-head">
-
                 <div>
+                  <span className="eyebrow">CUSTOMIZATION</span>
 
-                  <span className="eyebrow">
-                   CUSTOMIZATION
-                  </span>
+                  <h2>Branding & Details</h2>
 
-                  <h2>
-                    Branding & Details
-                  </h2>
-
-                  <p>
-                    Add your branding and
-                    customization preferences.
-                  </p>
-
+                  <p>Add your branding and customization preferences.</p>
                 </div>
-
               </div>
 
               <div className="inquiry-spec-grid">
 
                 <label className="inquiry-field">
-
-                  <span>
-                    Labels & Branding
-                  </span>
+                  <span>Labels & Branding</span>
 
                   <select
                     value={label}
-                    onChange={(e) =>
-                      setLabel(
-                        e.target.value,
-                      )
-                    }
+                    onChange={(e) => setLabel(e.target.value)}
                   >
+                    <option value="">Select label</option>
 
-                    <option value="">
-                      Select label
-                    </option>
-
-                    {labels.map(
-                      (item) => (
-                        <option
-                          key={item}
-                          value={item}
-                        >
-                          {item}
-                        </option>
-                      ),
-                    )}
-
+                    {labels.map((item) => (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    ))}
                   </select>
-
                 </label>
 
               </div>
 
             </section>
 
-            {/* =================================================
-                05 SIZES
-            ================================================= */}
+            {/* 05 SIZES */}
 
             <section className="inquiry-section">
 
               <div className="inquiry-section-head">
-
                 <div>
+                  <span className="eyebrow">SIZING</span>
 
-                  <span className="eyebrow">
-                  SIZING
-                  </span>
-
-                  <h2>
-                    Select Sizes
-                  </h2>
+                  <h2>Select Sizes</h2>
 
                   <p>
-                    Select one or more sizes
-                    for your sample or
-                    production.
+                    Select one or more sizes for your sample or production.
                   </p>
-
                 </div>
-
               </div>
 
               <div className="inquiry-size-grid">
+                {sizes.map((size) => (
+                  <button
+                    type="button"
+                    key={size}
+                    className={`inquiry-size ${
+                      selectedSizes.includes(size) ? "active" : ""
+                    }`}
+                    onClick={() => toggleSize(size)}
+                  >
+                    {selectedSizes.includes(size) && <Check size={12} />}
 
-                {sizes.map(
-                  (size) => (
-                    <button
-                      type="button"
-                      key={size}
-                      className={`inquiry-size ${
-                        selectedSizes.includes(
-                          size,
-                        )
-                          ? "active"
-                          : ""
-                      }`}
-                      onClick={() =>
-                        toggleSize(size)
-                      }
-                    >
-
-                      {selectedSizes.includes(
-                        size,
-                      ) && (
-                        <Check size={12} />
-                      )}
-
-                      <span>
-                        {size}
-                      </span>
-
-                    </button>
-                  ),
-                )}
-
+                    <span>{size}</span>
+                  </button>
+                ))}
               </div>
 
             </section>
 
-            {/* =================================================
-                06 QUANTITY
-            ================================================= */}
+            {/* 06 QUANTITY */}
 
             <section className="inquiry-section">
 
               <div className="inquiry-section-head">
-
                 <div>
+                  <span className="eyebrow">QUANTITY</span>
 
-                  <span className="eyebrow">
-                   QUANTITY
-                  </span>
-
-                  <h2>
-                    How Many Units?
-                  </h2>
+                  <h2>How Many Units?</h2>
 
                   <p>
-                    Select a preset quantity
-                    or enter your own quantity.
+                    Select a preset quantity or enter your own quantity.
                   </p>
-
                 </div>
-
               </div>
 
               {/* PRESET QUANTITIES */}
 
               <div className="inquiry-quantity-grid">
+                {quantities.map((item) => (
+                  <button
+                    type="button"
+                    key={item}
+                    className={`inquiry-quantity ${
+                      quantity === item && !customQuantity ? "active" : ""
+                    }`}
+                    onClick={() => handlePresetQuantity(item)}
+                  >
+                    {quantity === item && !customQuantity && (
+                      <Check size={13} />
+                    )}
 
-                {quantities.map(
-                  (item) => (
-                    <button
-                      type="button"
-                      key={item}
-                      className={`inquiry-quantity ${
-                        quantity === item &&
-                        !customQuantity
-                          ? "active"
-                          : ""
-                      }`}
-                      onClick={() =>
-                        handlePresetQuantity(
-                          item,
-                        )
-                      }
-                    >
-
-                      {quantity === item &&
-                        !customQuantity && (
-                          <Check size={13} />
-                        )}
-
-                      <span>
-                        {item}
-                      </span>
-
-                    </button>
-                  ),
-                )}
-
+                    <span>{item}</span>
+                  </button>
+                ))}
               </div>
 
               {/* CUSTOM QUANTITY */}
@@ -1184,188 +855,133 @@ export default function CollectionPage() {
               <div className="inquiry-custom-quantity">
 
                 <label className="inquiry-field">
-
-                  <span>
-                    Custom Quantity
-                  </span>
+                  <span>Custom Quantity</span>
 
                   <input
                     type="text"
                     inputMode="numeric"
                     value={customQuantity}
-                    onChange={(e) =>
-                      handleCustomQuantity(
-                        e.target.value,
-                      )
-                    }
+                    onChange={(e) => handleCustomQuantity(e.target.value)}
                     placeholder="Enter number of units"
                   />
-
                 </label>
 
-                <small>
-                  Example: 250 → 250 Units
-                </small>
+                <small>Example: 250 → 250 Units</small>
 
               </div>
 
             </section>
 
-            {/* =================================================
-                07 ADDITIONAL INFORMATION
-            ================================================= */}
+            {/* 07 CONTACT INFORMATION */}
 
             <section className="inquiry-section">
-                  <div className="inquiry-section-head">
-
-                    <div>
-                      <span className="eyebrow">
-                       CONTACT INFORMATION
-                      </span>
-
-                      <h2>
-                        Your Contact Details
-                      </h2>
-
-                      <p>
-                        Please provide your contact details so our
-                        team can get back to you about your inquiry.
-                      </p>
-
-                    </div>
-
-                  </div>
-
-                  <div className="inquiry-spec-grid">
-
-                    <label className="inquiry-field">
-                      <span>
-                        Name
-                      </span>
-
-                      <input
-                        type="text"
-                        value={name}
-                        onChange={(e) =>
-                          setName(e.target.value)
-                        }
-                        placeholder="Enter your name"
-                        required
-                      />
-                    </label>
-
-                    <label className="inquiry-field">
-                      <span>
-                        Phone Number
-                      </span>
-
-                      <input
-                        type="tel"
-                        value={phone}
-                        onChange={(e) =>
-                          setPhone(e.target.value)
-                        }
-                        placeholder="Enter your phone number"
-                        required
-                      />
-                    </label>
-
-                    <label className="inquiry-field">
-                      <span>
-                        Email
-                      </span>
-
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) =>
-                          setEmail(e.target.value)
-                        }
-                        placeholder="Enter your email address"
-                        required
-                      />
-                    </label>
-
-                  </div>
-                </section>
-
-                <section className="inquiry-section">
 
               <div className="inquiry-section-head">
-
                 <div>
+                  <span className="eyebrow">CONTACT INFORMATION</span>
 
-                  <span className="eyebrow">
-                    ADDITIONAL INFORMATION
-                  </span>
-
-                  <h2>
-                    Share Your Requirements
-                  </h2>
+                  <h2>Your Contact Details</h2>
 
                   <p>
-                    Tell us anything else we
-                    should know about your
+                    Please provide your contact details so our team can get
+                    back to you about your inquiry.
+                  </p>
+                </div>
+              </div>
+
+              <div className="inquiry-spec-grid">
+
+                <label className="inquiry-field">
+                  <span>Name</span>
+
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Enter your name"
+                    required
+                  />
+                </label>
+
+                <label className="inquiry-field">
+                  <span>Phone Number</span>
+
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="Enter your phone number"
+                    required
+                  />
+                </label>
+
+                <label className="inquiry-field">
+                  <span>Email</span>
+
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email address"
+                    required
+                  />
+                </label>
+
+              </div>
+
+            </section>
+
+            {/* 08 ADDITIONAL INFORMATION */}
+
+            <section className="inquiry-section">
+
+              <div className="inquiry-section-head">
+                <div>
+                  <span className="eyebrow">ADDITIONAL INFORMATION</span>
+
+                  <h2>Share Your Requirements</h2>
+
+                  <p>
+                    Tell us anything else we should know about your
                     requirements.
                   </p>
-
                 </div>
-
               </div>
 
               <div className="inquiry-extra-grid">
 
                 <label className="inquiry-field inquiry-notes-field">
-
-                  <span>
-                    Additional Notes
-                  </span>
+                  <span>Additional Notes</span>
 
                   <textarea
                     value={notes}
-                    onChange={(e) =>
-                      setNotes(
-                        e.target.value,
-                      )
-                    }
+                    onChange={(e) => setNotes(e.target.value)}
                     placeholder="Tell us about your design, finish, branding or any special requirements..."
                     rows={6}
                   />
-
                 </label>
 
               </div>
 
             </section>
 
-            {/* =================================================
-                ERROR
-            ================================================= */}
+            {/* ERROR */}
 
             {submitError && (
-              <div className="inquiry-error">
-                {submitError}
-              </div>
+              <div className="inquiry-error">{submitError}</div>
             )}
 
-            {/* =================================================
-                ADD TO CART
-            ================================================= */}
+            {/* ADD TO CART */}
 
             <div className="inquiry-submit">
 
               <div>
-
-                <span className="eyebrow">
-                  ADD TO YOUR INQUIRY
-                </span>
+                <span className="eyebrow">ADD TO YOUR INQUIRY</span>
 
                 <p>
-                  Complete the details above
-                  and add this article to your
+                  Complete the details above and add this article to your
                   inquiry cart.
                 </p>
-
               </div>
 
               <button
@@ -1373,26 +989,16 @@ export default function CollectionPage() {
                 className="btn btn-gold"
                 disabled={submitting}
               >
+                {submitting ? "Adding..." : "Add to Cart"}
 
-                {submitting
-                  ? "Adding..."
-                  : "Add to Cart"}
-
-                {!submitting && (
-                  <ArrowUpRight
-                    size={17}
-                  />
-                )}
-
+                {!submitting && <ArrowUpRight size={17} />}
               </button>
 
             </div>
 
           </form>
 
-          {/* =================================================
-              RIGHT SIDE CART
-          ================================================= */}
+          {/* RIGHT SIDE CART */}
 
           <aside className="inquiry-summary">
 
@@ -1401,23 +1007,13 @@ export default function CollectionPage() {
               {/* CART HEADER */}
 
               <div className="summary-header">
-
                 <div>
+                  <span className="eyebrow">YOUR CART</span>
 
-                  <span className="eyebrow">
-                    YOUR CART
-                  </span>
-
-                  <h2>
-                    Selected Articles
-                  </h2>
-
+                  <h2>Selected Articles</h2>
                 </div>
 
-                <span className="summary-count">
-                  {cartItems.length}
-                </span>
-
+                <span className="summary-count">{cartItems.length}</span>
               </div>
 
               {/* EMPTY CART */}
@@ -1425,216 +1021,135 @@ export default function CollectionPage() {
               {cartItems.length === 0 ? (
 
                 <div className="summary-empty">
-
                   <div>
                     <Package size={22} />
                   </div>
 
                   <p>
-                    Your selected articles
-                    will appear here after
-                    you add them to your cart.
+                    Your selected articles will appear here after you add them
+                    to your cart.
                   </p>
-
                 </div>
 
               ) : (
 
-                /* =================================================
-                   CART ITEMS
-                ================================================= */
+                /* CART ITEMS */
 
                 <div className="inquiry-cart">
 
-                  {cartItems.map(
-                    (item, index) => (
-                      <div
-                        className="inquiry-cart-item"
-                        key={item.id}
-                      >
+                  {cartItems.map((item, index) => (
+                    <div className="inquiry-cart-item" key={item.id}>
 
-                        {/* ITEM HEADER */}
+                      {/* ITEM IMAGE */}
 
-                        <div className="inquiry-cart-item-top">
+                      {item.imageUrl && (
+                        <div className="inquiry-cart-image">
+                          <img
+                            src={getImageSrc(item.imageUrl)}
+                            alt={item.articleName}
+                            loading="lazy"
+                          />
+                        </div>
+                      )}
 
+                      {/* ITEM HEADER */}
+
+                      <div className="inquiry-cart-item-top">
+
+                        <div>
+                          <span className="inquiry-cart-number">
+                            ARTICLE {index + 1}
+                          </span>
+
+                          <h3>{item.articleName}</h3>
+
+                          <span className="inquiry-cart-article">
+                            {item.articleNumber}
+                          </span>
+                        </div>
+
+                        <button
+                          type="button"
+                          className="inquiry-cart-remove"
+                          onClick={() => removeCartItem(item.id)}
+                          aria-label="Remove article"
+                        >
+                          <X size={14} />
+                        </button>
+
+                      </div>
+
+                      {/* CATEGORY */}
+
+                      <div className="inquiry-cart-category">
+                        {item.productCategory}
+                      </div>
+
+                      {/* DETAILS */}
+
+                      <div className="inquiry-cart-details">
+
+                        {item.color && (
                           <div>
-
-                            <span className="inquiry-cart-number">
-                              ARTICLE{" "}
-                              {index + 1}
-                            </span>
-
-                            <h3>
-                              {
-                                item.articleName
-                              }
-                            </h3>
-
-                            <span className="inquiry-cart-article">
-                              {
-                                item.articleNumber
-                              }
-                            </span>
-
-                          </div>
-
-                          <button
-                            type="button"
-                            className="inquiry-cart-remove"
-                            onClick={() =>
-                              removeCartItem(
-                                item.id,
-                              )
-                            }
-                            aria-label="Remove article"
-                          >
-                            <X size={14} />
-                          </button>
-
-                        </div>
-
-                        {/* CATEGORY */}
-
-                        <div className="inquiry-cart-category">
-                          {
-                            item.productCategory
-                          }
-                        </div>
-
-                        {/* DETAILS */}
-
-                        <div className="inquiry-cart-details">
-
-                          {item.color && (
-                            <div>
-
-                              <span>
-                                Color
-                              </span>
-
-                              <strong>
-                                {
-                                  item.color
-                                }
-                              </strong>
-
-                            </div>
-                          )}
-
-                          {item.fabricType && (
-                            <div>
-
-                              <span>
-                                Fabric
-                              </span>
-
-                              <strong>
-                                {
-                                  item.fabricType
-                                }
-                              </strong>
-
-                            </div>
-                          )}
-
-                          {item.gsm && (
-                            <div>
-
-                              <span>
-                                GSM
-                              </span>
-
-                              <strong>
-                                {item.gsm}
-                              </strong>
-
-                            </div>
-                          )}
-
-                          {item.fitStyle && (
-                            <div>
-
-                              <span>
-                                Fit
-                              </span>
-
-                              <strong>
-                                {
-                                  item.fitStyle
-                                }
-                              </strong>
-
-                            </div>
-                          )}
-
-                          {item.label && (
-                            <div>
-
-                              <span>
-                                Label
-                              </span>
-
-                              <strong>
-                                {
-                                  item.label
-                                }
-                              </strong>
-
-                            </div>
-                          )}
-
-                          {item.sizes.length >
-                            0 && (
-                            <div className="inquiry-cart-full">
-
-                              <span>
-                                Sizes
-                              </span>
-
-                              <strong>
-                                {item.sizes.join(
-                                  ", ",
-                                )}
-                              </strong>
-
-                            </div>
-                          )}
-
-                          <div className="inquiry-cart-full">
-
-                            <span>
-                              Quantity
-                            </span>
-
-                            <strong>
-                              {
-                                item.quantity
-                              }
-                            </strong>
-
-                          </div>
-
-                        </div>
-
-                        {/* NOTES */}
-
-                        {item.notes && (
-                          <div className="inquiry-cart-notes">
-
-                            <span>
-                              Notes
-                            </span>
-
-                            <p>
-                              {item.notes}
-                            </p>
-
+                            <span>Color</span>
+                            <strong>{item.color}</strong>
                           </div>
                         )}
 
+                        {item.fabricType && (
+                          <div>
+                            <span>Fabric</span>
+                            <strong>{item.fabricType}</strong>
+                          </div>
+                        )}
+
+                        {item.gsm && (
+                          <div>
+                            <span>GSM</span>
+                            <strong>{item.gsm}</strong>
+                          </div>
+                        )}
+
+                        {item.fitStyle && (
+                          <div>
+                            <span>Fit</span>
+                            <strong>{item.fitStyle}</strong>
+                          </div>
+                        )}
+
+                        {item.label && (
+                          <div>
+                            <span>Label</span>
+                            <strong>{item.label}</strong>
+                          </div>
+                        )}
+
+                        {item.sizes.length > 0 && (
+                          <div className="inquiry-cart-full">
+                            <span>Sizes</span>
+                            <strong>{item.sizes.join(", ")}</strong>
+                          </div>
+                        )}
+
+                        <div className="inquiry-cart-full">
+                          <span>Quantity</span>
+                          <strong>{item.quantity}</strong>
+                        </div>
+
                       </div>
-                    ),
-                  )}
+
+                      {/* NOTES */}
+
+                      {item.notes && (
+                        <div className="inquiry-cart-notes">
+                          <span>Notes</span>
+
+                          <p>{item.notes}</p>
+                        </div>
+                      )}
+
+                    </div>
+                  ))}
 
                 </div>
               )}
@@ -1642,18 +1157,12 @@ export default function CollectionPage() {
               {/* CART FOOTER */}
 
               <div className="summary-footer">
-
-                <span>
-                  HIDE DESIGN
-                </span>
+                <span>HIDE DESIGN</span>
 
                 <strong>
                   {cartItems.length}{" "}
-                  {cartItems.length === 1
-                    ? "ARTICLE"
-                    : "ARTICLES"}
+                  {cartItems.length === 1 ? "ARTICLE" : "ARTICLES"}
                 </strong>
-
               </div>
 
             </div>
