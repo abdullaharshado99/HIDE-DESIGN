@@ -6,7 +6,7 @@ import Link from 'next/link'
 export default function CollectionPage() {
   return (
     <main className="wholesale-page">
-      <section className="wholesale-section">
+      <section className="wholesale-section" id="wholesale-page">
         <div className="wholesale-shell">
 
           {/* HEADING */}

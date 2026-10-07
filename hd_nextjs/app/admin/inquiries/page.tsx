@@ -22,18 +22,14 @@ interface Inquiry {
   gsm?: string | null
   vintageEffect?: string | null
   fitStyle?: string | null
-  printingTechnique?: string | null
 
   // CUSTOMIZATION
-  rhinestone?: string | null
   label?: string | null
   sizes?: string | null
 
   // OTHER
   quantity?: string | null
-  fileName?: string | null
   notes?: string | null
-  status: string
   createdAt: string
 }
 
@@ -52,9 +48,7 @@ function formatSizes(sizes?: string | null) {
     const parsed = JSON.parse(sizes)
 
     if (Array.isArray(parsed)) {
-      return parsed.length
-        ? parsed.join(', ')
-        : 'Not specified'
+      return parsed.length ? parsed.join(', ') : 'Not specified'
     }
 
     return String(parsed)
@@ -81,22 +75,6 @@ function formatDate(date: string) {
   })
 }
 
-function getStatusClass(status: string) {
-  switch (status.toLowerCase()) {
-    case 'approved':
-      return 'status approved'
-
-    case 'completed':
-      return 'status completed'
-
-    case 'rejected':
-      return 'status rejected'
-
-    default:
-      return 'status pending'
-  }
-}
-
 export default function InquiriesPage() {
   const apiUrl = getApiUrl()
 
@@ -105,6 +83,7 @@ export default function InquiriesPage() {
   const [error, setError] = useState('')
   const [selectedInquiry, setSelectedInquiry] =
     useState<Inquiry | null>(null)
+  const [expandedId, setExpandedId] = useState<number | null>(null)
 
   useEffect(() => {
     const fetchInquiries = async () => {
@@ -151,10 +130,7 @@ export default function InquiriesPage() {
             </p>
           </div>
 
-          <Link
-            href="/admin"
-            className="back-admin-btn"
-          >
+          <Link href="/admin" className="back-admin-btn">
             ← Back to Admin
           </Link>
         </header>
@@ -162,7 +138,6 @@ export default function InquiriesPage() {
         {/* STATS */}
         {!loading && !error && (
           <section className="inquiry-stats">
-
             <div className="stat-card">
               <span className="stat-label">
                 Total Inquiries
@@ -170,39 +145,6 @@ export default function InquiriesPage() {
 
               <strong>{inquiries.length}</strong>
             </div>
-
-            <div className="stat-card">
-              <span className="stat-label">
-                Pending
-              </span>
-
-              <strong>
-                {
-                  inquiries.filter(
-                    (item) =>
-                      item.status?.toLowerCase() ===
-                      'pending'
-                  ).length
-                }
-              </strong>
-            </div>
-
-            <div className="stat-card">
-              <span className="stat-label">
-                Completed
-              </span>
-
-              <strong>
-                {
-                  inquiries.filter(
-                    (item) =>
-                      item.status?.toLowerCase() ===
-                      'completed'
-                  ).length
-                }
-              </strong>
-            </div>
-
           </section>
         )}
 
@@ -226,9 +168,7 @@ export default function InquiriesPage() {
 
               <button
                 type="button"
-                onClick={() =>
-                  window.location.reload()
-                }
+                onClick={() => window.location.reload()}
               >
                 Try Again
               </button>
@@ -236,239 +176,181 @@ export default function InquiriesPage() {
           )}
 
           {/* EMPTY */}
-          {!loading &&
-            !error &&
-            inquiries.length === 0 && (
-              <div className="state-box">
-                <div className="empty-icon">◇</div>
+          {!loading && !error && inquiries.length === 0 && (
+            <div className="state-box">
+              <div className="empty-icon">◇</div>
 
-                <h2>No Inquiries Yet</h2>
+              <h2>No Inquiries Yet</h2>
 
-                <p>
-                  New product inquiries will appear here
-                  when customers submit them.
-                </p>
-              </div>
-            )}
+              <p>
+                New product inquiries will appear here
+                when customers submit them.
+              </p>
+            </div>
+          )}
 
           {/* INQUIRIES */}
-          {!loading &&
-            !error &&
-            inquiries.length > 0 && (
-              <div className="inquiries-grid">
+          {!loading && !error && inquiries.length > 0 && (
+            <div className="inquiries-grid">
 
-                {inquiries.map((inquiry) => (
-                  <article
-                    key={inquiry.id}
-                    className="inquiry-card"
-                  >
+              {inquiries.map((inquiry) => {
+                const isOpen = expandedId === inquiry.id
 
-                    {/* CARD TOP */}
-                    <div className="card-top">
+                return (
+                  <div key={inquiry.id} className="inquiry-item">
 
-                      <div>
-                        <span className="inquiry-number">
-                          INQUIRY #{inquiry.id}
-                        </span>
-
-                        <h2>
-                          {inquiry.productCategory}
-                        </h2>
-
-                        {inquiry.productDetail && (
-                          <p className="product-detail">
-                            {inquiry.productDetail}
-                          </p>
-                        )}
-                      </div>
-
-                      <span
-                        className={getStatusClass(
-                          inquiry.status
-                        )}
-                      >
-                        {formatLabel(inquiry.status)}
-                      </span>
-
-                    </div>
-
-                    {/* CATEGORY */}
-                    <div className="category-row">
-
-                      <span>
-                        {formatLabel(
-                          inquiry.category
-                        )}
-                      </span>
-
-                      <span className="date">
-                        {formatDate(
-                          inquiry.createdAt
-                        )}
-                      </span>
-
-                    </div>
-
-                    {/* CUSTOMER INFORMATION */}
-                    <div className="customer-info">
-
-                      <div className="customer-info-item">
-                        <span>Name</span>
-
-                        <strong>
-                          {inquiry.name ||
-                            'Not specified'}
-                        </strong>
-                      </div>
-
-                      <div className="customer-info-item">
-                        <span>Phone</span>
-
-                        <strong>
-                          {inquiry.phone ||
-                            'Not specified'}
-                        </strong>
-                      </div>
-
-                      <div className="customer-info-item">
-                        <span>Email</span>
-
-                        <strong>
-                          {inquiry.email ||
-                            'Not specified'}
-                        </strong>
-                      </div>
-
-                    </div>
-
-                    {/* QUICK DETAILS */}
-                    <div className="quick-details">
-
-                      <div className="detail-item">
-                        <span>Color</span>
-
-                        <strong>
-                          {inquiry.color ||
-                            'Not specified'}
-                        </strong>
-                      </div>
-
-                      <div className="detail-item">
-                        <span>Fabric</span>
-
-                        <strong>
-                          {inquiry.fabricType ||
-                            'Not specified'}
-                        </strong>
-                      </div>
-
-                      <div className="detail-item">
-                        <span>GSM</span>
-
-                        <strong>
-                          {inquiry.gsm ||
-                            'Not specified'}
-                        </strong>
-                      </div>
-
-                      <div className="detail-item">
-                        <span>Quantity</span>
-
-                        <strong>
-                          {inquiry.quantity ||
-                            'Not specified'}
-                        </strong>
-                      </div>
-
-                    </div>
-
-                    {/* SIZES */}
-                    <div className="sizes-row">
-
-                      <span className="field-label">
-                        Sizes
-                      </span>
-
-                      <span className="sizes-value">
-                        {formatSizes(inquiry.sizes)}
-                      </span>
-
-                    </div>
-
-                    {/* VIEW BUTTON */}
+                    {/* NAME ROW (always visible) */}
                     <button
                       type="button"
-                      className="view-btn"
+                      className={`name-toggle ${isOpen ? 'open' : ''}`}
                       onClick={() =>
-                        setSelectedInquiry(inquiry)
+                        setExpandedId(isOpen ? null : inquiry.id)
                       }
                     >
-                      <span>
-                        View Full Inquiry
+                      <span className="name-toggle-text">
+                        {inquiry.name || 'Not specified'}
                       </span>
 
-                      <span>→</span>
+                      <span className="name-toggle-arrow">
+                        {isOpen ? '−' : '+'}
+                      </span>
                     </button>
 
-                  </article>
-                ))}
+                    {/* CARD (opens on click) */}
+                    {isOpen && (
+                      <article className="inquiry-card">
 
-              </div>
-            )}
+                        {/* CARD TOP */}
+                        <div className="card-top">
+                          <div>
+                            <span className="inquiry-number">
+                              INQUIRY #{inquiry.id}
+                            </span>
+
+                            <h2>{inquiry.productCategory}</h2>
+
+                            {inquiry.productDetail && (
+                              <p className="product-detail">
+                                {inquiry.productDetail}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* CATEGORY */}
+                        <div className="category-row">
+                          <span>{formatLabel(inquiry.category)}</span>
+
+                          <span className="date">
+                            {formatDate(inquiry.createdAt)}
+                          </span>
+                        </div>
+
+                        {/* CUSTOMER INFORMATION */}
+                        <div className="customer-info">
+                          <div className="customer-info-item">
+                            <span>Name</span>
+                            <strong>{inquiry.name || 'Not specified'}</strong>
+                          </div>
+
+                          <div className="customer-info-item">
+                            <span>Phone</span>
+                            <strong>{inquiry.phone || 'Not specified'}</strong>
+                          </div>
+
+                          <div className="customer-info-item">
+                            <span>Email</span>
+                            <strong>{inquiry.email || 'Not specified'}</strong>
+                          </div>
+                        </div>
+
+                        {/* QUICK DETAILS */}
+                        <div className="quick-details">
+                          <div className="detail-item">
+                            <span>Color</span>
+                            <strong>{inquiry.color || 'Not specified'}</strong>
+                          </div>
+
+                          <div className="detail-item">
+                            <span>Fabric</span>
+                            <strong>{inquiry.fabricType || 'Not specified'}</strong>
+                          </div>
+
+                          <div className="detail-item">
+                            <span>GSM</span>
+                            <strong>{inquiry.gsm || 'Not specified'}</strong>
+                          </div>
+
+                          <div className="detail-item">
+                            <span>Quantity</span>
+                            <strong>{inquiry.quantity || 'Not specified'}</strong>
+                          </div>
+                        </div>
+
+                        {/* SIZES */}
+                        <div className="sizes-row">
+                          <span className="field-label">Sizes</span>
+
+                          <span className="sizes-value">
+                            {formatSizes(inquiry.sizes)}
+                          </span>
+                        </div>
+
+                        {/* VIEW BUTTON */}
+                        <button
+                          type="button"
+                          className="view-btn"
+                          onClick={() => setSelectedInquiry(inquiry)}
+                        >
+                          <span>View Full Inquiry</span>
+                          <span>→</span>
+                        </button>
+
+                      </article>
+                    )}
+
+                  </div>
+                )
+              })}
+
+            </div>
+          )}
 
         </section>
       </div>
 
-      {/* =====================================================
-          MODAL
-      ===================================================== */}
-
+      {/* MODAL */}
       {selectedInquiry && (
         <div
           className="modal-overlay"
-          onClick={() =>
-            setSelectedInquiry(null)
-          }
+          onClick={() => setSelectedInquiry(null)}
         >
-
           <div
             className="inquiry-modal"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            onClick={(event) => event.stopPropagation()}
           >
 
             {/* MODAL HEADER */}
             <div className="modal-header">
-
               <div>
-
                 <span className="eyebrow">
                   INQUIRY #{selectedInquiry.id}
                 </span>
 
-                <h2>
-                  {selectedInquiry.productCategory}
-                </h2>
+                <h2>{selectedInquiry.productCategory}</h2>
 
                 {selectedInquiry.productDetail && (
-                  <p>
-                    {selectedInquiry.productDetail}
-                  </p>
+                  <p>{selectedInquiry.productDetail}</p>
                 )}
-
               </div>
 
               <button
                 type="button"
                 className="close-btn"
-                onClick={() =>
-                  setSelectedInquiry(null)
-                }
+                onClick={() => setSelectedInquiry(null)}
               >
                 ×
               </button>
-
             </div>
 
             {/* MODAL BODY */}
@@ -476,238 +358,106 @@ export default function InquiriesPage() {
 
               {/* CUSTOMER INFORMATION */}
               <div className="modal-section">
-
                 <h3>Customer Information</h3>
 
                 <div className="info-grid">
-
                   <div className="info-item">
                     <span>Name</span>
-
-                    <strong>
-                      {selectedInquiry.name ||
-                        'Not specified'}
-                    </strong>
+                    <strong>{selectedInquiry.name || 'Not specified'}</strong>
                   </div>
 
                   <div className="info-item">
                     <span>Phone Number</span>
-
-                    <strong>
-                      {selectedInquiry.phone ||
-                        'Not specified'}
-                    </strong>
+                    <strong>{selectedInquiry.phone || 'Not specified'}</strong>
                   </div>
 
                   <div className="info-item">
                     <span>Email</span>
-
-                    <strong>
-                      {selectedInquiry.email ||
-                        'Not specified'}
-                    </strong>
+                    <strong>{selectedInquiry.email || 'Not specified'}</strong>
                   </div>
-
                 </div>
-
               </div>
 
-              {/* STATUS */}
+              {/* DATE */}
               <div className="modal-status-row">
-
-                <span
-                  className={getStatusClass(
-                    selectedInquiry.status
-                  )}
-                >
-                  {formatLabel(
-                    selectedInquiry.status
-                  )}
-                </span>
-
                 <span className="modal-date">
-                  {formatDate(
-                    selectedInquiry.createdAt
-                  )}
+                  {formatDate(selectedInquiry.createdAt)}
                 </span>
-
               </div>
 
               {/* PRODUCT */}
               <div className="modal-section">
-
                 <h3>Product Information</h3>
 
                 <div className="info-grid">
-
                   <div className="info-item">
                     <span>Category</span>
-
-                    <strong>
-                      {formatLabel(
-                        selectedInquiry.category
-                      )}
-                    </strong>
+                    <strong>{formatLabel(selectedInquiry.category)}</strong>
                   </div>
 
                   <div className="info-item">
                     <span>Product</span>
-
-                    <strong>
-                      {selectedInquiry.productCategory}
-                    </strong>
+                    <strong>{selectedInquiry.productCategory}</strong>
                   </div>
 
                   <div className="info-item">
                     <span>Product Detail</span>
-
-                    <strong>
-                      {selectedInquiry.productDetail ||
-                        'Not specified'}
-                    </strong>
+                    <strong>{selectedInquiry.productDetail || 'Not specified'}</strong>
                   </div>
 
                   <div className="info-item">
                     <span>Quantity</span>
-
-                    <strong>
-                      {selectedInquiry.quantity ||
-                        'Not specified'}
-                    </strong>
+                    <strong>{selectedInquiry.quantity || 'Not specified'}</strong>
                   </div>
-
                 </div>
-
               </div>
 
               {/* FABRIC */}
               <div className="modal-section">
-
                 <h3>Fabric & Style</h3>
 
                 <div className="info-grid">
-
                   <div className="info-item">
                     <span>Color</span>
-
-                    <strong>
-                      {selectedInquiry.color ||
-                        'Not specified'}
-                    </strong>
+                    <strong>{selectedInquiry.color || 'Not specified'}</strong>
                   </div>
 
                   <div className="info-item">
                     <span>Fabric Type</span>
-
-                    <strong>
-                      {selectedInquiry.fabricType ||
-                        'Not specified'}
-                    </strong>
+                    <strong>{selectedInquiry.fabricType || 'Not specified'}</strong>
                   </div>
 
                   <div className="info-item">
                     <span>GSM</span>
-
-                    <strong>
-                      {selectedInquiry.gsm ||
-                        'Not specified'}
-                    </strong>
-                  </div>
-
-                  <div className="info-item">
-                    <span>Vintage Effect</span>
-
-                    <strong>
-                      {selectedInquiry.vintageEffect ||
-                        'Not specified'}
-                    </strong>
+                    <strong>{selectedInquiry.gsm || 'Not specified'}</strong>
                   </div>
 
                   <div className="info-item">
                     <span>Fit Style</span>
-
-                    <strong>
-                      {selectedInquiry.fitStyle ||
-                        'Not specified'}
-                    </strong>
+                    <strong>{selectedInquiry.fitStyle || 'Not specified'}</strong>
                   </div>
-
-                  <div className="info-item">
-                    <span>Printing Technique</span>
-
-                    <strong>
-                      {selectedInquiry.printingTechnique ||
-                        'Not specified'}
-                    </strong>
-                  </div>
-
                 </div>
-
               </div>
 
               {/* CUSTOMIZATION */}
               <div className="modal-section">
-
                 <h3>Customization</h3>
 
                 <div className="info-grid">
-
-                  <div className="info-item">
-                    <span>Rhinestone</span>
-
-                    <strong>
-                      {selectedInquiry.rhinestone ||
-                        'Not specified'}
-                    </strong>
-                  </div>
-
                   <div className="info-item">
                     <span>Label</span>
-
-                    <strong>
-                      {selectedInquiry.label ||
-                        'Not specified'}
-                    </strong>
+                    <strong>{selectedInquiry.label || 'Not specified'}</strong>
                   </div>
 
                   <div className="info-item full">
                     <span>Sizes</span>
-
-                    <strong>
-                      {formatSizes(
-                        selectedInquiry.sizes
-                      )}
-                    </strong>
+                    <strong>{formatSizes(selectedInquiry.sizes)}</strong>
                   </div>
-
                 </div>
-
               </div>
-
-              {/* FILE */}
-              {selectedInquiry.fileName && (
-                <div className="modal-section">
-
-                  <h3>Design File</h3>
-
-                  <div className="file-box">
-
-                    <span className="file-icon">
-                      ◇
-                    </span>
-
-                    <span>
-                      {selectedInquiry.fileName}
-                    </span>
-
-                  </div>
-
-                </div>
-              )}
 
               {/* NOTES */}
               <div className="modal-section">
-
                 <h3>Additional Notes</h3>
 
                 <div className="notes-box">
@@ -715,24 +465,19 @@ export default function InquiriesPage() {
                     ? selectedInquiry.notes
                     : 'No additional notes were provided.'}
                 </div>
-
               </div>
 
             </div>
 
             {/* FOOTER */}
             <div className="modal-footer">
-
               <button
                 type="button"
                 className="close-modal-btn"
-                onClick={() =>
-                  setSelectedInquiry(null)
-                }
+                onClick={() => setSelectedInquiry(null)}
               >
                 Close
               </button>
-
             </div>
 
           </div>
