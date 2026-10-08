@@ -49,6 +49,7 @@ export default function Home() {
         <ProductCarousel gender="men" category="coats" />
         <ProductCarousel gender="women" category="jackets" />
         <ProductCarousel gender="women" category="coats" />
+        <ProductCarousel category="accessories" />
 
         <AccountDashboard />
 
