@@ -16,8 +16,9 @@ interface Product {
 }
 
 interface ProductCarouselProps {
-  gender: 'men' | 'women'
-  category: 'jackets' | 'coats'
+  // accessories ke liye gender zaroori nahi
+  gender?: 'men' | 'women'
+  category: 'jackets' | 'coats' | 'accessories'
 }
 
 interface ApiProduct {
@@ -43,9 +44,21 @@ export default function ProductCarousel({
     useState<Product | null>(null)
 
   const [loading, setLoading] = useState(true)
-  const title = `${gender === 'men' ? "Men's" : "Women's"} ${category === 'coats' ? 'Long Coats' : 'Jackets'}`
 
-  const eyebrow = `THE ${gender === 'men' ? "MEN'S" : "WOMEN'S"} ${category === 'coats' ? 'COAT' : 'JACKET'} EDIT`
+  const isAccessories = category === 'accessories'
+
+  // /collections/men-jackets, /collections/accessories, etc.
+  const collectionSlug = isAccessories
+    ? 'accessories'
+    : `${gender}-${category}`
+
+  const title = isAccessories
+    ? 'Accessories'
+    : `${gender === 'men' ? "Men's" : "Women's"} ${category === 'coats' ? 'Long Coats' : 'Jackets'}`
+
+  const eyebrow = isAccessories
+    ? 'THE ACCESSORIES EDIT'
+    : `THE ${gender === 'men' ? "MEN'S" : "WOMEN'S"} ${category === 'coats' ? 'COAT' : 'JACKET'} EDIT`
 
   useEffect(() => {
     const apiUrl = getApiUrl()
@@ -64,11 +77,20 @@ export default function ProductCarousel({
       })
       .then((remoteProducts: ApiProduct[]) => {
         const matchingProducts = remoteProducts
-          .filter(
-            (product) =>
+          .filter((product) => {
+            const productCategory =
+              product.category?.toLowerCase() || 'coats'
+
+            // Accessories: audience check nahi hota
+            if (category === 'accessories') {
+              return productCategory === 'accessories'
+            }
+
+            return (
               product.audience?.toLowerCase() === gender &&
-              (product.category?.toLowerCase() || 'coats') === category
-          )
+              productCategory === category
+            )
+          })
           .map((product) => ({
             id: product.articleNumber,
             name: product.name,
@@ -194,7 +216,11 @@ export default function ProductCarousel({
             ? 'section-dark'
             : ''
         }`}
-        id={`${gender}-${category}`}
+        id={
+          isAccessories
+            ? 'Accessories'
+            : `${gender}-${category}`
+        }
       >
         <div className="container">
           <div className="section-heading">
@@ -264,6 +290,28 @@ export default function ProductCarousel({
                     </div>
                   </article>
                 ))}
+
+                <Link
+                  href={`/collections/${collectionSlug}`}
+                  className="explore-circle"
+                  aria-label={`Explore more ${title}`}
+                  title="Explore More"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    className="explore-circle-icon"
+                  >
+                    <path
+                      d="M9.5 6.5 15 12l-5.5 5.5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
               </div>
             )}
         </div>

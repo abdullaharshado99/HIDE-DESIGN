@@ -78,29 +78,32 @@ export default function Contact() {
     <section className="contact-section" id="contact">
       <div className="container contact-grid">
         <div className="contact-copy">
-  <span className="eyebrow">LET'S WORK TOGETHER</span>
-  <h2>
-    Request a <em>quote.</em>
-  </h2>
-  <p>
-    Tell us what you are looking for and our team will get back to you
-    with the next steps.
-  </p>
-  <div className="contact-details">
-    <a href="tel:+923044885277">
-      +92 304 488 5277
-    </a>
-    <a href="tel:+923434094678">
-      +92 343 409 4678
-    </a>
-    <a href="tel:+923008441503">
-      +92 300 844 1503
-    </a>
-    <span>
-      Pakistan · Worldwide Export
-    </span>
-  </div>
-</div>
+          <span className="eyebrow">LET'S WORK TOGETHER</span>
+          <h2>
+            Request a <em>quote.</em>
+          </h2>
+          <p>
+            Tell us what you are looking for and our team will get back to you
+            with the next steps.
+          </p>
+          <div className="contact-details">
+            <a href="tel:+923044885277">
+              +92 304 488 5277
+            </a>
+            <a href="tel:+923434094678">
+              +92 343 409 4678
+            </a>
+            <a href="tel:+923008441503">
+              +92 300 844 1503
+            </a>
+            <a href="mailto:info@hidesdesign.com">
+              info@hidesdesign.com
+            </a>
+            <span>
+              Pakistan · Worldwide Export
+            </span>
+          </div>
+        </div>
         <div className="contact-socials">
           <a
             href="https://www.facebook.com/profile.php?id=61592666757041"
@@ -154,6 +157,24 @@ export default function Contact() {
                 cx="17.5"
                 cy="6.5"
                 r="1"
+                fill="currentColor"
+              />
+            </svg>
+          </a>
+          <a
+            href="https://www.tiktok.com/@hide.design6"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-social"
+            aria-label="TikTok"
+            title="TikTok"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="M16.6 3h-3.2v11.6a2.6 2.6 0 1 1-2.6-2.6c.3 0 .5 0 .8.1V8.8a5.8 5.8 0 1 0 5 5.8V8.9a7 7 0 0 0 4 1.3V7a4.1 4.1 0 0 1-4-4Z"
                 fill="currentColor"
               />
             </svg>

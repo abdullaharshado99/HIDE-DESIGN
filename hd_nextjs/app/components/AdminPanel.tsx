@@ -123,6 +123,9 @@ export default function AdminPanel({
   const [uploading, setUploading] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
+  // Accessories: audience aur sizes ki zaroorat nahi
+  const isAccessories = form.category === 'accessories'
+
   // ---------- LOAD PRODUCTS ----------
   async function loadProducts(accessToken: string) {
     try {
@@ -488,7 +491,8 @@ export default function AdminPanel({
       return
     }
 
-    if (form.sizes.length === 0) {
+    // Sizes sirf jackets/coats ke liye zaroori hain
+    if (!isAccessories && form.sizes.length === 0) {
       toast.error('Please select at least one size.')
       return
     }
@@ -504,10 +508,16 @@ export default function AdminPanel({
       const productToSave = {
         ...form,
 
-        sizes:
-          normalizeOptions(
-            form.sizes
-          ),
+        // Accessories ke liye audience/sizes fixed
+        audience: isAccessories
+          ? 'unisex'
+          : form.audience,
+
+        sizes: isAccessories
+          ? []
+          : normalizeOptions(
+              form.sizes
+            ),
 
         colors:
           normalizeOptions(
@@ -839,13 +849,32 @@ export default function AdminPanel({
               value={
                 form.category
               }
-              onChange={(e) =>
+              onChange={(e) => {
+                const category =
+                  e.target.value
+
                 setForm({
                   ...form,
-                  category:
-                    e.target.value,
+                  category,
+
+                  // Accessories: audience "unisex", sizes khali
+                  // Wapas jackets/coats: audience default "men"
+                  ...(category ===
+                  'accessories'
+                    ? {
+                        audience:
+                          'unisex',
+                        sizes: [],
+                      }
+                    : form.audience ===
+                        'unisex'
+                      ? {
+                          audience:
+                            'men',
+                        }
+                      : {}),
                 })
-              }
+              }}
             >
               <option value="jackets">
                 Jackets
@@ -853,6 +882,10 @@ export default function AdminPanel({
 
               <option value="coats">
                 Coats
+              </option>
+
+              <option value="accessories">
+                Accessories
               </option>
             </select>
           </label>
@@ -864,6 +897,9 @@ export default function AdminPanel({
             <select
               value={
                 form.audience
+              }
+              disabled={
+                isAccessories
               }
               onChange={(e) =>
                 setForm({
@@ -880,6 +916,13 @@ export default function AdminPanel({
               <option value="women">
                 Women
               </option>
+
+              <option
+                value="unisex"
+                disabled
+              >
+                Not applicable
+              </option>
             </select>
           </label>
 
@@ -892,6 +935,7 @@ export default function AdminPanel({
                 <label className="admin-checkbox-option" key={size}>
                   <input
                     type="checkbox"
+                    disabled={isAccessories}
                     checked={form.sizes.includes(size)}
                     onChange={() =>
                       setForm({
@@ -905,7 +949,11 @@ export default function AdminPanel({
               ))}
             </div>
 
-            <small>Select all sizes available for this article.</small>
+            <small>
+              {isAccessories
+                ? 'Sizes are not required for accessories.'
+                : 'Select all sizes available for this article.'}
+            </small>
           </label>
 
           {/* COLORS */}
@@ -1143,9 +1191,10 @@ export default function AdminPanel({
                       </span>
 
                       <small className="admin-row-audience">
-                        {
-                          product.audience
-                        }{' '}
+                        {product.category ===
+                        'accessories'
+                          ? 'accessories'
+                          : product.audience}{' '}
                         ·{' '}
                         {product.price
                           ? `${product.currency} ${product.price}`
