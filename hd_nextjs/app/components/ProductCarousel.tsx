@@ -245,6 +245,7 @@ export default function ProductCarousel({
             )}
           {!loading &&
             products.length > 0 && (
+              <div className="carousel-wrap">
               <div
                 className="carousel"
                 ref={carouselRef}
@@ -290,28 +291,31 @@ export default function ProductCarousel({
                     </div>
                   </article>
                 ))}
-
-                <Link
-                  href={`/collections/${collectionSlug}`}
-                  className="explore-circle"
-                  aria-label={`Explore more ${title}`}
-                  title="Explore More"
+              </div>
+              <Link
+                href={`/collections/${collectionSlug}`}
+                className="explore-circle"
+                aria-label={`Explore more ${title}`}
+                title="Explore More"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  className="explore-circle-icon"
                 >
-                  <svg
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                    className="explore-circle-icon"
-                  >
-                    <path
-                      d="M9.5 6.5 15 12l-5.5 5.5"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.6"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </Link>
+                  <path
+                    d="M9.5 6.5 15 12l-5.5 5.5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span className="explore-circle-label">
+                  Explore More
+                </span>
+              </Link>
               </div>
             )}
         </div>
