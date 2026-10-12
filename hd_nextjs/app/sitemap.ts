@@ -55,6 +55,36 @@ export default async function sitemap({
       changeFrequency: 'weekly',
       priority: 0.7,
     },
+    {
+      url: `${siteUrl}/collections/men-jackets`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${siteUrl}/collections/men-coats`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${siteUrl}/collections/women-jackets`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${siteUrl}/collections/women-coats`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${siteUrl}/collections/accessories`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
   ]
 
   const productRoutes: MetadataRoute.Sitemap = currentProducts
