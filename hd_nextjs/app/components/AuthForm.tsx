@@ -93,11 +93,11 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
       const result = await response.json()
 
-      // Customer token admin token se alag rakha hai
+      // Keep the customer token separate from the admin token.
       try {
         localStorage.setItem('customer_token', result.accessToken)
       } catch {
-        /* storage blocked: login phir bhi chalega, bas yaad nahi rahega */
+        // Login can still continue if browser storage is unavailable.
       }
 
       router.push('/')
@@ -112,7 +112,11 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
   return (
     <main className="auth-page">
-      <form className="auth-card" onSubmit={handleSubmit} noValidate={false}>
+      <form
+        className="auth-card"
+        onSubmit={handleSubmit}
+        noValidate={false}
+      >
         <span className="eyebrow">
           {isSignup ? 'CREATE ACCOUNT' : 'WELCOME BACK'}
         </span>
@@ -184,7 +188,11 @@ export default function AuthForm({ mode }: AuthFormProps) {
               autoComplete={isSignup ? 'new-password' : 'current-password'}
               required
               minLength={isSignup ? 8 : undefined}
-              placeholder={isSignup ? 'At least 8 characters' : 'Your password'}
+              placeholder={
+                isSignup
+                  ? 'Create your password'
+                  : 'Your password'
+              }
               value={form.password}
               onChange={(e) => update('password', e.target.value)}
             />
@@ -193,9 +201,15 @@ export default function AuthForm({ mode }: AuthFormProps) {
               type="button"
               className="auth-eye"
               onClick={() => setShowPassword((v) => !v)}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-label={
+                showPassword ? 'Hide password' : 'Show password'
+              }
             >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              {showPassword ? (
+                <EyeOff size={18} />
+              ) : (
+                <Eye size={18} />
+              )}
             </button>
           </div>
         </label>
@@ -209,7 +223,9 @@ export default function AuthForm({ mode }: AuthFormProps) {
               required
               placeholder="Re-enter your password"
               value={form.confirmPassword}
-              onChange={(e) => update('confirmPassword', e.target.value)}
+              onChange={(e) =>
+                update('confirmPassword', e.target.value)
+              }
             />
           </label>
         )}
@@ -237,11 +253,13 @@ export default function AuthForm({ mode }: AuthFormProps) {
         <p className="auth-switch">
           {isSignup ? (
             <>
-              Already have an account? <Link href="/login">Sign in</Link>
+              Already have an account?{' '}
+              <Link href="/login">Sign in</Link>
             </>
           ) : (
             <>
-              New to HIDE DESIGN? <Link href="/signup">Create an account</Link>
+              New to HIDE DESIGN?{' '}
+              <Link href="/signup">Create an account</Link>
             </>
           )}
         </p>
