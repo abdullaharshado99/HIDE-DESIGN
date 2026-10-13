@@ -25,17 +25,7 @@ async function getProducts(): Promise<ProductRecord[]> {
   }
 }
 
-export async function generateSitemaps(): Promise<Array<{ id: number }>> {
-  const products = await getProducts()
-  const totalPages = Math.max(1, Math.ceil(products.length / PAGE_SIZE))
-  return Array.from({ length: totalPages }, (_, index) => ({ id: index }))
-}
-
-export default async function sitemap({
-  id,
-}: {
-  id?: number
-} = {}): Promise<MetadataRoute.Sitemap> {
+export default async function sitemap({ id }: { id?: number } = {}): Promise<MetadataRoute.Sitemap> {
   const products = await getProducts()
   const currentPage = id ?? 0
   const start = currentPage * PAGE_SIZE
