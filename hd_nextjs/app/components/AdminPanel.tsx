@@ -57,8 +57,6 @@ interface AdminPanelProps {
   initialEditId?: number | null
 }
 
-/* ---------- HELPERS ---------- */
-
 function normalizeOptions(
   value: string[] | string | null | undefined
 ): string[] {
@@ -87,46 +85,28 @@ function toggleArrayValue(
     : [...current, value]
 }
 
-/* ---------- COMPONENT ---------- */
-
 export default function AdminPanel({
   initialEditId,
 }: AdminPanelProps) {
   const apiUrl = getApiUrl()
   const router = useRouter()
-
-  // ---------- LOADING STATES ----------
   const [loginLoading, setLoginLoading] = useState(false)
   const [saving, setSaving] = useState(false)
-  const [deletingId, setDeletingId] =
-    useState<number | null>(null)
-
-  // ---------- MAIN STATES ----------
+  const [deletingId, setDeletingId] = useState<number | null>(null)
   const [token, setToken] = useState('')
-
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
   })
-
   const [products, setProducts] = useState<Product[]>([])
-
-  const [form, setForm] = useState<Omit<Product, 'id'>>(
-    emptyProduct
-  )
-
+  const [form, setForm] = useState<Omit<Product, 'id'>>(emptyProduct)
   const [editingId, setEditingId] =
     useState<number | null>(
       initialEditId ?? null
     )
-
   const [uploading, setUploading] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-
-  // Accessories: audience aur sizes ki zaroorat nahi
   const isAccessories = form.category === 'accessories'
-
-  // ---------- LOAD PRODUCTS ----------
   async function loadProducts(accessToken: string) {
     try {
       const response = await fetch(
@@ -187,7 +167,6 @@ export default function AdminPanel({
     }
   }
 
-  // ---------- CHECK SAVED LOGIN ----------
   useEffect(() => {
     const savedToken =
       localStorage.getItem('admin_token')
@@ -200,7 +179,6 @@ export default function AdminPanel({
     }
   }, [])
 
-  // ---------- OPEN INITIAL EDIT ----------
   useEffect(() => {
     if (
       token &&
@@ -265,7 +243,6 @@ export default function AdminPanel({
     products,
   ])
 
-  // ---------- IMAGE UPLOAD ----------
   async function uploadImage(
     e: React.ChangeEvent<HTMLInputElement>
   ) {
@@ -312,10 +289,10 @@ export default function AdminPanel({
       } else {
         toast.error(
           'Cloudinary error: ' +
-            (
-              result.error?.message ||
-              'Unknown error'
-            )
+          (
+            result.error?.message ||
+            'Unknown error'
+          )
         )
       }
     } catch (error) {
@@ -332,7 +309,6 @@ export default function AdminPanel({
     }
   }
 
-  // ---------- LOGIN ----------
   async function login(
     event: FormEvent
   ) {
@@ -400,7 +376,6 @@ export default function AdminPanel({
     }
   }
 
-  // ---------- SIGN OUT ----------
   const handleSignOut =
     useCallback(() => {
       localStorage.removeItem(
@@ -419,7 +394,6 @@ export default function AdminPanel({
       router.push('/admin')
     }, [router])
 
-  // ---------- AUTO SIGN OUT ----------
   useEffect(() => {
     if (!token) return
 
@@ -477,7 +451,6 @@ export default function AdminPanel({
     token,
   ])
 
-  // ---------- SAVE / UPDATE ----------
   async function saveProduct(
     event: FormEvent
   ) {
@@ -490,8 +463,6 @@ export default function AdminPanel({
 
       return
     }
-
-    // Sizes sirf jackets/coats ke liye zaroori hain
     if (!isAccessories && form.sizes.length === 0) {
       toast.error('Please select at least one size.')
       return
@@ -507,8 +478,6 @@ export default function AdminPanel({
     try {
       const productToSave = {
         ...form,
-
-        // Accessories ke liye audience/sizes fixed
         audience: isAccessories
           ? 'unisex'
           : form.audience,
@@ -516,8 +485,8 @@ export default function AdminPanel({
         sizes: isAccessories
           ? []
           : normalizeOptions(
-              form.sizes
-            ),
+            form.sizes
+          ),
 
         colors:
           normalizeOptions(
@@ -567,13 +536,13 @@ export default function AdminPanel({
             errorBody?.message
           )
             ? errorBody.message.join(
-                ', '
-              )
+              ', '
+            )
             : errorBody?.message
 
         toast.error(
           validationMessage ||
-            'Article could not be saved.'
+          'Article could not be saved.'
         )
 
         return
@@ -606,8 +575,6 @@ export default function AdminPanel({
       setSaving(false)
     }
   }
-
-  // ---------- DELETE ----------
   async function removeProduct(
     id: number
   ) {
@@ -662,7 +629,6 @@ export default function AdminPanel({
     }
   }
 
-  // ---------- LOGIN SCREEN ----------
   if (!token) {
     return (
       <main className="admin-shell">
@@ -729,11 +695,8 @@ export default function AdminPanel({
     )
   }
 
-  // ---------- ADMIN PANEL ----------
   return (
     <main className="admin-shell">
-
-      {/* HEADER */}
       <div className="admin-header">
         <div>
           <span className="eyebrow">
@@ -766,8 +729,6 @@ export default function AdminPanel({
       </div>
 
       <div className="admin-grid">
-
-        {/* PRODUCT FORM */}
         <form
           className="admin-form"
           onSubmit={
@@ -779,8 +740,6 @@ export default function AdminPanel({
               ? 'Edit article'
               : 'New article'}
           </h2>
-
-          {/* ARTICLE NUMBER */}
           <label>
             Article Number
 
@@ -799,8 +758,6 @@ export default function AdminPanel({
               required
             />
           </label>
-
-          {/* PRODUCT NAME */}
           <label>
             Product Name
 
@@ -817,8 +774,6 @@ export default function AdminPanel({
               required
             />
           </label>
-
-          {/* PRICE */}
           <label>
             Price (e.g., 250)
 
@@ -833,15 +788,13 @@ export default function AdminPanel({
                   price:
                     e.target.value
                       ? Number(
-                          e.target.value
-                        )
+                        e.target.value
+                      )
                       : null,
                 })
               }
             />
           </label>
-
-          {/* CATEGORY */}
           <label>
             Category
 
@@ -856,22 +809,19 @@ export default function AdminPanel({
                 setForm({
                   ...form,
                   category,
-
-                  // Accessories: audience "unisex", sizes khali
-                  // Wapas jackets/coats: audience default "men"
                   ...(category ===
-                  'accessories'
+                    'accessories'
                     ? {
-                        audience:
-                          'unisex',
-                        sizes: [],
-                      }
+                      audience:
+                        'unisex',
+                      sizes: [],
+                    }
                     : form.audience ===
-                        'unisex'
+                      'unisex'
                       ? {
-                          audience:
-                            'men',
-                        }
+                        audience:
+                          'men',
+                      }
                       : {}),
                 })
               }}
@@ -889,18 +839,11 @@ export default function AdminPanel({
               </option>
             </select>
           </label>
-
-          {/* AUDIENCE */}
           <label>
             Audience
-
             <select
-              value={
-                form.audience
-              }
-              disabled={
-                isAccessories
-              }
+              value={form.audience}
+              disabled={isAccessories}
               onChange={(e) =>
                 setForm({
                   ...form,
@@ -909,24 +852,11 @@ export default function AdminPanel({
                 })
               }
             >
-              <option value="men">
-                Men
-              </option>
-
-              <option value="women">
-                Women
-              </option>
-
-              <option
-                value="unisex"
-                disabled
-              >
-                Not applicable
-              </option>
+              <option value="men">Men</option>
+              <option value="women">Women</option>
+              <option value="unisex" disabled>Not applicable</option>
             </select>
           </label>
-
-          {/* SIZES */}
           <label>
             Sizes
 
@@ -955,8 +885,6 @@ export default function AdminPanel({
                 : 'Select all sizes available for this article.'}
             </small>
           </label>
-
-          {/* COLORS */}
           <label>
             Colors
 
@@ -980,8 +908,6 @@ export default function AdminPanel({
 
             <small>Select all colors available for this article.</small>
           </label>
-
-          {/* MATERIAL */}
           <label>
             Material
 
@@ -1000,8 +926,6 @@ export default function AdminPanel({
               required
             />
           </label>
-
-          {/* DESCRIPTION */}
           <label>
             Description
 
@@ -1019,8 +943,6 @@ export default function AdminPanel({
               required
             />
           </label>
-
-          {/* IMAGE UPLOAD */}
           <label>
             Upload Image
 
@@ -1054,8 +976,6 @@ export default function AdminPanel({
               />
             )}
           </label>
-
-          {/* PUBLISHED */}
           <label className="admin-check">
             <input
               type="checkbox"
@@ -1073,8 +993,6 @@ export default function AdminPanel({
 
             Published
           </label>
-
-          {/* SAVE */}
           <button
             className="btn btn-gold"
             type="submit"
@@ -1098,7 +1016,6 @@ export default function AdminPanel({
             )}
           </button>
 
-          {/* CANCEL */}
           {editingId && (
             <button
               type="button"
@@ -1108,11 +1025,9 @@ export default function AdminPanel({
                 setEditingId(
                   null
                 )
-
                 setForm(
                   emptyProduct
                 )
-
                 toast.info(
                   'Editing cancelled.'
                 )
@@ -1122,10 +1037,7 @@ export default function AdminPanel({
             </button>
           )}
         </form>
-
-        {/* PRODUCT LIST */}
         <section className="admin-list">
-
           <div className="admin-list-header">
             <h2>
               Published and draft
@@ -1134,19 +1046,19 @@ export default function AdminPanel({
 
             {products.length >
               5 && (
-              <button
-                className="admin-gold-btn"
-                onClick={() =>
-                  router.push(
-                    '/admin/all-products'
+                <button
+                  className="admin-gold-btn"
+                  onClick={() =>
+                    router.push(
+                      '/admin/all-products'
+                    )
+                  }
+                >
+                  Show More (
+                  {products.length}
                   )
-                }
-              >
-                Show More (
-                {products.length}
-                )
-              </button>
-            )}
+                </button>
+              )}
           </div>
 
           {isLoading ? (
@@ -1192,7 +1104,7 @@ export default function AdminPanel({
 
                       <small className="admin-row-audience">
                         {product.category ===
-                        'accessories'
+                          'accessories'
                           ? 'accessories'
                           : product.audience}{' '}
                         ·{' '}
@@ -1205,8 +1117,6 @@ export default function AdminPanel({
                   </div>
 
                   <div className="admin-row-actions">
-
-                    {/* VIEW */}
                     <Link
                       href={`/admin/${product.id}`}
                       className="btn-quote"
@@ -1214,14 +1124,12 @@ export default function AdminPanel({
                     >
                       View
                     </Link>
-
-                    {/* EDIT */}
                     <button
                       className="btn btn-gold"
                       disabled={
                         saving ||
                         deletingId !==
-                          null
+                        null
                       }
                       onClick={() => {
                         setEditingId(
@@ -1229,47 +1137,19 @@ export default function AdminPanel({
                         )
 
                         setForm({
-                          articleNumber:
-                            product.articleNumber,
-
-                          name:
-                            product.name,
-
-                          category:
-                            product.category,
-
-                          audience:
-                            product.audience,
-
-                          sizes:
-                            normalizeOptions(
-                              product.sizes
-                            ),
-
-                          colors:
-                            normalizeOptions(
-                              product.colors
-                            ),
-
-                          material:
-                            product.material,
-
-                          description:
-                            product.description,
-
-                          price:
-                            product.price,
-
-                          currency:
-                            product.currency,
-
-                          imageUrl:
-                            product.imageUrl,
-
-                          published:
-                            product.published,
+                          articleNumber: product.articleNumber,
+                          name: product.name,
+                          category: product.category,
+                          audience: product.audience,
+                          sizes: normalizeOptions(product.sizes),
+                          colors: normalizeOptions(product.colors),
+                          material: product.material,
+                          description: product.description,
+                          price: product.price,
+                          currency: product.currency,
+                          imageUrl: product.imageUrl,
+                          published: product.published,
                         })
-
                         toast.info(
                           `Editing ${product.name}`
                         )
@@ -1277,15 +1157,13 @@ export default function AdminPanel({
                     >
                       Edit
                     </button>
-
-                    {/* DELETE */}
                     <button
                       className="admin-delete"
                       disabled={
                         deletingId ===
-                          product.id ||
+                        product.id ||
                         deletingId !==
-                          null
+                        null
                       }
                       onClick={() =>
                         removeProduct(
@@ -1294,7 +1172,7 @@ export default function AdminPanel({
                       }
                     >
                       {deletingId ===
-                      product.id ? (
+                        product.id ? (
                         <>
                           <span className="admin-spinner"></span>
                           Deleting...
@@ -1303,7 +1181,6 @@ export default function AdminPanel({
                         'Delete'
                       )}
                     </button>
-
                   </div>
                 </article>
               ))

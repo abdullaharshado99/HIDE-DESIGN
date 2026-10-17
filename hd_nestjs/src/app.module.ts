@@ -13,9 +13,10 @@ import { Product } from './entities/product.entity';
 import { Quote } from './entities/quote.entity';
 import { Invoice } from './entities/invoice.entity';
 import { Inquiry } from './entities/inquiry.entity';
-// import { Customer } from './entities/customer.entity';
 import { CustomerModule } from './customers/customer.module';
 import { InquiryModule } from './inquiries/inquiry.module';
+import { WardrobeItem } from './entities/wardrobe-item.entity';
+import { WardrobeModule } from './wardrobe/wardrobe.module';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { InquiryModule } from './inquiries/inquiry.module';
           Quote,
           Invoice,
           Inquiry,
-          // Customer,
+          WardrobeItem
         ],
         synchronize:
           config.get('DB_SYNCHRONIZE', 'false') === 'true',
@@ -54,6 +55,7 @@ import { InquiryModule } from './inquiries/inquiry.module';
     InvoicesModule,
     InquiryModule,
     CustomerModule,
+    WardrobeModule
   ],
 
   controllers: [

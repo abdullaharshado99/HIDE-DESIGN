@@ -1,10 +1,4 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('products')
 export class Product {
@@ -23,11 +17,9 @@ export class Product {
   @Column({ length: 30 })
   audience?: string;
 
-  // Multiple sizes per product
   @Column('simple-array', { nullable: true })
   sizes?: string[];
 
-  // Multiple colors per product
   @Column('simple-array', { nullable: true })
   colors?: string[];
 

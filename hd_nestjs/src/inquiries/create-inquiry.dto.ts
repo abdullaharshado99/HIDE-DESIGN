@@ -1,12 +1,6 @@
-import {
-  IsArray,
-  IsEmail,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsArray, IsEmail, IsOptional, IsString } from 'class-validator';
 
 export class CreateInquiryDto {
-  // CUSTOMER INFORMATION
   @IsOptional()
   @IsString()
   name?: string;
@@ -19,7 +13,6 @@ export class CreateInquiryDto {
   @IsEmail()
   email?: string;
 
-  // PRODUCT INFORMATION
   @IsString()
   category!: string;
 
@@ -30,7 +23,6 @@ export class CreateInquiryDto {
   @IsString()
   productDetail?: string;
 
-  // FABRIC & STYLE
   @IsOptional()
   @IsString()
   color?: string;
@@ -47,7 +39,6 @@ export class CreateInquiryDto {
   @IsString()
   fitStyle?: string;
 
-  // CUSTOMIZATION
   @IsOptional()
   @IsString()
   label?: string;
@@ -56,7 +47,6 @@ export class CreateInquiryDto {
   @IsArray()
   sizes?: string[];
 
-  // OTHER
   @IsOptional()
   @IsString()
   quantity?: string;
