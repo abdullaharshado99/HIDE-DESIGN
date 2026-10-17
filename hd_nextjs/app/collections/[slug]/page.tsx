@@ -47,9 +47,7 @@ type PageProps = {
   params: Promise<{ slug: string }>
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const collection = COLLECTIONS[slug]
 
@@ -74,7 +72,6 @@ export default async function CollectionPage({ params }: PageProps) {
   return (
     <>
       <Navbar />
-
       <main>
         <CategoryProducts
           gender={collection.gender}
@@ -83,7 +80,6 @@ export default async function CollectionPage({ params }: PageProps) {
           eyebrow={collection.eyebrow}
         />
       </main>
-
       <Footer />
     </>
   )

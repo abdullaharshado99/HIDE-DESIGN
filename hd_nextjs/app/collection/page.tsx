@@ -131,9 +131,6 @@ export default function CollectionPage() {
 
   const [selectedProduct, setSelectedProduct] = useState("");
   const [selectedArticle, setSelectedArticle] = useState("");
-
-  /* FORM STATES */
-
   const [selectedColor, setSelectedColor] = useState("");
   const [fabricType, setFabricType] = useState("");
   const [gsm, setGsm] = useState("");
@@ -146,23 +143,25 @@ export default function CollectionPage() {
   const [quantity, setQuantity] = useState("");
   const [customQuantity, setCustomQuantity] = useState("");
   const [file, setFile] = useState<File | null>(null);
-
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-
   const [notes, setNotes] = useState("");
-
-  /* SUBMISSION */
-
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
-
-  /* CART */
-
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  /* LOAD ARTICLES FROM DATABASE */
+  useEffect(() => {
+    try {
+      const savedUser = localStorage.getItem('customer_user')
+      if (savedUser) {
+        const user = JSON.parse(savedUser)
+        if (user.name) setName(user.name)
+        if (user.phone) setPhone(user.phone)
+        if (user.email) setEmail(user.email)
+      }
+    } catch { }
+  }, [])
 
   useEffect(() => {
     const loadArticles = async () => {
@@ -549,9 +548,8 @@ export default function CollectionPage() {
                   <button
                     type="button"
                     key={item}
-                    className={`inquiry-product-category ${
-                      selectedProduct === item ? "active" : ""
-                    }`}
+                    className={`inquiry-product-category ${selectedProduct === item ? "active" : ""
+                      }`}
                     onClick={() => handleProductCategory(item)}
                   >
                     {selectedProduct === item && <Check size={13} />}
@@ -583,11 +581,10 @@ export default function CollectionPage() {
                         <button
                           type="button"
                           key={article.articleNumber}
-                          className={`inquiry-article-card ${
-                            selectedArticle === article.articleNumber
+                          className={`inquiry-article-card ${selectedArticle === article.articleNumber
                               ? "active"
                               : ""
-                          }`}
+                            }`}
                           onClick={() =>
                             setSelectedArticle(article.articleNumber)
                           }
@@ -659,9 +656,8 @@ export default function CollectionPage() {
                   <button
                     type="button"
                     key={color}
-                    className={`inquiry-color ${
-                      selectedColor === color ? "active" : ""
-                    }`}
+                    className={`inquiry-color ${selectedColor === color ? "active" : ""
+                      }`}
                     onClick={() => setSelectedColor(color)}
                   >
                     {selectedColor === color && <Check size={13} />}
@@ -799,9 +795,8 @@ export default function CollectionPage() {
                   <button
                     type="button"
                     key={size}
-                    className={`inquiry-size ${
-                      selectedSizes.includes(size) ? "active" : ""
-                    }`}
+                    className={`inquiry-size ${selectedSizes.includes(size) ? "active" : ""
+                      }`}
                     onClick={() => toggleSize(size)}
                   >
                     {selectedSizes.includes(size) && <Check size={12} />}
@@ -836,9 +831,8 @@ export default function CollectionPage() {
                   <button
                     type="button"
                     key={item}
-                    className={`inquiry-quantity ${
-                      quantity === item && !customQuantity ? "active" : ""
-                    }`}
+                    className={`inquiry-quantity ${quantity === item && !customQuantity ? "active" : ""
+                      }`}
                     onClick={() => handlePresetQuantity(item)}
                   >
                     {quantity === item && !customQuantity && (

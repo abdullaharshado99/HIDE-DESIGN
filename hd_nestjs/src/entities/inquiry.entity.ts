@@ -10,7 +10,6 @@ export class Inquiry {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  // CUSTOMER INFORMATION
   @Column({ nullable: true })
   name?: string;
 
@@ -20,7 +19,6 @@ export class Inquiry {
   @Column({ nullable: true })
   email?: string;
 
-  // PRODUCT INFORMATION
   @Column()
   category!: string;
 
@@ -30,7 +28,6 @@ export class Inquiry {
   @Column({ nullable: true })
   productDetail?: string;
 
-  // FABRIC & STYLE
   @Column({ nullable: true })
   color?: string;
 
@@ -43,14 +40,12 @@ export class Inquiry {
   @Column({ nullable: true })
   fitStyle?: string;
 
-  // CUSTOMIZATION
   @Column({ nullable: true })
   label?: string;
 
   @Column({ type: 'text', nullable: true })
   sizes?: string;
 
-  // OTHER
   @Column({ nullable: true })
   quantity?: string;
 

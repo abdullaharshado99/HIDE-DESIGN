@@ -28,16 +28,10 @@ interface CategoryProductsProps {
   eyebrow: string
 }
 
-export default function CategoryProducts({
-  gender,
-  category,
-  title,
-  eyebrow,
-}: CategoryProductsProps) {
+export default function CategoryProducts({ gender, category, title, eyebrow }: CategoryProductsProps) {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
 
-  // Home page par jis section se aaye the, wapas usi section par jao
   const homeSectionId =
     category === 'accessories'
       ? 'Accessories'
