@@ -16,7 +16,6 @@ interface Product {
 }
 
 interface ProductCarouselProps {
-  // accessories ke liye gender zaroori nahi
   gender?: 'men' | 'women'
   category: 'jackets' | 'coats' | 'accessories'
 }
@@ -33,21 +32,12 @@ interface ApiProduct {
   category?: string
 }
 
-export default function ProductCarousel({
-  gender,
-  category,
-}: ProductCarouselProps) {
+export default function ProductCarousel({ gender, category }: ProductCarouselProps) {
   const carouselRef = useRef<HTMLDivElement>(null)
-
   const [products, setProducts] = useState<Product[]>([])
-  const [selectedProduct, setSelectedProduct] =
-    useState<Product | null>(null)
-
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
-
   const isAccessories = category === 'accessories'
-
-  // /collections/men-jackets, /collections/accessories, etc.
   const collectionSlug = isAccessories
     ? 'accessories'
     : `${gender}-${category}`
@@ -78,10 +68,7 @@ export default function ProductCarousel({
       .then((remoteProducts: ApiProduct[]) => {
         const matchingProducts = remoteProducts
           .filter((product) => {
-            const productCategory =
-              product.category?.toLowerCase() || 'coats'
-
-            // Accessories: audience check nahi hota
+            const productCategory = product.category?.toLowerCase() || 'coats'
             if (category === 'accessories') {
               return productCategory === 'accessories'
             }
@@ -211,11 +198,10 @@ export default function ProductCarousel({
   return (
     <>
       <section
-        className={`collection-section ${
-          gender === 'men'
-            ? 'section-dark'
-            : ''
-        }`}
+        className={`collection-section ${gender === 'men'
+          ? 'section-dark'
+          : ''
+          }`}
         id={
           isAccessories
             ? 'Accessories'
@@ -246,76 +232,76 @@ export default function ProductCarousel({
           {!loading &&
             products.length > 0 && (
               <div className="carousel-wrap">
-              <div
-                className="carousel"
-                ref={carouselRef}
-              >
-                {products.map((product) => (
-                  <article
-                    className="product-card"
-                    key={product.id}
-                    onClick={() =>
-                      openProductModule(
-                        product
-                      )
-                    }
-                  >
-                    <div className="product-image">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        width={280}
-                        height={340}
-                        style={{ objectFit: 'contain' }}
-                        onError={(event) => {
-                          const target =
-                            event.target as HTMLImageElement
-
-                          target.src =
-                            '/images/placeholder.svg'
-                        }}
-                      />
-                    </div>
-                    <div className="product-info">
-                      <span className="product-id">
-                        {product.id}
-                      </span>
-
-                      <h3>
-                        {product.name}
-                      </h3>
-
-                      <p>
-                        {product.material}
-                      </p>
-                    </div>
-                  </article>
-                ))}
-              </div>
-              <Link
-                href={`/collections/${collectionSlug}`}
-                className="explore-circle"
-                aria-label={`Explore more ${title}`}
-                title="Explore More"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                  className="explore-circle-icon"
+                <div
+                  className="carousel"
+                  ref={carouselRef}
                 >
-                  <path
-                    d="M9.5 6.5 15 12l-5.5 5.5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <span className="explore-circle-label">
-                  Explore More
-                </span>
-              </Link>
+                  {products.map((product) => (
+                    <article
+                      className="product-card"
+                      key={product.id}
+                      onClick={() =>
+                        openProductModule(
+                          product
+                        )
+                      }
+                    >
+                      <div className="product-image">
+                        <Image
+                          src={product.image}
+                          alt={product.name}
+                          width={280}
+                          height={340}
+                          style={{ objectFit: 'contain' }}
+                          onError={(event) => {
+                            const target =
+                              event.target as HTMLImageElement
+
+                            target.src =
+                              '/images/placeholder.svg'
+                          }}
+                        />
+                      </div>
+                      <div className="product-info">
+                        <span className="product-id">
+                          {product.id}
+                        </span>
+
+                        <h3>
+                          {product.name}
+                        </h3>
+
+                        <p>
+                          {product.material}
+                        </p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+                <Link
+                  href={`/collections/${collectionSlug}`}
+                  className="explore-circle"
+                  aria-label={`Explore more ${title}`}
+                  title="Explore More"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    className="explore-circle-icon"
+                  >
+                    <path
+                      d="M9.5 6.5 15 12l-5.5 5.5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <span className="explore-circle-label">
+                    Explore More
+                  </span>
+                </Link>
               </div>
             )}
         </div>

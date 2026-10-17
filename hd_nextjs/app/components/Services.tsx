@@ -9,32 +9,19 @@ export default function Services() {
     <section className="services-section" id="services">
       <div
         ref={ref}
-        className={`services-container reveal-stagger ${
-          isVisible ? 'visible' : ''
-        }`}
+        className={`services-container reveal-stagger ${isVisible ? 'visible' : ''}`}
       >
-
-        {/* LEFT — SERVICES CONTENT */}
         <div className="services-content">
-
           <div className="services-copy">
-            <span className="services-eyebrow">
-              OUR SERVICES
-            </span>
-
-            <h2>
-              Built for <em>business.</em>
-            </h2>
-
+            <span className="services-eyebrow">OUR SERVICES</span>
+            <h2>Built for <em>business.</em></h2>
             <p>
               From retail and wholesale to international exporting and
               manufacturing partnerships, we provide reliable outerwear
               solutions tailored to every business requirement.
             </p>
           </div>
-
           <div className="services-list">
-
             <div className="service-item">
               <span>01</span>
               <div>
@@ -45,7 +32,6 @@ export default function Services() {
                 </small>
               </div>
             </div>
-
             <div className="service-item">
               <span>02</span>
               <div>
@@ -55,7 +41,6 @@ export default function Services() {
                 </small>
               </div>
             </div>
-
             <div className="service-item">
               <span>03</span>
               <div>
@@ -66,7 +51,6 @@ export default function Services() {
                 </small>
               </div>
             </div>
-
             <div className="service-item">
               <span>04</span>
               <div>
@@ -77,19 +61,14 @@ export default function Services() {
                 </small>
               </div>
             </div>
-
           </div>
-
         </div>
-
-        {/* RIGHT — SERVICES IMAGE */}
         <div className="services-image">
           <img
             src="/images/services.jpg"
             alt="HIDE DESIGN services"
           />
         </div>
-
       </div>
     </section>
   )

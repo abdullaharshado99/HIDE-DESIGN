@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { ShoppingBag } from 'lucide-react'
+import { getApiUrl } from '../api-config'
 
 export default function Navbar() {
   const router = useRouter()
@@ -11,6 +13,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState<boolean>(false)
   const [accountOpen, setAccountOpen] = useState<boolean>(false)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
+  const [wardrobeCount, setWardrobeCount] = useState<number>(0)
   const accountRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -24,11 +27,42 @@ export default function Navbar() {
   useEffect(() => {
     const token = localStorage.getItem('customer_token')
     setIsLoggedIn(!!token)
+
+    if (token) {
+      fetch(`${getApiUrl()}/wardrobe`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => (res.ok ? res.json() : []))
+        .then((data) => {
+          if (Array.isArray(data)) setWardrobeCount(data.length)
+        })
+        .catch(() => { })
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleWardrobeUpdate = () => {
+      const token = localStorage.getItem('customer_token')
+      if (token) {
+        fetch(`${getApiUrl()}/wardrobe`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+          .then((res) => (res.ok ? res.json() : []))
+          .then((data) => {
+            if (Array.isArray(data)) setWardrobeCount(data.length)
+          })
+          .catch(() => { })
+      } else {
+        setWardrobeCount(0)
+      }
+    }
+
+    window.addEventListener('wardrobe-updated', handleWardrobeUpdate)
+    return () => window.removeEventListener('wardrobe-updated', handleWardrobeUpdate)
   }, [])
 
   useEffect(() => {
     if (!accountOpen) return
-
     const handleClick = (event: MouseEvent) => {
       if (
         accountRef.current &&
@@ -96,11 +130,7 @@ export default function Navbar() {
               className="nav-account-btn"
               onClick={(event) => {
                 event.preventDefault()
-                // if (isLoggedIn) {
                 setAccountOpen((open) => !open)
-                // } else {
-                //   router.push('/login')
-                // }
               }}
               aria-expanded={accountOpen}
               aria-haspopup="true"
@@ -136,11 +166,16 @@ export default function Navbar() {
               </div>
             )}
           </div>
-
           <a href="/#contact" onClick={closeAll}>Contact Us</a>
         </nav>
 
         <div className="nav-right">
+          <Link href="/wardrobe" className="nav-wardrobe-icon" aria-label="My Wardrobe">
+            <ShoppingBag size={20} />
+            {wardrobeCount > 0 && (
+              <span className="nav-wardrobe-badge">{wardrobeCount}</span>
+            )}
+          </Link>
           <a className="btn-quote" href="/#contact">
             <span className="txt">Request a Quote</span> ↗
           </a>
