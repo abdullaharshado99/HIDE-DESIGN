@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff } from 'lucide-react'
 import { getApiUrl } from '../api-config'
+import { toast } from 'sonner'
 
 interface AuthFormProps {
   mode: 'login' | 'signup'
@@ -58,15 +59,15 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
       const body = isSignup
         ? {
-            name: form.name.trim(),
-            email: form.email.trim(),
-            phone: form.phone.trim(),
-            password: form.password,
-          }
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          password: form.password,
+        }
         : {
-            email: form.email.trim(),
-            password: form.password,
-          }
+          email: form.email.trim(),
+          password: form.password,
+        }
 
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -83,22 +84,31 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
         setError(
           message ||
-            (isSignup
-              ? 'Could not create your account. Please try again.'
-              : 'Invalid email or password.')
+          (isSignup
+            ? 'Could not create your account. Please try again.'
+            : 'Invalid email or password.')
         )
-
         return
       }
 
       const result = await response.json()
 
-      // Keep the customer token separate from the admin token.
       try {
         localStorage.setItem('customer_token', result.accessToken)
-      } catch {
-        // Login can still continue if browser storage is unavailable.
-      }
+        if (result.user) {
+          localStorage.setItem('customer_user', JSON.stringify({
+            name: result.user.name || '',
+            email: result.user.email || '',
+            phone: result.user.phone || '',
+          }))
+        }
+      } catch { }
+
+      toast.success(
+        isSignup
+          ? 'Account created successfully!'
+          : 'Signed in successfully!'
+      )
 
       router.push('/')
       router.refresh()

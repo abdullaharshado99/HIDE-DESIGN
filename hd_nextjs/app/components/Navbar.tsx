@@ -3,11 +3,14 @@
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function Navbar() {
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [scrolled, setScrolled] = useState<boolean>(false)
   const [accountOpen, setAccountOpen] = useState<boolean>(false)
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
   const accountRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -18,7 +21,11 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // My account menu: bahar click ya Escape par band ho jaye
+  useEffect(() => {
+    const token = localStorage.getItem('customer_token')
+    setIsLoggedIn(!!token)
+  }, [])
+
   useEffect(() => {
     if (!accountOpen) return
 
@@ -49,8 +56,15 @@ export default function Navbar() {
     setAccountOpen(false)
   }
 
-  // Links "/#..." hain taake login/signup/collections jaise dusre pages se
-  // bhi click karne par home page ke sahi section par jayein.
+  const handleLogout = () => {
+    localStorage.removeItem('customer_token')
+    localStorage.removeItem('customer_user')
+    setIsLoggedIn(false)
+    setAccountOpen(false)
+    router.push('/')
+    router.refresh()
+  }
+
   return (
     <header className={`nav ${scrolled ? 'scrolled' : ''}`}>
       <div className="wrap">
@@ -76,31 +90,49 @@ export default function Navbar() {
           <a href="/#women-coats" onClick={closeAll}>Women&apos;s Coats</a>
           <a href="/#Accessories" onClick={closeAll}>Accessories</a>
 
-          {/* MY ACCOUNT: click par Sign in / Create account */}
           <div className="nav-account" ref={accountRef}>
-            {/* <a> rakha hai taake baqi nav links wali styling (size, uppercase,
-                letter-spacing) khud-ba-khud lage. JS na chale to seedha /login khulta hai. */}
             <a
-              href="/login"
+              href={isLoggedIn ? '#' : '/login'}
               className="nav-account-btn"
               onClick={(event) => {
                 event.preventDefault()
+                // if (isLoggedIn) {
                 setAccountOpen((open) => !open)
+                // } else {
+                //   router.push('/login')
+                // }
               }}
               aria-expanded={accountOpen}
               aria-haspopup="true"
             >
-              My account
+              {isLoggedIn ? 'PROFILE' : 'MY ACCOUNT'}
             </a>
 
             {accountOpen && (
               <div className="nav-account-menu" role="menu">
-                <Link href="/login" role="menuitem" onClick={closeAll}>
-                  Sign in
-                </Link>
-                <Link href="/signup" role="menuitem" onClick={closeAll}>
-                  Create account
-                </Link>
+                {isLoggedIn ? (
+                  <>
+                    <Link href="/profile" role="menuitem" onClick={closeAll}>
+                      My Profile
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="nav-logout-btn"
+                    >
+                      Sign out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/login" role="menuitem" onClick={closeAll}>
+                      Sign in
+                    </Link>
+                    <Link href="/signup" role="menuitem" onClick={closeAll}>
+                      Create account
+                    </Link>
+                  </>
+                )}
               </div>
             )}
           </div>
