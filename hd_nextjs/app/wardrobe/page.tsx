@@ -127,6 +127,9 @@ export default function WardrobePage() {
                             ))}
                         </div>
                     )}
+                    <Link href="/checkout" className="btn btn-gold" style={{ marginTop: '30px' }}>
+                        Proceed to Checkout
+                    </Link>
                 </div>
             </main>
             <Footer />

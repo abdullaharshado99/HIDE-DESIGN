@@ -17,6 +17,8 @@ import { CustomerModule } from './customers/customer.module';
 import { InquiryModule } from './inquiries/inquiry.module';
 import { WardrobeItem } from './entities/wardrobe-item.entity';
 import { WardrobeModule } from './wardrobe/wardrobe.module';
+import { Order } from './entities/order.entity';
+import { OrderModule } from './orders/order.module';
 
 @Module({
   imports: [
@@ -36,7 +38,8 @@ import { WardrobeModule } from './wardrobe/wardrobe.module';
           Quote,
           Invoice,
           Inquiry,
-          WardrobeItem
+          WardrobeItem,
+          Order
         ],
         synchronize:
           config.get('DB_SYNCHRONIZE', 'false') === 'true',
@@ -55,7 +58,8 @@ import { WardrobeModule } from './wardrobe/wardrobe.module';
     InvoicesModule,
     InquiryModule,
     CustomerModule,
-    WardrobeModule
+    WardrobeModule,
+    OrderModule
   ],
 
   controllers: [
