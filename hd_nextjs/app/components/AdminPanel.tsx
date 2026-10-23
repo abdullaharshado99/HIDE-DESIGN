@@ -309,11 +309,8 @@ export default function AdminPanel({
     }
   }
 
-  async function login(
-    event: FormEvent
-  ) {
+  async function login(event: FormEvent) {
     event.preventDefault()
-
     setLoginLoading(true)
 
     try {
@@ -334,15 +331,14 @@ export default function AdminPanel({
       )
 
       if (!response.ok) {
-        toast.error(
-          'Invalid admin credentials.'
-        )
+        const errorData = await response.json().catch(() => null)
+        const errorMessage = errorData?.message || 'Invalid admin credentials.'
 
+        toast.error(errorMessage)
         return
       }
 
-      const result =
-        await response.json()
+      const result = await response.json()
 
       localStorage.setItem(
         'admin_token',

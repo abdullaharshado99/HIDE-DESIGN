@@ -5,18 +5,22 @@ import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { LoginDto } from './dto/login.dto';
+import { ForbiddenException } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
     private readonly jwt: JwtService,
-  ) {}
+  ) { }
 
   async login(dto: LoginDto) {
     const user = await this.users.findOne({ where: { email: dto.email.toLowerCase() } });
     if (!user || !(await bcrypt.compare(dto.password, user.passwordHash))) {
       throw new UnauthorizedException('Invalid email or password');
+    }
+    if (user.role !== 'admin') {
+      throw new ForbiddenException('Access denied. This login is for administrators only.');
     }
     return { accessToken: await this.jwt.signAsync({ sub: user.id, email: user.email, role: user.role }) };
   }
