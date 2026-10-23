@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CustomerLoginDto } from './dto/customer-login.dto';
+import { ForbiddenException } from '@nestjs/common';
 
 @Injectable()
 export class CustomerService {
@@ -60,6 +61,10 @@ export class CustomerService {
             throw new UnauthorizedException('Invalid email or password');
         }
 
+        if (user.role !== 'customer') {
+            throw new ForbiddenException('Access denied. This login is for customers only.');
+        }
+        
         return {
             accessToken: await this.jwt.signAsync({
                 sub: user.id,
