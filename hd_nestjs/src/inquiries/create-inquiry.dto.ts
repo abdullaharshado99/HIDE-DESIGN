@@ -1,6 +1,10 @@
-import { IsArray, IsEmail, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsEmail, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateInquiryDto {
+  @IsOptional()
+  @IsNumber()
+  userId?: number;
+
   @IsOptional()
   @IsString()
   name?: string;

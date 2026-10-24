@@ -243,67 +243,41 @@ export default function AdminPanel({
     products,
   ])
 
-  async function uploadImage(
-    e: React.ChangeEvent<HTMLInputElement>
-  ) {
+  async function uploadImage(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
-
     if (!file) return
 
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please upload an image file (JPG, PNG).')
+      return
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image size must be less than 5MB.')
+      return
+    }
+
     setUploading(true)
-
     const data = new FormData()
-
     data.append('file', file)
-    data.append(
-      'upload_preset',
-      UPLOAD_PRESET
-    )
-    data.append(
-      'cloud_name',
-      CLOUD_NAME
-    )
+    data.append('upload_preset', UPLOAD_PRESET)
+    data.append('cloud_name', CLOUD_NAME)
 
     try {
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-        {
-          method: 'POST',
-          body: data,
-        }
-      )
-
-      const result =
-        await response.json()
-
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+        method: 'POST',
+        body: data,
+      })
+      const result = await response.json()
       if (result.secure_url) {
-        setForm((previousForm) => ({
-          ...previousForm,
-          imageUrl:
-            result.secure_url,
-        }))
-
-        toast.success(
-          'Image uploaded successfully!'
-        )
+        setForm((prev) => ({ ...prev, imageUrl: result.secure_url }))
+        toast.success('Image uploaded successfully!')
       } else {
-        toast.error(
-          'Cloudinary error: ' +
-          (
-            result.error?.message ||
-            'Unknown error'
-          )
-        )
+        toast.error('Cloudinary error: ' + (result.error?.message || 'Unknown error'))
       }
     } catch (error) {
-      console.error(
-        'Image upload error:',
-        error
-      )
-
-      toast.error(
-        'Image upload failed. Please check your Cloudinary details.'
-      )
+      console.error('Image upload error:', error)
+      toast.error('Image upload failed.')
     } finally {
       setUploading(false)
     }
@@ -392,25 +366,12 @@ export default function AdminPanel({
 
   useEffect(() => {
     if (!token) return
+    let timeoutId = window.setTimeout(handleSignOut, 30 * 60 * 1000)
 
-    let timeoutId =
-      window.setTimeout(
-        handleSignOut,
-        5 * 60 * 1000
-      )
-
-    const resetInactivityTimer =
-      () => {
-        window.clearTimeout(
-          timeoutId
-        )
-
-        timeoutId =
-          window.setTimeout(
-            handleSignOut,
-            5 * 60 * 1000
-          )
-      }
+    const resetInactivityTimer = () => {
+      window.clearTimeout(timeoutId)
+      timeoutId = window.setTimeout(handleSignOut, 30 * 60 * 1000)
+    }
 
     const activityEvents = [
       'mousedown',

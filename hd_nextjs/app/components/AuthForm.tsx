@@ -97,6 +97,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         localStorage.setItem('customer_token', result.accessToken)
         if (result.user) {
           localStorage.setItem('customer_user', JSON.stringify({
+            id: result.user.id,
             name: result.user.name || '',
             email: result.user.email || '',
             phone: result.user.phone || '',

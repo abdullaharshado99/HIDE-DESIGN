@@ -1,11 +1,4 @@
-import {
-    Body,
-    Controller,
-    Get,
-    Post,
-    Request,
-    UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { AdminGuard } from '../auth/admin.guard';
 import { OrderService } from './order.service';
@@ -18,6 +11,12 @@ export class OrderController {
     @UseGuards(JwtAuthGuard)
     create(@Request() req: { user: { sub: number } }, @Body() dto: any) {
         return this.orders.create(req.user.sub, dto);
+    }
+
+    @Post('checkout')
+    @UseGuards(JwtAuthGuard)
+    checkout(@Request() req: { user: { sub: number } }, @Body() dto: any) {
+        return this.orders.checkout(req.user.sub, dto);
     }
 
     @Get()

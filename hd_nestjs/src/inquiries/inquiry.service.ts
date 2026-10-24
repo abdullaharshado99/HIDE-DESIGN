@@ -10,7 +10,7 @@ export class InquiryService {
   constructor(
     @InjectRepository(Inquiry)
     private readonly inquiryRepository: Repository<Inquiry>,
-  ) {}
+  ) { }
 
   async create(createInquiryDto: CreateInquiryDto) {
     const inquiry = this.inquiryRepository.create({
