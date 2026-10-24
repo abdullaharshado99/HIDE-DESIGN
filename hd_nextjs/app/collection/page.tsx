@@ -335,7 +335,16 @@ export default function CollectionPage() {
     setSubmitting(true);
 
     try {
+      let userId: number | undefined = undefined;
+      try {
+        const savedUser = localStorage.getItem('customer_user');
+        if (savedUser) {
+          const user = JSON.parse(savedUser);
+          userId = user?.id;
+        }
+      } catch { }
       const inquiryData = {
+        userId,
         name,
         phone,
         email,
@@ -360,23 +369,16 @@ export default function CollectionPage() {
 
       const response = await fetch(`${API_URL}/inquiries`, {
         method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(inquiryData),
       });
 
       if (!response.ok) {
         const errorText = await response.text();
-
         console.error("Inquiry API error:", errorText);
-
         throw new Error(`Failed to submit inquiry (${response.status})`);
       }
 
-      const savedInquiry = await response.json();
       const cartItem: CartItem = {
         id: `${selectedArticle}-${Date.now()}`,
         name,

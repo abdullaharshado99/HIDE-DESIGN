@@ -42,7 +42,7 @@ export default function CheckoutPage() {
 
         setLoading(true)
         try {
-            const response = await fetch(`${getApiUrl()}/orders`, {
+            const response = await fetch(`${getApiUrl()}/orders/checkout`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,18 +58,8 @@ export default function CheckoutPage() {
             })
 
             if (!response.ok) throw new Error('Order failed')
-
-            // Clear wardrobe
-            await Promise.all(
-                wardrobeItems.map((item) =>
-                    fetch(`${getApiUrl()}/wardrobe/${item.id}`, {
-                        method: 'DELETE',
-                        headers: { Authorization: `Bearer ${token}` },
-                    })
-                )
-            )
-
             toast.success('Order placed successfully!')
+            window.dispatchEvent(new CustomEvent('wardrobe-updated'))
             router.push('/')
         } catch (error) {
             console.error(error)

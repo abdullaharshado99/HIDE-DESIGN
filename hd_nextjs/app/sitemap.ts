@@ -14,10 +14,7 @@ async function getProducts(): Promise<ProductRecord[]> {
       next: { revalidate: 3600 },
     })
 
-    if (!response.ok) {
-      return []
-    }
-
+    if (!response.ok) return []
     const products = (await response.json()) as ProductRecord[]
     return Array.isArray(products) ? products : []
   } catch {
@@ -25,59 +22,20 @@ async function getProducts(): Promise<ProductRecord[]> {
   }
 }
 
-export default async function sitemap({ id }: { id?: number } = {}): Promise<MetadataRoute.Sitemap> {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products = await getProducts()
-  const currentPage = id ?? 0
-  const start = currentPage * PAGE_SIZE
-  const end = start + PAGE_SIZE
-  const currentProducts = products.slice(start, end)
 
   const baseRoutes: MetadataRoute.Sitemap = [
-    {
-      url: `${siteUrl}/`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1,
-    },
-    {
-      url: `${siteUrl}/admin`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
-      url: `${siteUrl}/collections/men-jackets`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${siteUrl}/collections/men-coats`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${siteUrl}/collections/women-jackets`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${siteUrl}/collections/women-coats`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${siteUrl}/collections/accessories`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
+    { url: `${siteUrl}/`, lastModified: new Date(), changeFrequency: 'daily', priority: 1 },
+    { url: `${siteUrl}/admin`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${siteUrl}/collections/men-jackets`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${siteUrl}/collections/men-coats`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${siteUrl}/collections/women-jackets`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${siteUrl}/collections/women-coats`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${siteUrl}/collections/accessories`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
   ]
 
-  const productRoutes: MetadataRoute.Sitemap = currentProducts
+  const productRoutes: MetadataRoute.Sitemap = products
     .filter((product) => Boolean(product.articleNumber))
     .map((product) => ({
       url: `${siteUrl}/products/${encodeURIComponent(product.articleNumber ?? '')}/`,

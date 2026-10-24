@@ -1,14 +1,12 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('inquiries')
 export class Inquiry {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Column({ nullable: true })
+  userId?: number;
 
   @Column({ nullable: true })
   name?: string;

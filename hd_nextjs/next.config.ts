@@ -1,16 +1,18 @@
 import type { NextConfig } from 'next'
 
-const nextConfig: NextConfig = {
-  turbopack: {
-    root: __dirname,
+const nextConfig = {
+  reactStrictMode: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
   },
-
   images: {
-    domains: [],
-    unoptimized: true,
+    remotePatterns: [
+      { protocol: 'https', hostname: 'res.cloudinary.com' },
+      { protocol: 'https', hostname: 'hide-design-q2o9.onrender.com' },
+    ],
   },
-
-  trailingSlash: true,
 }
 
-export default nextConfig
+module.exports = nextConfig
+
+// export default nextConfig
