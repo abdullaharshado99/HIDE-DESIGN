@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { getApiUrl } from '@/app/api-config'
@@ -56,8 +55,7 @@ export default function UserInquiriesDetailPage() {
     const apiUrl = getApiUrl()
     const router = useRouter()
     const params = useParams()
-    const identifier = params.userId as string
-
+    const identifier = decodeURIComponent(params.userId as string)
     const [inquiries, setInquiries] = useState<Inquiry[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
@@ -65,7 +63,8 @@ export default function UserInquiriesDetailPage() {
     const [deletingId, setDeletingId] = useState<number | null>(null)
     const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null)
     const [productData, setProductData] = useState<any[]>([])
-    const [productImages, setProductImages] = useState<Record<string, string>>({})
+    const [locallySeenIds, setLocallySeenIds] = useState<number[]>([])
+    const [openedInquiryIds, setOpenedInquiryIds] = useState<number[]>([])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -87,11 +86,6 @@ export default function UserInquiriesDetailPage() {
                 if (prodRes.ok) {
                     const products = await prodRes.json()
                     setProductData(products)
-                    const imageMap: Record<string, string> = {}
-                    products.forEach((p: any) => {
-                        if (p.articleNumber && p.imageUrl) imageMap[p.articleNumber] = p.imageUrl
-                    })
-                    setProductImages(imageMap)
                 }
             } catch (err) {
                 setError('Unable to load inquiries.')
@@ -115,22 +109,33 @@ export default function UserInquiriesDetailPage() {
         return null;
     }
 
-    const handleViewInquiry = async (inquiry: Inquiry) => {
+    const handleOpenModal = (inquiry: Inquiry) => {
         setSelectedInquiry(inquiry)
-        if (inquiry.isRead) return;
+        if (!openedInquiryIds.includes(inquiry.id)) {
+            setOpenedInquiryIds(prev => [...prev, inquiry.id])
+        }
+    }
+    const handleMarkAsSeen = async () => {
+        if (!selectedInquiry) return
+
+        setLocallySeenIds(prev => [...prev, selectedInquiry.id])
+        setSelectedInquiry({ ...selectedInquiry, isRead: true })
+
+        setInquiries(current =>
+            current.map(inq => inq.id === selectedInquiry.id ? { ...inq, isRead: true } : inq)
+        )
 
         const token = localStorage.getItem('admin_token')
         if (!token) return
 
         try {
-            const res = await fetch(`${apiUrl}/inquiries/${inquiry.id}/read`, {
+            await fetch(`${apiUrl}/inquiries/${selectedInquiry.id}/read`, {
                 method: 'PATCH',
                 headers: { Authorization: `Bearer ${token}` }
             })
-            if (res.ok) {
-                setInquiries(current => current.map(inq => inq.id === inquiry.id ? { ...inq, isRead: true } : inq))
-            }
-        } catch (err) { }
+        } catch (err) {
+            console.error("Failed to update database", err)
+        }
     }
 
     const executeDelete = async () => {
@@ -157,7 +162,6 @@ export default function UserInquiriesDetailPage() {
     }
 
     if (loading) return <div className="state-box"><div className="loader" /><p>Loading...</p></div>
-
     if (inquiries.length === 0 && !error) {
         return (
             <main className="inquiries-page">
@@ -171,14 +175,25 @@ export default function UserInquiriesDetailPage() {
             </main>
         )
     }
-
     const user = inquiries[0]
 
     return (
         <main className="inquiries-page">
             <div className="inquiries-shell">
-                <button onClick={() => router.back()} className="inquiry-back" style={{ marginBottom: '20px' }}>
-                    <ArrowLeft size={16} /> Back to Customers
+                <button
+                    onClick={() => router.back()}
+                    className="btn-quote"
+                    style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        marginBottom: '30px',
+                        background: 'transparent',
+                        padding: '10px 20px',
+                        fontSize: '11px'
+                    }}
+                >
+                    <ArrowLeft size={14} /> BACK TO CUSTOMERS
                 </button>
 
                 <header className="inquiries-header" style={{ borderBottom: '1px solid var(--hair)', paddingBottom: '20px', marginBottom: '30px' }}>
@@ -193,6 +208,9 @@ export default function UserInquiriesDetailPage() {
                 <div className="user-inquiries-list" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     {inquiries.map((inquiry) => {
                         const imgUrl = getProductImage(inquiry)
+                        const isSeen = inquiry.isRead || locallySeenIds.includes(inquiry.id);
+                        const isOpened = openedInquiryIds.includes(inquiry.id);
+
                         return (
                             <article className="inquiry-card" key={inquiry.id}>
                                 <div className="card-top">
@@ -200,12 +218,18 @@ export default function UserInquiriesDetailPage() {
                                         <span className="inquiry-number">
                                             INQUIRY #{inquiry.id}
                                             <span style={{ marginLeft: '10px', display: 'inline-flex', alignItems: 'center' }}>
-                                                {inquiry.isRead ? (
+                                                {isSeen ? (
                                                     <span title="Seen">
                                                         <CheckCheck size={16} color="#4ade80" />
-                                                    </span>) : (
+                                                    </span>
+                                                ) : isOpened ? (
+                                                    <span title="Opened, not marked as seen">
+                                                        <CheckCheck size={16} color="#a9977d" />
+                                                    </span>
+                                                ) : (
                                                     <span style={{ width: '8px', height: '8px', background: 'var(--gold)', borderRadius: '50%' }} title="Unseen"></span>
                                                 )}
+
                                             </span>
                                         </span>
                                         <h2>{inquiry.productCategory}</h2>
@@ -245,7 +269,7 @@ export default function UserInquiriesDetailPage() {
                                     <span className="sizes-value">{formatSizes(inquiry.sizes)}</span>
                                 </div>
 
-                                <button type="button" className="view-btn" onClick={() => handleViewInquiry(inquiry)}>
+                                <button type="button" className="view-btn" onClick={() => handleOpenModal(inquiry)}>
                                     <span>View Full Inquiry</span>
                                     <span>→</span>
                                 </button>
@@ -260,12 +284,54 @@ export default function UserInquiriesDetailPage() {
                     <div className="inquiry-modal" onClick={(event) => event.stopPropagation()}>
                         <div className="modal-header">
                             <div>
-                                <span className="eyebrow"> INQUIRY #{selectedInquiry.id} <span style={{ color: '#4ade80', marginLeft: '8px' }}><CheckCheck size={14} style={{ display: 'inline', verticalAlign: 'middle' }} /> Seen</span></span>
+                                <span className="eyebrow"> INQUIRY #{selectedInquiry.id}
+                                    {(selectedInquiry.isRead || locallySeenIds.includes(selectedInquiry.id)) ? (
+                                        <span style={{ color: '#4ade80', marginLeft: '8px' }}>
+                                            <CheckCheck size={14} style={{ display: 'inline', verticalAlign: 'middle' }} /> Seen
+                                        </span>
+                                    ) : (
+                                        <span style={{ color: 'var(--muted)', marginLeft: '8px' }}>
+                                            Unseen
+                                        </span>
+                                    )}
+                                </span>
                                 <h2>{selectedInquiry.productCategory}</h2>
                             </div>
                             <button type="button" className="close-btn" onClick={() => setSelectedInquiry(null)}>×</button>
                         </div>
+
+                        {!(selectedInquiry.isRead || locallySeenIds.includes(selectedInquiry.id)) && (
+                            <div style={{ padding: '20px 30px 0', borderBottom: '1px solid var(--hair)' }}>
+                                <button
+                                    onClick={handleMarkAsSeen}
+                                    className="btn btn-gold"
+                                    style={{ width: '100%', marginBottom: '20px' }}
+                                >
+                                    ✓ Mark as Seen (Mark Read)
+                                </button>
+                            </div>
+                        )}
+
                         <div className="modal-body">
+                            <div className="modal-section" style={{ paddingTop: '20px' }}>
+                                <h3>Selected Article</h3>
+                                <div className="inquiry-article-preview" style={{ margin: 0 }}>
+                                    {getProductImage(selectedInquiry) ? (
+                                        <div className="inquiry-preview-image" style={{ width: '80px', height: '100px' }}>
+                                            <img src={getProductImage(selectedInquiry)!} alt={selectedInquiry.productDetail || 'Article'} />
+                                        </div>
+                                    ) : (
+                                        <div className="inquiry-preview-image" style={{ width: '80px', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted)', fontSize: '10px' }}>
+                                            No Image
+                                        </div>
+                                    )}
+                                    <div className="inquiry-preview-info">
+                                        <strong style={{ fontSize: '20px' }}>{selectedInquiry.productDetail || 'Unknown Article'}</strong>
+                                        {selectedInquiry.articleNumber && <span className="inquiry-preview-num" style={{ fontSize: '12px', marginTop: '4px' }}>#{selectedInquiry.articleNumber}</span>}
+                                    </div>
+                                </div>
+                            </div>
+
                             <div className="modal-section">
                                 <h3>Customer Information</h3>
                                 <div className="info-grid">
