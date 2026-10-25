@@ -95,4 +95,17 @@ export class CustomerService {
             role: user.role,
         };
     }
+
+    async getProfile(userId: number) {
+        const user = await this.users.findOne({ where: { id: userId } });
+        if (!user) throw new UnauthorizedException('User not found');
+
+        return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            role: user.role,
+        };
+    }
 }

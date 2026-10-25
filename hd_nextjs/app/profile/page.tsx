@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { getApiUrl } from '../api-config'
 import { toast } from 'sonner'
+import { Eye, EyeOff } from 'lucide-react'
 
 interface CustomerUser {
     id?: number
@@ -24,28 +25,36 @@ export default function ProfilePage() {
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
     const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
 
     useEffect(() => {
         const token = localStorage.getItem('customer_token')
-        const savedUser = localStorage.getItem('customer_user')
 
         if (!token) {
             router.push('/login')
             return
         }
 
-        if (savedUser) {
-            try {
-                const parsed = JSON.parse(savedUser)
-                setUser(parsed)
-                setName(parsed.name || '')
-                setEmail(parsed.email || '')
-                setPhone(parsed.phone || '')
-            } catch {
+        fetch(`${getApiUrl()}/customers/profile`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(res => {
+                if (!res.ok) throw new Error('Failed to load profile')
+                return res.json()
+            })
+            .then(data => {
+                setUser(data)
+                setName(data.name || '')
+                setEmail(data.email || '')
+                setPhone(data.phone || '')
+            })
+            .catch(err => {
+                console.error(err)
+                toast.error('Could not load profile. Please login again.')
+                localStorage.removeItem('customer_token')
                 router.push('/login')
-            }
-        }
-        setLoading(false)
+            })
+            .finally(() => setLoading(false))
     }, [router])
 
     const handleUpdate = async (e: FormEvent) => {
@@ -75,7 +84,6 @@ export default function ProfilePage() {
             }
 
             const updatedUser = await response.json()
-            localStorage.setItem('customer_user', JSON.stringify(updatedUser))
             setUser(updatedUser)
             setPassword('')
             toast.success('Profile updated successfully!')
@@ -149,13 +157,23 @@ export default function ProfilePage() {
 
                         <label className="profile-field">
                             <span>New Password (Optional)</span>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Leave blank to keep current password"
-                                minLength={8}
-                            />
+                            <div className="auth-password" style={{ width: '100%' }}>
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Leave blank to keep current password"
+                                    minLength={8}
+                                />
+                                <button
+                                    type="button"
+                                    className="auth-eye"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                >
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
                         </label>
 
                         <div className="profile-actions">

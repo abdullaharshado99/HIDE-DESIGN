@@ -14,64 +14,14 @@ const getImageSrc = (url?: string) => {
   return `${API_URL}${url.startsWith("/") ? "" : "/"}${url}`;
 };
 
-const colors = [
-  "Black",
-  "Brown",
-  "Gray",
-  "Blue",
-  "White",
-  "Green",
-  "Red",
-  "Tan",
-];
-
-const fabricTypes = [
-  "Goat Leather",
-  "Buffalo Leather",
-  "Sheep Leather",
-  "Cow Leather",
-  "Wool Tweed",
-];
-
-const fabricGsm = [
-  "180 GSM",
-  "220 GSM",
-  "260 GSM",
-  "300 GSM",
-  "340 GSM",
-  "400+ GSM",
-  "None",
-];
-
-const fitStyles = [
-  "Regular Fit",
-  "Slim Fit",
-  "Oversized Fit",
-  "Relaxed Fit",
-  "Cropped Fit",
-  "Boxy Fit",
-];
-
+const colors = ["Black", "Brown", "Gray", "Blue", "White", "Green", "Red", "Tan"];
+const fabricTypes = ["Goat Leather", "Buffalo Leather", "Sheep Leather", "Cow Leather", "Wool Tweed"];
+const fabricGsm = ["180 GSM", "220 GSM", "260 GSM", "300 GSM", "340 GSM", "400+ GSM", "None"];
+const fitStyles = ["Regular Fit", "Slim Fit", "Oversized Fit", "Relaxed Fit", "Cropped Fit", "Boxy Fit"];
 const labels = ["Company Label", "Custom Label"];
-
 const sizes = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"];
-
-const quantities = [
-  "Sample",
-  "10 Units",
-  "20 Units",
-  "30 Units",
-  "50 Units",
-  "100 Units",
-];
-
-const productCategories = [
-  "Men's Jacket",
-  "Women's Jacket",
-  "Men's Coat",
-  "Women's Coat",
-  "Accessories",
-];
+const quantities = ["Sample", "10 Units", "20 Units", "30 Units", "50 Units", "100 Units"];
+const productCategories = ["Men's Jacket", "Women's Jacket", "Men's Coat", "Women's Coat", "Accessories"];
 
 interface Article {
   id?: string;
@@ -129,18 +79,28 @@ export default function CollectionPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [userId, setUserId] = useState<number | undefined>(undefined);
 
-  useEffect(() => {
+  const loadSavedUser = () => {
     try {
-      const savedUser = localStorage.getItem('customer_user')
-      if (savedUser) {
-        const user = JSON.parse(savedUser)
-        if (user.name) setName(user.name)
-        if (user.phone) setPhone(user.phone)
-        if (user.email) setEmail(user.email)
-      }
+      const token = localStorage.getItem('customer_token')
+      if (!token) return
+
+      fetch(`${API_URL}/customers/profile`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(res => res.ok ? res.json() : null)
+        .then(user => {
+          if (user) {
+            if (user.name) setName(user.name)
+            if (user.phone) setPhone(user.phone)
+            if (user.email) setEmail(user.email)
+            if (user.id) setUserId(user.id);
+          }
+        })
+        .catch(() => { })
     } catch { }
-  }, [])
+  }
 
   useEffect(() => {
     const loadArticles = async () => {
@@ -156,7 +116,6 @@ export default function CollectionPage() {
         }
 
         const data = await response.json();
-
         const productList = Array.isArray(data)
           ? data
           : Array.isArray(data?.products)
@@ -175,21 +134,6 @@ export default function CollectionPage() {
     loadArticles();
     loadSavedUser()
   }, []);
-
-  const loadSavedUser = () => {
-    try {
-      const token = localStorage.getItem('customer_token')
-      if (!token) return
-
-      const savedUser = localStorage.getItem('customer_user')
-      if (savedUser) {
-        const user = JSON.parse(savedUser)
-        if (user.name) setName(user.name)
-        if (user.phone) setPhone(user.phone)
-        if (user.email) setEmail(user.email)
-      }
-    } catch { }
-  }
 
   const filteredArticles = useMemo(() => {
     if (!selectedProduct) {
@@ -250,13 +194,8 @@ export default function CollectionPage() {
     });
   }, [articles, selectedProduct]);
 
-  const finalQuantity = customQuantity.trim()
-    ? `${customQuantity.trim()} Units`
-    : quantity;
-
-  const selectedArticleData =
-    articles.find((article) => article.articleNumber === selectedArticle) ||
-    null;
+  const finalQuantity = customQuantity.trim() ? `${customQuantity.trim()} Units` : quantity;
+  const selectedArticleData = articles.find((article) => article.articleNumber === selectedArticle) || null;
 
   const toggleSize = (size: string) => {
     setSelectedSizes((current) =>
@@ -309,40 +248,16 @@ export default function CollectionPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setSubmitError("");
 
-    if (!selectedProduct) {
-      setSubmitError("Please select a product category first.");
-      return;
-    }
-
-    if (!selectedArticle) {
-      setSubmitError("Please select an article first.");
-      return;
-    }
-
-    if (!finalQuantity) {
-      setSubmitError("Please select or enter a quantity.");
-      return;
-    }
-
-    if (!selectedArticleData) {
-      setSubmitError("Selected article could not be found.");
-      return;
-    }
+    if (!selectedProduct) return setSubmitError("Please select a product category first.");
+    if (!selectedArticle) return setSubmitError("Please select an article first.");
+    if (!finalQuantity) return setSubmitError("Please select or enter a quantity.");
+    if (!selectedArticleData) return setSubmitError("Selected article could not be found.");
 
     setSubmitting(true);
 
     try {
-      let userId: number | undefined = undefined;
-      try {
-        const savedUser = localStorage.getItem('customer_user');
-        if (savedUser) {
-          const user = JSON.parse(savedUser);
-          userId = user?.id;
-        }
-      } catch { }
       const inquiryData = {
         userId,
         name,
@@ -381,18 +296,13 @@ export default function CollectionPage() {
 
       const cartItem: CartItem = {
         id: `${selectedArticle}-${Date.now()}`,
-        name,
-        phone,
-        email,
+        name, phone, email,
         articleNumber: selectedArticleData.articleNumber,
         articleName: selectedArticleData.name,
         imageUrl: selectedArticleData.imageUrl,
         productCategory: selectedProduct,
         color: selectedColor,
-        fabricType,
-        gsm,
-        fitStyle,
-        label,
+        fabricType, gsm, fitStyle, label,
         sizes: [...selectedSizes],
         quantity: finalQuantity,
         notes,
@@ -401,12 +311,12 @@ export default function CollectionPage() {
 
       setCartItems((current) => [...current, cartItem]);
       resetForm();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
     } catch (error) {
       console.error("Inquiry submission failed:", error);
-
-      setSubmitError(
-        "We could not add this article to your cart. Please try again.",
-      );
+      setSubmitError("We could not add this article to your cart. Please try again.");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } finally {
       setSubmitting(false);
     }

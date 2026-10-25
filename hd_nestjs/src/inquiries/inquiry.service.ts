@@ -36,4 +36,9 @@ export class InquiryService {
     await this.inquiryRepository.remove(inquiry);
     return { deleted: true, id };
   }
+
+  async markAsRead(id: number) {
+    await this.inquiryRepository.update(id, { isRead: true });
+    return { success: true };
+  }
 }

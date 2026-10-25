@@ -1,6 +1,6 @@
 import type { NextConfig } from 'next'
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   reactStrictMode: true,
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
@@ -11,8 +11,9 @@ const nextConfig = {
       { protocol: 'https', hostname: 'hide-design-q2o9.onrender.com' },
     ],
   },
+  turbopack: {
+    root: __dirname,
+  },
 }
 
-module.exports = nextConfig
-
-// export default nextConfig
+export default nextConfig
