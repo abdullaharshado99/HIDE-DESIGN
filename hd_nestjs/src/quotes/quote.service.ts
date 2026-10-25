@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Quote } from '../entities/quote.entity';
@@ -11,4 +11,11 @@ export class QuoteService {
   create(dto: CreateQuoteDto) { return this.quotes.save(this.quotes.create(dto)); }
 
   findAll() { return this.quotes.find({ order: { createdAt: 'DESC' } }); }
+
+  async remove(id: number) {
+    const quote = await this.quotes.findOne({ where: { id } });
+    if (!quote) throw new NotFoundException('Quote not found');
+    await this.quotes.remove(quote);
+    return { deleted: true, id };
+  }
 }
