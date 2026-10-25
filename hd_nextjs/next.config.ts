@@ -11,9 +11,6 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'hide-design-q2o9.onrender.com' },
     ],
   },
-  turbopack: {
-    root: __dirname,
-  },
 }
 
 export default nextConfig
