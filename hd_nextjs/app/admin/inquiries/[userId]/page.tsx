@@ -201,8 +201,9 @@ export default function UserInquiriesDetailPage() {
                                             INQUIRY #{inquiry.id}
                                             <span style={{ marginLeft: '10px', display: 'inline-flex', alignItems: 'center' }}>
                                                 {inquiry.isRead ? (
-                                                    <CheckCheck size={16} color="#4ade80" title="Seen" />
-                                                ) : (
+                                                    <span title="Seen">
+                                                        <CheckCheck size={16} color="#4ade80" />
+                                                    </span>) : (
                                                     <span style={{ width: '8px', height: '8px', background: 'var(--gold)', borderRadius: '50%' }} title="Unseen"></span>
                                                 )}
                                             </span>
