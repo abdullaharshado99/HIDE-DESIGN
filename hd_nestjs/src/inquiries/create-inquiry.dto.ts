@@ -29,6 +29,10 @@ export class CreateInquiryDto {
 
   @IsOptional()
   @IsString()
+  articleNumber?: string;
+
+  @IsOptional()
+  @IsString()
   color?: string;
 
   @IsOptional()

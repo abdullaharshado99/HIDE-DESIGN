@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { CreateInquiryDto } from './create-inquiry.dto';
 import { InquiryService } from './inquiry.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -29,5 +29,11 @@ export class InquiryController {
   @UseGuards(JwtAuthGuard, AdminGuard)
   async remove(@Param('id', ParseIntPipe) id: number) {
     return this.inquiryService.remove(id);
+  }
+
+  @Patch(':id/read')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  markAsRead(@Param('id', ParseIntPipe) id: number) {
+    return this.inquiryService.markAsRead(id);
   }
 }

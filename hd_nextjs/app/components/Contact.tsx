@@ -5,6 +5,27 @@ import { getApiUrl } from '../api-config'
 
 export default function Contact() {
   const [status, setStatus] = useState<'idle' | 'submitted' | 'error'>('idle')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+
+  useEffect(() => {
+    const token = localStorage.getItem('customer_token')
+    if (!token) return
+
+    fetch(`${getApiUrl()}/customers/profile`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.ok ? res.json() : null)
+      .then(user => {
+        if (user) {
+          if (user.name) setName(user.name)
+          if (user.email) setEmail(user.email)
+          if (user.phone) setPhone(user.phone)
+        }
+      })
+      .catch(() => { })
+  }, [])
 
   useEffect(() => {
     const handleEnquiry = (event: Event) => {
@@ -19,14 +40,7 @@ export default function Contact() {
       const form = document.querySelector<HTMLFormElement>('.quote-form')
       if (!form) return
 
-      const nameInput = form.elements.namedItem('name') as HTMLInputElement | null
-      const messageInput = form.elements.namedItem(
-        'message'
-      ) as HTMLTextAreaElement | null
-
-      if (nameInput && detail.name) {
-        nameInput.value = detail.name
-      }
+      const messageInput = form.elements.namedItem('message') as HTMLTextAreaElement | null
 
       if (messageInput && detail.products?.length) {
         messageInput.value =
@@ -58,13 +72,26 @@ export default function Contact() {
         body: JSON.stringify(data),
       })
 
-      if (!response.ok) {
-        throw new Error('Quote submission failed')
-      }
+      if (!response.ok) throw new Error('Quote submission failed')
 
       setStatus('submitted')
-
       form.reset()
+
+      const token = localStorage.getItem('customer_token')
+      if (token) {
+        fetch(`${apiUrl}/customers/profile`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+          .then(res => res.ok ? res.json() : null)
+          .then(user => {
+            if (user) {
+              setName(user.name || '')
+              setEmail(user.email || '')
+              setPhone(user.phone || '')
+            }
+          })
+          .catch(() => { })
+      }
 
       setTimeout(() => {
         setStatus('idle')
@@ -87,144 +114,72 @@ export default function Contact() {
             with the next steps.
           </p>
           <div className="contact-details">
-            <a href="tel:+923044885277">
-              +92 304 488 5277
-            </a>
-            <a href="tel:+923434094678">
-              +92 343 409 4678
-            </a>
-            <a href="tel:+923008441503">
-              +92 300 844 1503
-            </a>
-            <a href="mailto:info@hidesdesign.com">
-              info@hidesdesign.com
-            </a>
-            <span>
-              Pakistan · Worldwide Export
-            </span>
+            <a href="tel:+923044885277">+92 304 488 5277</a>
+            <a href="tel:+923434094678">+92 343 409 4678</a>
+            <a href="tel:+923008441503">+92 300 844 1503</a>
+            <a href="mailto:info@hidesdesign.com">info@hidesdesign.com</a>
+            <span>Pakistan · Worldwide Export</span>
           </div>
         </div>
         <div className="contact-socials">
-          <a
-            href="https://www.facebook.com/profile.php?id=61592666757041"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="contact-social"
-            aria-label="Facebook"
-            title="Facebook"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                d="M14 8h3V4h-3c-3.3 0-5 1.9-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.7.3-1 1-1Z"
-                fill="currentColor"
-              />
+          <a href="https://www.facebook.com/profile.php?id=61592666757041" target="_blank" rel="noopener noreferrer" className="contact-social" aria-label="Facebook" title="Facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M14 8h3V4h-3c-3.3 0-5 1.9-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.7.3-1 1-1Z" fill="currentColor" />
             </svg>
           </a>
-          <a
-            href="https://www.instagram.com/hidedesign.official/?hl=en"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="contact-social"
-            aria-label="Instagram"
-            title="Instagram"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <rect
-                x="3"
-                y="3"
-                width="18"
-                height="18"
-                rx="5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-              />
-              <circle
-                cx="12"
-                cy="12"
-                r="4"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-              />
-              <circle
-                cx="17.5"
-                cy="6.5"
-                r="1"
-                fill="currentColor"
-              />
+          <a href="https://www.instagram.com/hidedesign.official/?hl=en" target="_blank" rel="noopener noreferrer" className="contact-social" aria-label="Instagram" title="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+              <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="1.8" />
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
             </svg>
           </a>
-          <a
-            href="https://www.tiktok.com/@hide.design6"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="contact-social"
-            aria-label="TikTok"
-            title="TikTok"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                d="M16.6 3h-3.2v11.6a2.6 2.6 0 1 1-2.6-2.6c.3 0 .5 0 .8.1V8.8a5.8 5.8 0 1 0 5 5.8V8.9a7 7 0 0 0 4 1.3V7a4.1 4.1 0 0 1-4-4Z"
-                fill="currentColor"
-              />
+          <a href="https://www.tiktok.com/@hide.design6" target="_blank" rel="noopener noreferrer" className="contact-social" aria-label="TikTok" title="TikTok">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M16.6 3h-3.2v11.6a2.6 2.6 0 1 1-2.6-2.6c.3 0 .5 0 .8.1V8.8a5.8 5.8 0 1 0 5 5.8V8.9a7 7 0 0 0 4 1.3V7a4.1 4.1 0 0 1-4-4Z" fill="currentColor" />
             </svg>
           </a>
         </div>
-        <form
-          className="quote-form"
-          onSubmit={handleSubmit}
-        >
+        <form className="quote-form" onSubmit={handleSubmit}>
           <div className="form-row">
-
             <label>
               Full Name
-
               <input
                 name="name"
                 required
                 placeholder="Your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </label>
 
             <label>
               Email
-
               <input
                 type="email"
                 name="email"
                 required
                 placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </label>
-
           </div>
 
-
           <div className="form-row">
-
             <label>
               Phone
-
               <input
                 name="phone"
                 required
                 placeholder="+92 ..."
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
               />
             </label>
 
             <label>
               Interested In
-
               <select name="category">
                 <option>Men's Long Coats</option>
                 <option>Women's Long Coats</option>
@@ -233,13 +188,10 @@ export default function Contact() {
                 <option>Wholesale / Export</option>
               </select>
             </label>
-
           </div>
-
 
           <label>
             Message
-
             <textarea
               name="message"
               required
@@ -248,28 +200,18 @@ export default function Contact() {
             />
           </label>
 
-
-          <button
-            className="btn btn-gold form-submit"
-            type="submit"
-          >
+          <button className="btn btn-gold form-submit" type="submit">
             Send Request <span>→</span>
           </button>
           {status === 'submitted' && (
             <div className="form-success">
-              <p>
-                Thank you. Your request has been received.
-              </p>
+              <p>Thank you. Your request has been received.</p>
             </div>
           )}
           {status === 'error' && (
-            <p className="form-success">
-              We could not send your request. Please try again.
-            </p>
+            <p className="form-success">We could not send your request. Please try again.</p>
           )}
-
         </form>
-
       </div>
     </section>
   )

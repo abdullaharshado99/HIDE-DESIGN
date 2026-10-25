@@ -17,6 +17,12 @@ export class Inquiry {
   @Column({ nullable: true })
   email?: string;
 
+  @Column({ default: false })
+  isRead!: boolean;
+
+  @Column({ nullable: true })
+  articleNumber?: string;
+
   @Column()
   category!: string;
 

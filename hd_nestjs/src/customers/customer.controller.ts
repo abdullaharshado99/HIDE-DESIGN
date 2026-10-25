@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Request, UseGuards } from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CustomerLoginDto } from './dto/customer-login.dto';
@@ -17,6 +17,12 @@ export class CustomerController {
     @Post('login')
     login(@Body() dto: CustomerLoginDto) {
         return this.customers.login(dto);
+    }
+
+    @Get('profile')
+    @UseGuards(JwtAuthGuard)
+    getProfile(@Request() req: { user: { sub: number } }) {
+        return this.customers.getProfile(req.user.sub);
     }
 
     @Patch('profile')
