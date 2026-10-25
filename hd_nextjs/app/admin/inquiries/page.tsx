@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { useEffect, useState, useMemo } from 'react'
 import { getApiUrl } from '@/app/api-config'
+import { toast } from 'sonner'
+import { Trash2 } from 'lucide-react'
 
 interface Inquiry {
   id: number
@@ -55,6 +57,8 @@ export default function InquiriesPage() {
   const [error, setError] = useState('')
   const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null)
   const [expandedUser, setExpandedUser] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<number | null>(null)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null)
 
   useEffect(() => {
     const fetchInquiries = async () => {
@@ -74,6 +78,71 @@ export default function InquiriesPage() {
     }
     fetchInquiries()
   }, [apiUrl])
+
+  const handleDelete = async (id: number) => {
+    if (!window.confirm('Are you sure you want to delete this inquiry?')) return
+
+    const token = localStorage.getItem('admin_token')
+    if (!token) {
+      toast.error('Admin session expired. Please login again.')
+      return
+    }
+
+    setDeletingId(id)
+    try {
+      const res = await fetch(`${apiUrl}/inquiries/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      })
+
+      if (!res.ok) throw new Error('Failed to delete inquiry')
+
+      setInquiries((current) => current.filter((inq) => inq.id !== id))
+      toast.success('Inquiry deleted successfully.')
+
+      if (selectedInquiry?.id === id) setSelectedInquiry(null)
+    } catch (err) {
+      console.error(err)
+      toast.error('Could not delete inquiry.')
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
+  const confirmDelete = (id: number) => {
+    setConfirmDeleteId(id)
+  }
+
+  const executeDelete = async () => {
+    if (!confirmDeleteId) return
+
+    const token = localStorage.getItem('admin_token')
+    if (!token) {
+      toast.error('Admin session expired. Please login again.')
+      return
+    }
+
+    setDeletingId(confirmDeleteId)
+    try {
+      const res = await fetch(`${apiUrl}/inquiries/${confirmDeleteId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      })
+
+      if (!res.ok) throw new Error('Failed to delete inquiry')
+
+      setInquiries((current) => current.filter((inq) => inq.id !== confirmDeleteId))
+      toast.success('Inquiry deleted successfully.')
+
+      if (selectedInquiry?.id === confirmDeleteId) setSelectedInquiry(null)
+      setConfirmDeleteId(null)
+    } catch (err) {
+      console.error(err)
+      toast.error('Could not delete inquiry.')
+    } finally {
+      setDeletingId(null)
+    }
+  }
 
   const groupedInquiries = useMemo(() => {
     const groups: Record<string, { user: Inquiry; inquiries: Inquiry[] }> = {}
@@ -171,6 +240,18 @@ export default function InquiriesPage() {
                                 <h2>{inquiry.productCategory}</h2>
                                 {inquiry.productDetail && <p className="product-detail">{inquiry.productDetail}</p>}
                               </div>
+                              <button
+                                type="button"
+                                className="delete-btn"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  confirmDelete(inquiry.id)
+                                }}
+                                disabled={deletingId === inquiry.id}
+                                title="Delete Inquiry"
+                              >
+                                <Trash2 size={16} />
+                              </button>
                             </div>
                             <div className="category-row">
                               <span>{formatLabel(inquiry.category)}</span>
@@ -262,8 +343,42 @@ export default function InquiriesPage() {
                 </div>
               </div>
             </div>
-            <div className="modal-footer">
+            <div className="modal-footer" style={{ justifyContent: 'space-between' }}>
+              <button
+                type="button"
+                className="delete-modal-btn"
+                onClick={() => handleDelete(selectedInquiry.id)}
+                disabled={deletingId === selectedInquiry.id}
+              >
+                <Trash2 size={15} /> Delete Inquiry
+              </button>
               <button type="button" className="close-modal-btn" onClick={() => setSelectedInquiry(null)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {confirmDeleteId !== null && (
+        <div className="confirm-modal-overlay" onClick={() => setConfirmDeleteId(null)}>
+          <div className="confirm-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Delete Inquiry?</h3>
+            <p>Are you sure you want to delete this workspace inquiry? This action cannot be undone.</p>
+
+            <div className="confirm-modal-actions">
+              <button
+                className="confirm-modal-cancel"
+                onClick={() => setConfirmDeleteId(null)}
+                disabled={deletingId !== null}
+              >
+                Cancel
+              </button>
+              <button
+                className="confirm-modal-confirm"
+                onClick={executeDelete}
+                disabled={deletingId !== null}
+              >
+                {deletingId !== null ? 'Deleting...' : 'Yes, Delete'}
+              </button>
             </div>
           </div>
         </div>

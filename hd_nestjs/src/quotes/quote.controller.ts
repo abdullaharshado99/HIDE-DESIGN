@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
 import { AdminGuard } from '../auth/admin.guard';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateQuoteDto } from './dto/create-quote.dto';
@@ -14,4 +14,10 @@ export class QuoteController {
   @Get('quotes')
   @UseGuards(JwtAuthGuard, AdminGuard)
   findAll() { return this.quotes.findAll(); }
+
+  @Delete('quotes/:id')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.quotes.remove(id);
+  }
 }
