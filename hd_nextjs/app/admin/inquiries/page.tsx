@@ -5,6 +5,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { getApiUrl } from '@/app/api-config'
 import { toast } from 'sonner'
 import { ChevronRight } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 interface Inquiry {
   id: number
@@ -19,48 +20,58 @@ interface Inquiry {
 }
 
 export default function InquiriesListPage() {
-  const apiUrl = getApiUrl()
   const [inquiries, setInquiries] = useState<Inquiry[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const router = useRouter()
 
   useEffect(() => {
-    const fetchInquiries = async () => {
-      try {
-        setLoading(true)
-        setError('')
-        const response = await fetch(`${apiUrl}/inquiries`)
+    const token = localStorage.getItem('admin_token')
+    if (!token) {
+      router.replace('/admin')
+      return
+    }
+
+    fetch(`${getApiUrl()}/inquiries`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(async (response) => {
+        if (response.status === 401 || response.status === 403) {
+          localStorage.removeItem('admin_token')
+          toast.error('Session expired. Please login again.')
+          router.replace('/admin')
+          return []
+        }
         if (!response.ok) throw new Error('Failed to load inquiries')
         const data = await response.json()
-        setInquiries(Array.isArray(data) ? data : [])
-      } catch (err) {
+        return Array.isArray(data) ? data : []
+      })
+      .then(setInquiries)
+      .catch((err) => {
         console.error('Inquiry fetch error:', err)
         setError('Unable to load inquiries.')
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchInquiries()
-  }, [apiUrl])
+      })
+      .finally(() => setLoading(false))
+  }, [router])
 
   const groupedInquiries = useMemo(() => {
-    const groups: Record<string, { 
-      identifier: string; 
-      displayName: string; 
-      email?: string | null; 
-      phone?: string | null; 
-      total: number; 
-      unread: number; 
+    const groups: Record<string, {
+      identifier: string;
+      displayName: string;
+      email?: string | null;
+      phone?: string | null;
+      total: number;
+      unread: number;
       lastDate: string;
     }> = {}
 
     inquiries.forEach((inquiry) => {
-      const key = inquiry.userId 
-        ? `user_${inquiry.userId}` 
+      const key = inquiry.userId
+        ? `user_${inquiry.userId}`
         : `guest_${inquiry.email || inquiry.phone || 'unknown'}`
-      
-      const identifier = inquiry.userId 
-        ? String(inquiry.userId) 
+
+      const identifier = inquiry.userId
+        ? String(inquiry.userId)
         : `${inquiry.email || inquiry.phone || 'guest'}`
 
       if (!groups[key]) {
@@ -74,12 +85,12 @@ export default function InquiriesListPage() {
           lastDate: inquiry.createdAt
         }
       }
-      
+
       groups[key].total += 1
       if (!inquiry.isRead) groups[key].unread += 1
     })
 
-    return Object.values(groups).sort((a, b) => 
+    return Object.values(groups).sort((a, b) =>
       new Date(b.lastDate).getTime() - new Date(a.lastDate).getTime()
     )
   }, [inquiries])
@@ -112,7 +123,7 @@ export default function InquiriesListPage() {
         <section className="inquiries-content">
           {loading && <div className="state-box"><div className="loader" /><p>Loading...</p></div>}
           {!loading && error && <div className="state-box error-box"><h2>Error</h2><p>{error}</p></div>}
-          
+
           {!loading && !error && groupedInquiries.length === 0 && (
             <div className="state-box">
               <div className="empty-icon">◇</div>
@@ -124,8 +135,8 @@ export default function InquiriesListPage() {
           {!loading && !error && groupedInquiries.length > 0 && (
             <div className="inquiries-grid">
               {groupedInquiries.map((group) => (
-                <Link 
-                  href={`/admin/inquiries/${encodeURIComponent(group.identifier)}`} 
+                <Link
+                  href={`/admin/inquiries/${encodeURIComponent(group.identifier)}`}
                   key={group.identifier}
                   className="user-list-card"
                 >
@@ -145,7 +156,7 @@ export default function InquiriesListPage() {
                       </span>
                     </div>
                   </div>
-                  
+
                   <div className="user-list-card-right">
                     <div className="user-list-count">
                       <span>{group.total}</span>

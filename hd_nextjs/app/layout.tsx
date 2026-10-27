@@ -50,7 +50,7 @@ export const metadata: Metadata = {
 
 const websiteJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'WebSite',
+  '@type': 'WebSite',   
   name: 'HIDE DESIGN',
   alternateName: ['Hide Design', 'hidesdesign.com'],
   url: 'https://www.hidesdesign.com/',
@@ -62,7 +62,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body className={`${cormorant.variable} ${leagueScript.variable} ${jost.variable}`}>
         <script
           type="application/ld+json"
