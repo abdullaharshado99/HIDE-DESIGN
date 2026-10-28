@@ -52,7 +52,6 @@ function formatDate(date: string) {
 }
 
 export default function UserInquiriesDetailPage() {
-    const apiUrl = getApiUrl()
     const router = useRouter()
     const params = useParams()
     const identifier = decodeURIComponent(params.userId as string)
@@ -67,10 +66,28 @@ export default function UserInquiriesDetailPage() {
     const [openedInquiryIds, setOpenedInquiryIds] = useState<number[]>([])
 
     useEffect(() => {
+        if (!identifier) return
+
+        const token = localStorage.getItem('admin_token')
+        if (!token) {
+            router.replace('/admin')
+            return
+        }
+
+        const apiUrl = getApiUrl()
+
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const response = await fetch(`${apiUrl}/inquiries`)
+                const response = await fetch(`${apiUrl}/inquiries`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+                if (response.status === 401 || response.status === 403) {
+                    localStorage.removeItem('admin_token')
+                    toast.error('Session expired. Please login again.')
+                    router.replace('/admin')
+                    return
+                }
                 if (!response.ok) throw new Error('Failed to load')
                 const allData = await response.json()
 
@@ -87,14 +104,15 @@ export default function UserInquiriesDetailPage() {
                     const products = await prodRes.json()
                     setProductData(products)
                 }
-            } catch (err) {
+            } catch {
                 setError('Unable to load inquiries.')
             } finally {
                 setLoading(false)
             }
         }
-        if (identifier) fetchData()
-    }, [apiUrl, identifier])
+
+        fetchData()
+    }, [router, identifier])
 
     const getProductImage = (inquiry: Inquiry) => {
         if (!productData.length) return null;
@@ -115,6 +133,7 @@ export default function UserInquiriesDetailPage() {
             setOpenedInquiryIds(prev => [...prev, inquiry.id])
         }
     }
+
     const handleMarkAsSeen = async () => {
         if (!selectedInquiry) return
 
@@ -126,29 +145,46 @@ export default function UserInquiriesDetailPage() {
         )
 
         const token = localStorage.getItem('admin_token')
-        if (!token) return
+        if (!token) {
+            router.replace('/admin')
+            return
+        }
 
         try {
-            await fetch(`${apiUrl}/inquiries/${selectedInquiry.id}/read`, {
+            const res = await fetch(`${getApiUrl()}/inquiries/${selectedInquiry.id}/read`, {
                 method: 'PATCH',
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${token}` },
             })
+            if (res.status === 401 || res.status === 403) {
+                localStorage.removeItem('admin_token')
+                toast.error('Session expired. Please login again.')
+                router.replace('/admin')
+            }
         } catch (err) {
-            console.error("Failed to update database", err)
+            console.error('Failed to update database', err)
         }
     }
 
     const executeDelete = async () => {
         if (!confirmDeleteId) return
         const token = localStorage.getItem('admin_token')
-        if (!token) return toast.error('Admin session expired.')
+        if (!token) {
+            router.replace('/admin')
+            return
+        }
 
         setDeletingId(confirmDeleteId)
         try {
-            const res = await fetch(`${apiUrl}/inquiries/${confirmDeleteId}`, {
+            const res = await fetch(`${getApiUrl()}/inquiries/${confirmDeleteId}`, {
                 method: 'DELETE',
                 headers: { Authorization: `Bearer ${token}` },
             })
+            if (res.status === 401 || res.status === 403) {
+                localStorage.removeItem('admin_token')
+                toast.error('Session expired. Please login again.')
+                router.replace('/admin')
+                return
+            }
             if (!res.ok) throw new Error('Failed')
             setInquiries((current) => current.filter((inq) => inq.id !== confirmDeleteId))
             toast.success('Inquiry deleted.')

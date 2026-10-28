@@ -16,11 +16,13 @@ export class InquiryController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard, AdminGuard)
   async findAll() {
     return this.inquiryService.findAll();
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard, AdminGuard)
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return this.inquiryService.findOne(id);
   }
