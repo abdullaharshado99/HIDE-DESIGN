@@ -673,6 +673,7 @@ export default function AdminPanel({
             <Link href="/admin/quotes">Contact inquiries</Link>
             <Link href="/admin/inquiries">Workspace inquiries</Link>
             <Link href="/admin/orders">Customer Orders</Link>
+            <Link href="/admin/users">Users & Customers</Link>
           </nav>
         </div>
 

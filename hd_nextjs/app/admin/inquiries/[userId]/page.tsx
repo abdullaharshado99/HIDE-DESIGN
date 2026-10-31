@@ -202,7 +202,7 @@ export default function UserInquiriesDetailPage() {
         return (
             <main className="inquiries-page">
                 <div className="inquiries-shell">
-                    <button onClick={() => router.back()} className="back-admin-btn" style={{ marginBottom: '20px' }}>← Back</button>
+                    <button onClick={() => router.back()} className="back-admin-btn" style={{ marginBottom: '20px' }}>Back</button>
                     <div className="state-box">
                         <h2>No Inquiries Found</h2>
                         <p>This user has no inquiries.</p>
@@ -218,7 +218,7 @@ export default function UserInquiriesDetailPage() {
             <div className="inquiries-shell">
                 <button
                     onClick={() => router.back()}
-                    className="btn-quote"
+                    className="back-admin-btn"
                     style={{
                         display: 'inline-flex',
                         alignItems: 'center',
@@ -229,7 +229,7 @@ export default function UserInquiriesDetailPage() {
                         fontSize: '11px'
                     }}
                 >
-                    <ArrowLeft size={14} /> BACK TO CUSTOMERS
+                    <ArrowLeft size={14} /> BACK TO INQUIRIES
                 </button>
 
                 <header className="inquiries-header" style={{ borderBottom: '1px solid var(--hair)', paddingBottom: '20px', marginBottom: '30px' }}>

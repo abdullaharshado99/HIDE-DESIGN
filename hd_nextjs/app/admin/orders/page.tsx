@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getApiUrl } from '@/app/api-config'
 import { toast } from 'sonner'
-import { Package, User as UserIcon, ShoppingBag } from 'lucide-react'
+import { Package, User as UserIcon, ShoppingBag, ArrowLeft } from 'lucide-react'
 
 interface Order {
   id: number
@@ -65,12 +65,24 @@ export default function AdminOrdersPage() {
             <h1>Customer Orders & Wardrobes</h1>
             <p>See who checked out what, and what's left in their wardrobe.</p>
           </div>
-          <Link href="/admin" className="back-admin-btn">← Back to Admin</Link>
+          <button
+            onClick={() => router.push('/admin')}
+            className="back-admin-btn"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'transparent',
+              padding: '10px 20px',
+              fontSize: '11px'
+            }}>
+            <ArrowLeft size={14} /> BACK TO ADMIN
+          </button>
         </header>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '30px' }}>
           {orders.length === 0 && <p style={{ color: 'var(--muted)' }}>No orders yet.</p>}
-          
+
           {orders.map(order => (
             <div key={order.id} className="inquiry-card">
               {/* Header: Order & Customer Info */}

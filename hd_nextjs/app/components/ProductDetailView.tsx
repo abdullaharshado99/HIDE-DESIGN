@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { getApiUrl } from '../api-config'
 import Link from 'next/link'
+import { ArrowLeft } from 'lucide-react'
 
 interface Product {
   id: number
@@ -100,7 +101,7 @@ export default function ProductDetailView() {
           <span className="eyebrow">HIDE DESIGN · ADMIN</span>
           <h1>Article Details</h1>
         </div>
-        <Link href="/admin/all-products" className="btn-quote">← Back to List</Link>
+        <Link href="/admin/all-products" className="btn-quote"><ArrowLeft size={14} />BACK TO LIST</Link>
       </div>
 
       <div className="product-detail-container">

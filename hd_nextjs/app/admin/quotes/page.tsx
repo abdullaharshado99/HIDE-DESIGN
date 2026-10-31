@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getApiUrl } from '../../api-config'
 import { toast } from 'sonner'
-import { Trash2 } from 'lucide-react'
+import { ArrowLeft, Trash2 } from 'lucide-react'
 
 interface Quote {
   id: number
@@ -116,7 +116,20 @@ export default function QuotesAdminPage() {
           <h1>Contact inquiries</h1>
           <p className="admin-intro">Requests submitted through the contact form.</p>
         </div>
-        <button className="btn-quote" type="button" onClick={() => router.push('/admin')}>Back to articles</button>
+        <button
+          className="back-admin-btn"
+          type="button"
+          onClick={() => router.push('/admin')}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'transparent',
+            padding: '10px 20px',
+            fontSize: '11px'
+          }}>
+          <ArrowLeft size={14} /> BACK TO ADMIN
+        </button>
       </div>
       <section className="admin-list admin-inquiry-list">
         {loading && <p className="admin-loading">Loading inquiries...</p>}
