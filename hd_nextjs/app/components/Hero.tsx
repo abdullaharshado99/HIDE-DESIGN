@@ -1,3 +1,5 @@
+import { ArrowLeft, ArrowRight } from "lucide-react";
+
 export default function Hero() {
   return (
     <section className="hero" id="top">
@@ -30,7 +32,7 @@ export default function Hero() {
           </div>
           <div className="hero-actions">
             <a className="btn btn-gold" href="#men-jackets">
-              EXPLORE COLLECTION <span>→</span>
+              EXPLORE COLLECTION <ArrowRight size={14} />
             </a>
             <a className="btn btn-outline" href="#contact">
               CONTACT US
