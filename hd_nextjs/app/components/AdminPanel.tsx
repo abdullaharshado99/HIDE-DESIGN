@@ -672,6 +672,7 @@ export default function AdminPanel({
           <nav className="admin-inquiry-links" aria-label="Inquiry management">
             <Link href="/admin/quotes">Contact inquiries</Link>
             <Link href="/admin/inquiries">Workspace inquiries</Link>
+            <Link href="/admin/orders">Customer Orders</Link>
           </nav>
         </div>
 

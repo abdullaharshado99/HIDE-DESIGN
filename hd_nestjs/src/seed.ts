@@ -14,7 +14,7 @@ const dataSource = new DataSource({
   password: process.env.DB_PASSWORD ?? 'hide_design',
   database: process.env.DB_NAME ?? 'hide_design',
   entities: [User, Product, Quote],
-  synchronize: true,
+  synchronize: process.env.DB_SYNCHRONIZE === 'true',
   ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
 });
 
@@ -22,10 +22,10 @@ async function seed() {
   try {
     console.log('🌱 Starting database seeding...');
     console.log(`📍 Connecting to: ${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || 5432}/${process.env.DB_NAME || 'hide_design'}`);
-    
+
     await dataSource.initialize();
     console.log('✅ Database connection established');
-    
+
     const users = dataSource.getRepository(User);
     const email = (process.env.ADMIN_EMAIL ?? 'info@hidesdesign.com').toLowerCase();
     const existing = await users.findOne({ where: { email } });
@@ -41,14 +41,14 @@ async function seed() {
       console.log(`✅ Admin user already exists: ${email}`);
     }
     console.log('✅ Product seeding skipped (managed via admin panel)');
-    
+
     console.log('🎉 Seeding completed successfully!');
     await dataSource.destroy();
     process.exit(0);
   } catch (error: any) {
     console.error('❌ Seeding failed:', error.message);
     console.error('Error details:', error);
-    await dataSource.destroy().catch(() => {});
+    await dataSource.destroy().catch(() => { });
     process.exit(1);
   }
 }

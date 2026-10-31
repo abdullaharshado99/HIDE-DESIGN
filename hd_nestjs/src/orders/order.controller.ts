@@ -28,6 +28,6 @@ export class OrderController {
     @Get('admin/all')
     @UseGuards(JwtAuthGuard, AdminGuard)
     findAll() {
-        return this.orders.findAll();
+        return this.orders.findAllWithUserDetails();
     }
 }
