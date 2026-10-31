@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { getApiUrl } from '../api-config'
+import { ArrowLeft } from 'lucide-react'
 
 interface Product {
   id: number
@@ -59,7 +60,7 @@ export default function AdminAllProducts() {
       router.push('/admin')
       return
     }
-    
+
     setToken(savedToken)
     fetch(`${apiUrl}/products/admin/all`, {
       headers: { Authorization: `Bearer ${savedToken}` }
@@ -80,9 +81,9 @@ export default function AdminAllProducts() {
   const removeProduct = async (id: number) => {
     if (!window.confirm('Delete this article?')) return
     try {
-      await fetch(`${apiUrl}/products/${id}`, { 
-        method: 'DELETE', 
-        headers: { Authorization: `Bearer ${token}` } 
+      await fetch(`${apiUrl}/products/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
       })
       setProducts(products?.filter(p => p.id !== id) || null)
     } catch (error) {
@@ -100,7 +101,7 @@ export default function AdminAllProducts() {
           <h1>All Articles</h1>
           <p className="admin-intro">Full list of all products.</p>
         </div>
-        <Link href="/admin" className="btn-quote">← Back to Admin</Link>
+        <Link href="/admin" className="btn-quote"><ArrowLeft size={14} />Back to Admin</Link>
       </div>
 
       <div className="admin-list">

@@ -1289,28 +1289,21 @@ button {
 
 .btn-quote {
   border: 1px solid var(--gold);
-
   color: var(--gold-bright);
-
   padding: 11px 22px;
-
   font-family: 'Jost', sans-serif;
   font-size: 12px;
   letter-spacing: 0.16em;
-
   text-transform: uppercase;
   border-radius: 2px;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-
   transition:
     background .3s ease,
     color .3s ease,
     border-color .3s ease;
-
   white-space: nowrap;
 }
 
@@ -12141,4 +12134,241 @@ button {
 .user-list-card:hover .user-list-arrow {
   color: var(--gold);
   transform: translateX(4px);
+}
+
+.admin-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--hair);
+  background: var(--espresso);
+  margin-top: 20px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-table th {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--hair);
+  color: var(--gold);
+  font-family: var(--font-jost), sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.admin-table td {
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(201, 162, 77, 0.1);
+  vertical-align: middle;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.admin-table tr:hover td {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.table-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(201, 162, 77, 0.1);
+  border: 1px solid var(--hair);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.table-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid var(--hair);
+  color: var(--cream);
+  font-family: var(--font-jost), sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.table-action-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+  background: rgba(201, 162, 77, 0.05);
+}
+
+@media (max-width: 768px) {
+  .admin-table-wrapper {
+    border: 0;
+    background: transparent;
+  }
+
+  .admin-table,
+  .admin-table thead,
+  .admin-table tbody,
+  .admin-table th,
+  .admin-table td,
+  .admin-table tr {
+    display: block;
+  }
+
+  .admin-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .admin-table tr {
+    margin-bottom: 16px;
+    border: 1px solid var(--hair);
+    background: var(--espresso);
+    padding: 12px;
+  }
+
+  .admin-table td {
+    border: none;
+    padding: 10px 12px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .admin-table td::before {
+    content: attr(data-label);
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .admin-table td:first-child {
+    border-bottom: 1px solid rgba(201, 162, 77, 0.1);
+    padding-bottom: 14px;
+  }
+
+  .admin-table td:last-child {
+    padding-top: 14px;
+    border-top: 1px solid rgba(201, 162, 77, 0.1);
+  }
+}
+
+.quote-image-wrapper {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid var(--hair);
+  flex-shrink: 0;
+  background: var(--espresso-2);
+}
+
+.quote-image-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.quote-image-wrapper:hover .quote-image-thumb {
+  transform: scale(1.08);
+}
+
+/* Hover par dikhne wala overlay */
+.quote-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 13, 10, 0.75);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: var(--gold);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-family: var(--font-jost), sans-serif;
+}
+
+.quote-image-wrapper:hover .quote-image-overlay {
+  opacity: 1;
+}
+
+.image-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(10, 7, 5, 0.92);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.image-lightbox-img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border: 1px solid rgba(201, 162, 77, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  animation: zoomIn 0.3s ease-out;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--hair);
+  color: var(--cream);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.lightbox-close:hover {
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--gold);
+  transform: rotate(90deg);
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

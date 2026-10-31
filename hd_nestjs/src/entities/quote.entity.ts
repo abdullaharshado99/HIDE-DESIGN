@@ -20,6 +20,9 @@ export class Quote {
   @Column({ type: 'text' })
   message?: string;
 
+  @Column({ type: 'varchar', length: 1500, nullable: true })
+  imageUrl?: string | null;
+
   @Column({ length: 30, default: 'new' })
   status?: string;
 

@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+  import { Type } from 'class-transformer';
 import {
   IsArray,
   IsEmail,
@@ -14,6 +14,7 @@ export class CreateQuoteDto {
   @IsOptional() @IsString() phone?: string;
   @IsOptional() @IsString() category?: string;
   @IsString() message?: string;
+  @IsOptional() @IsString() imageUrl?: string; 
 }
 
 export class CreateCustomInquiryDto {
