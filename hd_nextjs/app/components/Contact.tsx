@@ -2,12 +2,15 @@
 
 import { useEffect, useState, FormEvent } from 'react'
 import { getApiUrl } from '../api-config'
+import { toast } from 'sonner'
 
 export default function Contact() {
   const [status, setStatus] = useState<'idle' | 'submitted' | 'error'>('idle')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+  const [file, setFile] = useState<File | null>(null)
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem('customer_token')
@@ -27,77 +30,100 @@ export default function Contact() {
       .catch(() => { })
   }, [])
 
-  useEffect(() => {
-    const handleEnquiry = (event: Event) => {
-      const detail = (
-        event as CustomEvent<{
-          name?: string
-          company?: string
-          products?: string[]
-        }>
-      ).detail
+  // useEffect(() => {
+  //   const handleEnquiry = (event: Event) => {
+  //     const detail = (
+  //       event as CustomEvent<{
+  //         name?: string
+  //         company?: string
+  //         products?: string[]
+  //       }>
+  //     ).detail
 
-      const form = document.querySelector<HTMLFormElement>('.quote-form')
-      if (!form) return
+  //     const form = document.querySelector<HTMLFormElement>('.quote-form')
+  //     if (!form) return
 
-      const messageInput = form.elements.namedItem('message') as HTMLTextAreaElement | null
+  //     const messageInput = form.elements.namedItem('message') as HTMLTextAreaElement | null
 
-      if (messageInput && detail.products?.length) {
-        messageInput.value =
-          `I would like to discuss: ${detail.products.join(', ')}` +
-          `${detail.company ? `\nCompany: ${detail.company}` : ''}`
-      }
-    }
+  //     if (messageInput && detail.products?.length) {
+  //       messageInput.value =
+  //         `I would like to discuss: ${detail.products.join(', ')}` +
+  //         `${detail.company ? `\nCompany: ${detail.company}` : ''}`
+  //     }
+  //   }
 
-    window.addEventListener('hide-design-enquiry', handleEnquiry)
+  //   window.addEventListener('hide-design-enquiry', handleEnquiry)
 
-    return () => {
-      window.removeEventListener('hide-design-enquiry', handleEnquiry)
-    }
-  }, [])
+  //   return () => {
+  //     window.removeEventListener('hide-design-enquiry', handleEnquiry)
+  //   }
+  // }, [])
+
+  const uploadImage = async (file: File) => {
+    const data = new FormData()
+    data.append('file', file)
+    data.append('upload_preset', 'hide_design_uploads')
+    data.append('cloud_name', 'gmqcr7ae')
+
+    const res = await fetch(`https://api.cloudinary.com/v1_1/gmqcr7ae/image/upload`, {
+      method: 'POST',
+      body: data,
+    })
+
+    if (!res.ok) throw new Error('Image upload failed')
+    const result = await res.json()
+    return result.secure_url
+  }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     const form = e.currentTarget
-    const data = Object.fromEntries(new FormData(form).entries())
+    const formData = Object.fromEntries(new FormData(form).entries())
     const apiUrl = getApiUrl()
 
+    setUploading(true)
     try {
+      let imageUrl = null
+      if (file) {
+        imageUrl = await uploadImage(file)
+      }
+
+      const payload = {
+        ...formData,
+        imageUrl
+      }
+
       const response = await fetch(`${apiUrl}/quotes`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       })
 
       if (!response.ok) throw new Error('Quote submission failed')
 
       setStatus('submitted')
+      setFile(null)
       form.reset()
 
       const token = localStorage.getItem('customer_token')
       if (token) {
         fetch(`${apiUrl}/customers/profile`, {
           headers: { Authorization: `Bearer ${token}` }
+        }).then(res => res.json()).then(user => {
+          if (user) {
+            setName(user.name || '')
+            setEmail(user.email || '')
+            setPhone(user.phone || '')
+          }
         })
-          .then(res => res.ok ? res.json() : null)
-          .then(user => {
-            if (user) {
-              setName(user.name || '')
-              setEmail(user.email || '')
-              setPhone(user.phone || '')
-            }
-          })
-          .catch(() => { })
       }
 
-      setTimeout(() => {
-        setStatus('idle')
-      }, 600000)
-    } catch {
+      setTimeout(() => setStatus('idle'), 600000)
+    } catch (err) {
+      console.error(err)
       setStatus('error')
+    } finally {
+      setUploading(false)
     }
   }
 
@@ -142,44 +168,19 @@ export default function Contact() {
         </div>
         <form className="quote-form" onSubmit={handleSubmit}>
           <div className="form-row">
-            <label>
-              Full Name
-              <input
-                name="name"
-                required
-                placeholder="Your name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
+            <label>Full Name
+              <input name="name" required placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
             </label>
-
-            <label>
-              Email
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+            <label>Email
+              <input type="email" name="email" required placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
             </label>
           </div>
 
           <div className="form-row">
-            <label>
-              Phone
-              <input
-                name="phone"
-                required
-                placeholder="+92 ..."
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
+            <label>Phone
+              <input name="phone" required placeholder="+92 ..." value={phone} onChange={(e) => setPhone(e.target.value)} />
             </label>
-
-            <label>
-              Interested In
+            <label>Interested In
               <select name="category">
                 <option>Men's Long Coats</option>
                 <option>Women's Long Coats</option>
@@ -192,17 +193,33 @@ export default function Contact() {
 
           <label>
             Message
-            <textarea
-              name="message"
-              required
-              rows={5}
-              placeholder="Tell us about your requirements, quantity, fabric, sizes, or design..."
-            />
+            <textarea name="message" required rows={5} placeholder="Tell us about your requirements, quantity, fabric, sizes, or design..." />
           </label>
 
-          <button className="btn btn-gold form-submit" type="submit">
-            Send Request <span>→</span>
+          <label>
+            Reference Image (Optional)
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              style={{
+                border: '1px dashed var(--gold)',
+                padding: '12px',
+                background: 'rgba(201, 162, 77, 0.05)',
+                borderRadius: '4px',
+                color: 'var(--muted)',
+                cursor: 'pointer',
+                fontSize: '13px',
+                marginTop: '4px'
+              }}
+            />
+            {file && <span style={{ fontSize: '11px', color: 'var(--gold)', marginTop: '4px' }}>Selected: {file.name}</span>}
+          </label>
+
+          <button className="btn btn-gold form-submit" type="submit" disabled={uploading}>
+            {uploading ? 'Uploading...' : 'Send Request →'}
           </button>
+
           {status === 'submitted' && (
             <div className="form-success">
               <p>Thank you. Your request has been received.</p>
