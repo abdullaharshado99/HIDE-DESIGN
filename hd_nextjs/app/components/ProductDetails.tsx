@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getApiUrl } from '../api-config'
+import { ArrowLeft } from 'lucide-react'
 
 interface Product {
   id: number
@@ -91,7 +92,7 @@ export default function ProductDetails({ articleNumber }: ProductDetailsProps) {
             className="back-to-collection"
             onClick={() => router.back()}
           >
-            ← Back To Collection
+            <ArrowLeft size={14} /> Back To Collection
           </button>
         </div>
       </main>
@@ -148,7 +149,7 @@ export default function ProductDetails({ articleNumber }: ProductDetailsProps) {
           className="product-back-link"
           onClick={() => router.back()}
         >
-          ← Back To Collection
+          <ArrowLeft size={14} /> Back To Collection
         </button>
         <span className="product-counter">
           PRODUCT / {product.articleNumber}
