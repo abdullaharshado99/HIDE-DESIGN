@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState, useMemo } from 'react'
 import { getApiUrl } from '@/app/api-config'
 import { toast } from 'sonner'
-import { ChevronRight } from 'lucide-react'
+import { ArrowLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 interface Inquiry {
@@ -104,7 +104,20 @@ export default function AdminUsersPage() {
                         <h1>Users & Customers</h1>
                         <p>List of all users who have submitted inquiries.</p>
                     </div>
-                    <Link href="/admin" className="back-admin-btn">← Back to Admin</Link>
+                    <button
+                        className="back-admin-btn"
+                        type="button"
+                        onClick={() => router.push('/admin')}
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            background: 'transparent',
+                            padding: '10px 20px',
+                            fontSize: '11px'
+                        }}>
+                        <ArrowLeft size={14} /> BACK TO ADMIN
+                    </button>
                 </header>
 
                 {!loading && !error && (

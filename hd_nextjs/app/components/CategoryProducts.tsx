@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getApiUrl } from '../api-config'
+import { ArrowLeft } from 'lucide-react'
 
 interface Product {
   id: string
@@ -96,8 +97,7 @@ export default function CategoryProducts({ gender, category, title, eyebrow }: C
             href={`/#${homeSectionId}`}
             className="explore-more-btn"
           >
-            <span>←</span>
-            Back to Home
+            <ArrowLeft size={14} /> Back to Home
           </Link>
         </div>
 
